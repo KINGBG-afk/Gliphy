@@ -1,0 +1,15 @@
+package me.mert.ui;
+
+import javax.swing.JFrame;
+
+public class GameFrame extends JFrame {
+    public GameFrame() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        setVisible(true);
+        setTitle("Gliphy");
+        add(new MainWindow());
+        pack();
+
+    }
+}
