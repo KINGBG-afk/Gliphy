@@ -3,7 +3,7 @@ package me.mert.core;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import me.mert.Camera;
+import me.mert.ui.Camera;
 
 public class GameRenderer {
 

@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import me.mert.Camera;
 import me.mert.MouseInput;
 import me.mert.core.GameRenderer;
 import me.mert.world.World;

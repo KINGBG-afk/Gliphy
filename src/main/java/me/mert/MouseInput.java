@@ -5,6 +5,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
+import me.mert.ui.Camera;
+
 public class MouseInput extends MouseAdapter {
     private Camera camera;
     JPanel panel;
