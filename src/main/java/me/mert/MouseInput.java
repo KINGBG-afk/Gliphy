@@ -28,8 +28,8 @@ public class MouseInput extends MouseAdapter {
         int dx = e.getX() - lastX;
         int dy = e.getY() - lastY;
 
-        camera.x += dx;
-        camera.y += dy;
+        camera.x -= dx;
+        camera.y -= dy;
 
         lastX = e.getX();
         lastY = e.getY();

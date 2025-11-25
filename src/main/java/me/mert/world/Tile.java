@@ -15,7 +15,11 @@ public class Tile {
         this.component = component;
     }
 
+    public GameObject getComponent() {
+        return this.component;
+    }
+
     public boolean isEmpty() {
-        return (component != null) ? true : false;
+        return (this.component != null) ? true : false;
     }
 }

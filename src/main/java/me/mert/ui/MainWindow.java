@@ -13,6 +13,7 @@ import javax.swing.Timer;
 import me.mert.MouseInput;
 import me.mert.core.GameRenderer;
 import me.mert.world.World;
+import me.mert.components.Collector;
 
 public class MainWindow extends JPanel implements ActionListener {
     private Dimension screeDimension = Toolkit.getDefaultToolkit().getScreenSize();
@@ -31,11 +32,13 @@ public class MainWindow extends JPanel implements ActionListener {
 
         camera = new Camera();
         world = new World();
-        gameRenderer = new GameRenderer(camera);
+        gameRenderer = new GameRenderer(camera, world);
 
         MouseInput mouseInput = new MouseInput(camera, this);
         addMouseListener(mouseInput);
         addMouseMotionListener(mouseInput);
+
+        world.setTitle(0, 0, new Collector(0, 0, 2));
 
         timer = new Timer(1000 / FPS, this);
         timer.start();
@@ -51,7 +54,10 @@ public class MainWindow extends JPanel implements ActionListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        gameRenderer.drawGrid(g, getWidth(), getHeight());
+        int sWidth = getWidth();
+        int sHeight = getHeight();
+        gameRenderer.drawGrid(g, sWidth, sHeight);
+        gameRenderer.drawComponents(g, sWidth, sHeight);
 
     }
 }

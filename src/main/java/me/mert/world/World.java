@@ -1,5 +1,6 @@
 package me.mert.world;
 
+import me.mert.components.GameObject;
 import me.mert.core.Constants;
 
 public class World {
@@ -23,13 +24,13 @@ public class World {
         return i >= 0 && i < Constants.GRID_CELL_HEIGHT && j >= 0 && j < Constants.GRID_CELL_WIDTH;
     }
 
-    public Tile getTile(int i, int j, Tile tile) {
+    public Tile getTile(int i, int j) {
         if (inBounds(i, j)) return tiles[i][j];
         return null;
     }
 
-    public void setTitle(int i, int j, Tile tile) {
-        tiles[i][j] = tile;
+    public void setTitle(int i, int j, GameObject obj) {
+        tiles[i][j].component = obj;
     }
 
 

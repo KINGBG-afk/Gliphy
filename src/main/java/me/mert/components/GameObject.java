@@ -11,26 +11,31 @@ import javax.imageio.ImageIO;
 import me.mert.world.Glyph;
 
 public abstract class GameObject {
-    int i, j;
+    public int i, j;
     List<GameObject> inputs, outputs;
-    Glyph item;
-    int[] size;
-    int orientation; // 0 = north; 1 = east; 2 = south; 3 = west
-    BufferedImage img;
+    public Glyph item;
+    public final String type;
+    public final int[] size;
+    public int orientation; // 0 = north; 1 = east; 2 = south; 3 = west
+    public BufferedImage img;
 
-    GameObject(int i, int j, int orientation) {
+    // constructor of this class should not be public
+    GameObject(int i, int j, int orientation, int[] size, String type) {
         this.i = i;
         this.j = j;
         this.outputs = new ArrayList<>();
         this.inputs = new ArrayList<>();
         this.orientation = orientation;
         this.img = null;
+        this.size = size;
+        this.type = type;
     }
 
     public abstract void update();
 
     protected void loadImage(String component) {
-        String path = "component/" + component + ".png";
+        String path = "components/" + component + ".png";
+        System.out.println(path);
 
         try (InputStream iStream = getClass().getClassLoader().getResourceAsStream(path)) {
             if (iStream != null) {
@@ -41,10 +46,11 @@ public abstract class GameObject {
             System.out.println("Loading default image");
         }
 
-        try (InputStream fallback = getClass().getClassLoader().getResourceAsStream("component/default.png")) {
+        if (this.img != null) return;
+        try (InputStream fallback = getClass().getClassLoader().getResourceAsStream("components/default.png")) {
             this.img = ImageIO.read(fallback);
         } catch (IOException e) {
-            throw new RuntimeException("Cannot load fallback image", e);
+            this.img = null;
         }
 
     }
