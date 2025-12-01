@@ -9,10 +9,9 @@ import java.util.Set;
 
 import me.mert.components.GameObject;
 import me.mert.ui.Camera;
+import me.mert.world.Tile;
 import me.mert.world.World;
 
-// at some point i feel like there are gonna be issues with the performance here
-// *detective-Doakes-meme.png*
 public class GameRenderer {
 
     private final Camera camera;
@@ -21,79 +20,38 @@ public class GameRenderer {
     public GameRenderer(Camera camera, World world) {
         this.camera = camera;
         this.world = world;
-
     }
 
-    private void drawRotatedImage(Graphics g, BufferedImage img, int x, int y, int width, int height,
-            int orientation) {
+    private void drawRotatedImage(Graphics g, BufferedImage img,
+            int x, int y, int width, int height, int orientation) {
+
         Graphics2D g2d = (Graphics2D) g.create();
 
         switch (orientation) {
-            case 0:
-                // no rotation
+            case 0: // 0 degree
                 g2d.drawImage(img, x, y, width, height, null);
                 break;
 
-            case 1:
-                // 90 degree
+            case 1: // 90 degrees
                 g2d.translate(x + width, y);
                 g2d.rotate(Math.PI / 2);
                 g2d.drawImage(img, 0, 0, width, height, null);
                 break;
 
-            case 2:
-                // 180 degree
+            case 2: // 180 degrees
                 g2d.translate(x + width, y + height);
                 g2d.rotate(Math.PI);
                 g2d.drawImage(img, 0, 0, width, height, null);
                 break;
 
-            case 3:
-                // 270 degree
+            case 3: // 270 degree
                 g2d.translate(x, y + height);
                 g2d.rotate(Math.PI / 2);
                 g2d.drawImage(img, 0, 0, width, height, null);
                 break;
         }
-    }
 
-    // i want the compoenents and the grid to be drawn from 2 different methods
-    // (it's slower i know)
-    public void drawComponents(Graphics g, int screenWidth, int screenHeight) {
-        int startX = Math.max(0, camera.x / Constants.CELL_SIZE);
-        int startY = Math.max(0, camera.y / Constants.CELL_SIZE);
-        int endX = (camera.x + screenWidth) / Constants.CELL_SIZE + 1;
-        int endY = (camera.y + screenHeight) / Constants.CELL_SIZE + 1;
-
-        // it's to avoid drawing something twice
-        Set<GameObject> drawnComponents = new HashSet<>();
-
-        for (int i = startX; i < endX; i++) {
-            for (int j = startY; j < endY; j++) {
-                GameObject obj = world.getTile(i, j).getComponent();
-
-                if (obj != null && !drawnComponents.contains(obj)) {
-                    drawnComponents.add(obj);
-
-                    // get screen pos
-                    int objSX = obj.i * Constants.CELL_SIZE - camera.x;
-                    int objSY = obj.j * Constants.CELL_SIZE - camera.y;
-                    int objWidth = obj.size[0] * Constants.CELL_SIZE;
-                    int objHeight = obj.size[1] * Constants.CELL_SIZE;
-
-                    if (obj.img != null) {
-
-                        drawRotatedImage(g, obj.img, objSX, objSY, objWidth, objHeight, obj.orientation);
-                    } else {
-                        // this is like the 2nd protection of missing assets
-                        // don't know if its good to have more than 1
-                        g.setColor(Color.BLUE);
-                        g.fillRect(objSX, objSY, objWidth, objHeight);
-                    }
-                }
-
-            }
-        }
+        g2d.dispose();
     }
 
     public void drawGrid(Graphics g, int screenWidth, int screenHeight) {
@@ -101,35 +59,95 @@ public class GameRenderer {
 
         int cell = Constants.CELL_SIZE;
 
-        // world limits in pixels
-        int worldW = Constants.GRID_CELL_WIDTH * cell;
-        int worldH = Constants.GRID_CELL_HEIGHT * cell;
+        // find the visible world bouds
+        int worldStartX = (int) camera.screenToWorldX(0);
+        int worldEndX = (int) camera.screenToWorldX(Constants.GRID_PIXEL_WIDTH);
+        int worldStartY = (int) camera.screenToWorldY(0);
+        int worldEndY = (int) camera.screenToWorldY(Constants.GRID_PIXEL_HEIGHT);
 
-        // camera-space offset
-        int startX = -(camera.x % cell);
-        int startY = -(camera.y % cell);
+        // clamp boundaries
+        worldStartX = Math.max(worldStartX, 0);
+        worldEndX = Math.min(worldEndX, Constants.GRID_PIXEL_WIDTH);
 
-        // vertical lines inside world boundaries
-        for (int i = startX; i < screenWidth; i += cell) {
-            int worldX = i + camera.x;
+        worldStartY = Math.max(worldStartY, 0);
+        worldEndY = Math.min(worldEndY, Constants.GRID_PIXEL_HEIGHT);
 
-            if (worldX >= 0 && worldX <= worldW) {
-                int lineStartY = Math.max(0, -camera.y);
-                int lineEndY = Math.min(screenHeight, worldH - camera.y);
+        int screenWorldMinX = camera.worldToScreenX(0);
+        int screenWorldMinY = camera.worldToScreenY(0);
+        
+        int screenWorldMaxX = camera.worldToScreenX(Constants.GRID_PIXEL_WIDTH);
+        int screenWorldMaxY = camera.worldToScreenY(Constants.GRID_PIXEL_HEIGHT);
 
-                g.drawLine(i, lineStartY, i, lineEndY);
-            }
+        // first world grid line
+        int firstGridX = (worldStartX / cell) * cell;
+        int firstGridY = (worldStartY / cell) * cell;
+
+        // vertical lines
+        for (int x = firstGridX; x <= worldEndX; x += cell) {
+            int sx = camera.worldToScreenX(x);
+            g.drawLine(sx, screenWorldMinY, sx, screenWorldMaxY);
         }
 
-        // horizontal lines inside world boundaries
-        for (int j = startY; j < screenHeight; j += cell) {
-            int worldY = j + camera.y;
+        // horizontal lines
+        for (int y = firstGridY; y <= worldEndY; y += cell) {
+            int sy = camera.worldToScreenY(y);
+            g.drawLine(screenWorldMinX, sy, screenWorldMaxX, sy);
+        }
+    }
 
-            if (worldY >= 0 && worldY <= worldH) {
-                int lineStartX = Math.max(0, -camera.x);
-                int lineEndX = Math.min(screenWidth, worldW - camera.x);
+    // --- COMPONENTS ------------------------------------------------------------
 
-                g.drawLine(lineStartX, j, lineEndX, j);
+    public void drawComponents(Graphics g, int screenWidth, int screenHeight) {
+        int cell = Constants.CELL_SIZE;
+        double zoom = camera.zoom;
+
+        // Visible world range
+        double worldStartX = camera.x;
+        double worldEndX = camera.x + screenWidth / zoom;
+
+        double worldStartY = camera.y;
+        double worldEndY = camera.y + screenHeight / zoom;
+
+        // Translate to tile indices
+        int startX = Math.max(0, (int) (worldStartX / cell));
+        int endX = Math.min(Constants.GRID_CELL_WIDTH, (int) (worldEndX / cell) + 1);
+
+        int startY = Math.max(0, (int) (worldStartY / cell));
+        int endY = Math.min(Constants.GRID_CELL_HEIGHT, (int) (worldEndY / cell) + 1);
+
+        // Avoid drawing same object multiple times
+        Set<GameObject> drawn = new HashSet<>();
+
+        for (int i = startX; i < endX; i++) {
+            for (int j = startY; j < endY; j++) {
+
+                Tile tile = world.getTile(i, j);
+                if (tile == null)
+                    continue;
+                GameObject obj = tile.getComponent();
+                if (obj == null)
+                    continue;
+
+                if (drawn.contains(obj))
+                    continue;
+                drawn.add(obj);
+
+                // Object world coordinates
+                double worldX = obj.i * cell;
+                double worldY = obj.j * cell;
+
+                int screenX = (int) ((worldX - camera.x) * zoom);
+                int screenY = (int) ((worldY - camera.y) * zoom);
+
+                int screenW = (int) (obj.size[0] * cell * zoom);
+                int screenH = (int) (obj.size[1] * cell * zoom);
+
+                if (obj.img != null) {
+                    drawRotatedImage(g, obj.img, screenX, screenY, screenW, screenH, obj.orientation);
+                } else {
+                    g.setColor(Color.BLUE);
+                    g.fillRect(screenX, screenY, screenW, screenH);
+                }
             }
         }
     }

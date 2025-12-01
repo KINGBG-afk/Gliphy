@@ -30,13 +30,14 @@ public class MainWindow extends JPanel implements ActionListener {
         setPreferredSize(screeDimension);
         setFocusable(true);
 
-        camera = new Camera();
+        camera = new Camera(0, 0);
         world = new World();
         gameRenderer = new GameRenderer(camera, world);
 
         MouseInput mouseInput = new MouseInput(camera, this);
         addMouseListener(mouseInput);
         addMouseMotionListener(mouseInput);
+        addMouseWheelListener(mouseInput);
 
         world.setTitle(0, 0, new Collector(0, 0, 2));
 
@@ -47,7 +48,8 @@ public class MainWindow extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        camera.update();
+        // camera.update();
+        // zooming isn't working like its supposed to do
         repaint();
     }
 
