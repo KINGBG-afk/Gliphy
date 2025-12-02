@@ -1,4 +1,4 @@
-package me.mert;
+package me.mert.input;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -51,7 +51,7 @@ public class MouseInput extends MouseAdapter {
 
         camera.x = worldX - (mouseX / camera.zoom);
         camera.y = worldY - (mouseY / camera.zoom);
-        
+
         camera.update();
         panel.repaint();
     }

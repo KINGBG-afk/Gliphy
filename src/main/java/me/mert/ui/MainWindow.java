@@ -10,8 +10,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import me.mert.MouseInput;
 import me.mert.core.GameRenderer;
+import me.mert.input.KeyboardActions;
+import me.mert.input.MouseInput;
 import me.mert.world.World;
 import me.mert.components.Collector;
 
@@ -29,15 +30,19 @@ public class MainWindow extends JPanel implements ActionListener {
         setBackground(Color.BLACK);
         setPreferredSize(screeDimension);
         setFocusable(true);
-
         camera = new Camera(0, 0);
         world = new World();
         gameRenderer = new GameRenderer(camera, world);
 
+        // mouse
         MouseInput mouseInput = new MouseInput(camera, this);
         addMouseListener(mouseInput);
         addMouseMotionListener(mouseInput);
         addMouseWheelListener(mouseInput);
+
+        // keyboard
+        KeyboardActions kActions = new KeyboardActions(camera);
+        kActions.register(this);
 
         world.setTitle(0, 0, new Collector(0, 0, 2));
 
