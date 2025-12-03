@@ -14,7 +14,7 @@ public class Collector extends GameObject {
         item = new Glyph(1);
         for (GameObject gameObject : inputs) {
             if (gameObject.item == null) {
-                gameObject.reveiveItem(item);
+                gameObject.receiveItem(item);
             }
         }
 

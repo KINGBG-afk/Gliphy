@@ -9,6 +9,6 @@ public class Hub extends GameObject {
     }
 
     public void update() {
-        // ig do nothing
+        // i guess do nothing
     }
 }

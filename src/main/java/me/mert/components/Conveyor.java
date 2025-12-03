@@ -25,7 +25,7 @@ public class Conveyor extends GameObject {
         if (bufferedItem != null) {
             for (GameObject target : outputs) {
                 if (target.item != null) {
-                    target.reveiveItem(bufferedItem);
+                    target.receiveItem(bufferedItem);
                     bufferedItem = null;
                     return;
                 }

@@ -19,8 +19,7 @@ public abstract class GameObject {
     public int orientation; // 0 = north; 1 = east; 2 = south; 3 = west
     public BufferedImage img;
 
-    // constructor of this class should not be public
-    GameObject(int i, int j, int orientation, int[] size, String type) {
+    protected GameObject(int i, int j, int orientation, int[] size, String type) {
         this.i = i;
         this.j = j;
         this.outputs = new ArrayList<>();
@@ -35,7 +34,6 @@ public abstract class GameObject {
 
     protected void loadImage(String component) {
         String path = "components/" + component + ".png";
-        System.out.println(path);
 
         try (InputStream iStream = getClass().getClassLoader().getResourceAsStream(path)) {
             if (iStream != null) {
@@ -46,7 +44,8 @@ public abstract class GameObject {
             System.out.println("Loading default image");
         }
 
-        if (this.img != null) return;
+        if (this.img != null)
+            return;
         try (InputStream fallback = getClass().getClassLoader().getResourceAsStream("components/default.png")) {
             this.img = ImageIO.read(fallback);
         } catch (IOException e) {
@@ -60,9 +59,14 @@ public abstract class GameObject {
         other.inputs.add(this);
     }
 
-    public void reveiveItem(Glyph item) {
+    public void receiveItem(Glyph item) {
         if (item != null) {
             this.item = item;
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s(i=%d, j=%d, orientation=%d)", getClass().getName(), i, j, orientation);
     }
 }

@@ -15,6 +15,8 @@ import me.mert.input.KeyboardActions;
 import me.mert.input.MouseInput;
 import me.mert.world.World;
 import me.mert.components.Collector;
+import me.mert.components.Conveyor;
+import me.mert.components.Hub;
 
 public class MainWindow extends JPanel implements ActionListener {
     private Dimension screeDimension = Toolkit.getDefaultToolkit().getScreenSize();
@@ -44,7 +46,20 @@ public class MainWindow extends JPanel implements ActionListener {
         KeyboardActions kActions = new KeyboardActions(camera);
         kActions.register(this);
 
-        world.setTitle(0, 0, new Collector(0, 0, 2));
+        Collector collector = new  Collector(0, 0, 1);
+        Conveyor conveyor = new     Conveyor(1, 0, 1);
+        Conveyor conveyor2 = new    Conveyor(2, 0, 1);
+        Hub hub = new                    Hub(3, 0, 0);
+
+        world.setTile(0, 0, collector);
+        world.setTile(1, 0, conveyor);
+        world.setTile(2, 0, conveyor2);
+        world.setTile(3, 0, hub);
+
+        System.out.println(world.getTile(0, 0).getComponent());
+        System.out.println(world.getTile(1, 0).getComponent());
+        System.out.println(world.getTile(2, 0).getComponent());
+        System.out.println(world.getTile(3, 0).getComponent());
 
         timer = new Timer(1000 / FPS, this);
         timer.start();
@@ -55,6 +70,7 @@ public class MainWindow extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         // camera.update();
         // zooming isn't working like its supposed to do
+        world.updateComponents();
         repaint();
     }
 

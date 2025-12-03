@@ -42,6 +42,16 @@ public class Camera {
         return (int) ((worldY - y) * zoom);
     }
 
+    public int screenToCellX(int screenX) {
+        double worldX = screenToWorldX(screenX);
+        return (int) Math.floor(worldX / Constants.CELL_SIZE);
+    }
+
+    public int screenToCellY(int screenY) {
+        double worldY = screenToWorldY(screenY);
+        return (int) Math.floor(worldY / Constants.CELL_SIZE);
+    }
+
     public void update() {
         x = Math.round(x * 100000.0) / 100000.0;
         y = Math.round(y * 100000.0) / 100000.0;

@@ -22,6 +22,50 @@ public class GameRenderer {
         this.world = world;
     }
 
+    // --- GRID ------------------------------------------------------------
+    public void drawGrid(Graphics g, int screenWidth, int screenHeight) {
+        g.setColor(new Color(90, 90, 90));
+
+        int cell = Constants.CELL_SIZE;
+
+        // find the visible world bouds
+        int worldStartX = (int) camera.screenToWorldX(0);
+        int worldEndX = (int) camera.screenToWorldX(Constants.GRID_PIXEL_WIDTH);
+        int worldStartY = (int) camera.screenToWorldY(0);
+        int worldEndY = (int) camera.screenToWorldY(Constants.GRID_PIXEL_HEIGHT);
+
+        // clamp boundaries
+        worldStartX = Math.max(worldStartX, 0);
+        worldEndX = Math.min(worldEndX, Constants.GRID_PIXEL_WIDTH);
+
+        worldStartY = Math.max(worldStartY, 0);
+        worldEndY = Math.min(worldEndY, Constants.GRID_PIXEL_HEIGHT);
+
+        int screenWorldMinX = camera.worldToScreenX(0);
+        int screenWorldMinY = camera.worldToScreenY(0);
+
+        int screenWorldMaxX = camera.worldToScreenX(Constants.GRID_PIXEL_WIDTH);
+        int screenWorldMaxY = camera.worldToScreenY(Constants.GRID_PIXEL_HEIGHT);
+
+        // first world grid line
+        int firstGridX = (worldStartX / cell) * cell;
+        int firstGridY = (worldStartY / cell) * cell;
+
+        // vertical lines
+        for (int x = firstGridX; x <= worldEndX; x += cell) {
+            int sx = camera.worldToScreenX(x);
+            g.drawLine(sx, screenWorldMinY, sx, screenWorldMaxY);
+        }
+
+        // horizontal lines
+        for (int y = firstGridY; y <= worldEndY; y += cell) {
+            int sy = camera.worldToScreenY(y);
+            g.drawLine(screenWorldMinX, sy, screenWorldMaxX, sy);
+        }
+    }
+
+    // --- COMPONENTS ------------------------------------------------------------
+
     private void drawRotatedImage(Graphics g, BufferedImage img,
             int x, int y, int width, int height, int orientation) {
 
@@ -54,72 +98,29 @@ public class GameRenderer {
         g2d.dispose();
     }
 
-    public void drawGrid(Graphics g, int screenWidth, int screenHeight) {
-        g.setColor(new Color(90, 90, 90));
-
-        int cell = Constants.CELL_SIZE;
-
-        // find the visible world bouds
-        int worldStartX = (int) camera.screenToWorldX(0);
-        int worldEndX = (int) camera.screenToWorldX(Constants.GRID_PIXEL_WIDTH);
-        int worldStartY = (int) camera.screenToWorldY(0);
-        int worldEndY = (int) camera.screenToWorldY(Constants.GRID_PIXEL_HEIGHT);
-
-        // clamp boundaries
-        worldStartX = Math.max(worldStartX, 0);
-        worldEndX = Math.min(worldEndX, Constants.GRID_PIXEL_WIDTH);
-
-        worldStartY = Math.max(worldStartY, 0);
-        worldEndY = Math.min(worldEndY, Constants.GRID_PIXEL_HEIGHT);
-
-        int screenWorldMinX = camera.worldToScreenX(0);
-        int screenWorldMinY = camera.worldToScreenY(0);
-        
-        int screenWorldMaxX = camera.worldToScreenX(Constants.GRID_PIXEL_WIDTH);
-        int screenWorldMaxY = camera.worldToScreenY(Constants.GRID_PIXEL_HEIGHT);
-
-        // first world grid line
-        int firstGridX = (worldStartX / cell) * cell;
-        int firstGridY = (worldStartY / cell) * cell;
-
-        // vertical lines
-        for (int x = firstGridX; x <= worldEndX; x += cell) {
-            int sx = camera.worldToScreenX(x);
-            g.drawLine(sx, screenWorldMinY, sx, screenWorldMaxY);
-        }
-
-        // horizontal lines
-        for (int y = firstGridY; y <= worldEndY; y += cell) {
-            int sy = camera.worldToScreenY(y);
-            g.drawLine(screenWorldMinX, sy, screenWorldMaxX, sy);
-        }
-    }
-
-    // --- COMPONENTS ------------------------------------------------------------
-
     public void drawComponents(Graphics g, int screenWidth, int screenHeight) {
         int cell = Constants.CELL_SIZE;
         double zoom = camera.zoom;
 
-        // Visible world range
+        // visible world range
         double worldStartX = camera.x;
         double worldEndX = camera.x + screenWidth / zoom;
 
         double worldStartY = camera.y;
         double worldEndY = camera.y + screenHeight / zoom;
 
-        // Translate to tile indices
+        // translate to tile indices
         int startX = Math.max(0, (int) (worldStartX / cell));
         int endX = Math.min(Constants.GRID_CELL_WIDTH, (int) (worldEndX / cell) + 1);
 
         int startY = Math.max(0, (int) (worldStartY / cell));
         int endY = Math.min(Constants.GRID_CELL_HEIGHT, (int) (worldEndY / cell) + 1);
 
-        // Avoid drawing same object multiple times
+        // avoid drawing same object multiple times
         Set<GameObject> drawn = new HashSet<>();
 
-        for (int i = startX; i < endX; i++) {
-            for (int j = startY; j < endY; j++) {
+        for (int i = startY; i < endY; i++) {
+            for (int j = startX; j < endX; j++) {
 
                 Tile tile = world.getTile(i, j);
                 if (tile == null)
@@ -132,12 +133,12 @@ public class GameRenderer {
                     continue;
                 drawn.add(obj);
 
-                // Object world coordinates
-                double worldX = obj.i * cell;
-                double worldY = obj.j * cell;
+                // object world coordinates
+                int worldX = (obj.j * cell);
+                int worldY = (obj.i * cell);
 
-                int screenX = (int) ((worldX - camera.x) * zoom);
-                int screenY = (int) ((worldY - camera.y) * zoom);
+                int screenX = camera.worldToScreenX(worldX);
+                int screenY = camera.worldToScreenY(worldY);
 
                 int screenW = (int) (obj.size[0] * cell * zoom);
                 int screenH = (int) (obj.size[1] * cell * zoom);
