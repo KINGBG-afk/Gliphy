@@ -20,7 +20,9 @@ public class MouseInput extends MouseAdapter {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // adding it for later
+        lastX = e.getX();
+        lastY = e.getY();
+        System.out.println("cell pos: " + camera.screenToCellX(lastX) + ", " + camera.screenToCellY(lastY));
     }
 
     @Override

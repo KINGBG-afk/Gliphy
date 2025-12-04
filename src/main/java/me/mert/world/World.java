@@ -9,23 +9,25 @@ import me.mert.core.Constants;
 public class World {
     private Tile[][] tiles;
     private List<GameObject> components;
+    private final int width = Constants.GRID_CELL_WIDTH;
+    private final int height = Constants.GRID_CELL_HEIGHT;
 
     public World() {
-        tiles = new Tile[Constants.GRID_CELL_HEIGHT][Constants.GRID_CELL_WIDTH];
+        tiles = new Tile[height][width];
         generateEmptyWorld();
         this.components = new ArrayList<>();
     }
 
     private void generateEmptyWorld() {
-        for (int i = 0; i < Constants.GRID_CELL_HEIGHT; i++) {
-            for (int j = 0; j < Constants.GRID_CELL_WIDTH; j++) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < height; j++) {
                 tiles[i][j] = new Tile(i, j);
             }
         }
     }
 
     private boolean inBounds(int i, int j) {
-        return i >= 0 && i < Constants.GRID_CELL_HEIGHT && j >= 0 && j < Constants.GRID_CELL_WIDTH;
+        return i >= 0 && i < height && j >= 0 && j < width;
     }
 
     public Tile getTile(int i, int j) {
@@ -34,9 +36,35 @@ public class World {
         return null;
     }
 
-    public void setTile(int i, int j, GameObject obj) {
-        tiles[i][j].component = obj;
+    public boolean isComponent(int i, int j) {
+        Tile tile = getTile(i, j);
+        return (tile != null && tile.component != null);
+    }
+
+    public boolean placeObject(int i, int j, GameObject obj) {
+        int w = obj.size[0];
+        int h = obj.size[1];
+
+        for (int di = 0; di < h; di++) {
+            for (int dj = 0; dj < w; dj++) {
+                int ni = i + di;
+                int nj = j + dj;
+
+                if (!inBounds(nj, ni) || isComponent(nj, ni))
+                    return false;
+            }
+        }
+
+        // place is valid so proceed
+        for (int di = 0; di < h; di++) {
+            for (int dj = 0; dj < w; dj++) {
+                int ni = i + di;
+                int nj = j + dj;
+                tiles[ni][nj].component = obj;
+            }
+        }
         components.add(obj);
+        return true;
     }
 
     public void updateComponents() {
