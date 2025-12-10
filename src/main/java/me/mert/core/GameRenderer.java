@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Set;
 
-import me.mert.components.GameObject;
+import me.mert.components.Component;
 import me.mert.ui.Camera;
 import me.mert.world.Tile;
 import me.mert.world.World;
@@ -67,32 +67,34 @@ public class GameRenderer {
     // --- COMPONENTS ------------------------------------------------------------
 
     private void drawRotatedImage(Graphics g, BufferedImage img,
-            int x, int y, int width, int height, int orientation) {
+            int x, int y, int width, int height, Direction dir) {
 
         Graphics2D g2d = (Graphics2D) g.create();
 
-        switch (orientation) {
-            case 0: // 0 degree
+        switch (dir) {
+            case Direction.NORTH -> // 0 degree
                 g2d.drawImage(img, x, y, width, height, null);
-                break;
 
-            case 1: // 90 degrees
+            case Direction.EAST -> {
+                // 90 degrees
                 g2d.translate(x + width, y);
                 g2d.rotate(Math.PI / 2);
                 g2d.drawImage(img, 0, 0, width, height, null);
-                break;
+            }
 
-            case 2: // 180 degrees
+            case Direction.SOUTH -> {
+                // 180 degrees
                 g2d.translate(x + width, y + height);
                 g2d.rotate(Math.PI);
                 g2d.drawImage(img, 0, 0, width, height, null);
-                break;
+            }
 
-            case 3: // 270 degree
+            case Direction.WEST -> {
+                // 270 degree
                 g2d.translate(x, y + height);
                 g2d.rotate(Math.PI / 2);
                 g2d.drawImage(img, 0, 0, width, height, null);
-                break;
+            }
         }
 
         g2d.dispose();
@@ -117,7 +119,7 @@ public class GameRenderer {
         int endY = Math.min(Constants.GRID_CELL_HEIGHT, (int) (worldEndY / cell) + 1);
 
         // avoid drawing same object multiple times
-        Set<GameObject> drawn = new HashSet<>();
+        Set<Component> drawn = new HashSet<>();
 
         for (int i = startY; i < endY; i++) {
             for (int j = startX; j < endX; j++) {
@@ -125,7 +127,7 @@ public class GameRenderer {
                 Tile tile = world.getTile(i, j);
                 if (tile == null)
                     continue;
-                GameObject obj = tile.getComponent();
+                Component obj = tile.getComponent();
                 if (obj == null)
                     continue;
 
@@ -144,10 +146,16 @@ public class GameRenderer {
                 int screenH = (int) (obj.size[1] * cell * zoom);
 
                 if (obj.img != null) {
-                    drawRotatedImage(g, obj.img, screenX, screenY, screenW, screenH, obj.orientation);
+                    drawRotatedImage(g, obj.img, screenX, screenY, screenW, screenH, obj.direction);
                 } else {
                     g.setColor(Color.BLUE);
                     g.fillRect(screenX, screenY, screenW, screenH);
+                }
+
+                // TEMP to visualize the items flowing through
+                if (obj.hasItem()) {
+                    g.setColor(Color.RED);
+                    g.fillOval(screenX, screenY, 20, 20);
                 }
             }
         }

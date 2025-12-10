@@ -1,36 +1,33 @@
 package me.mert.components;
 
+import me.mert.core.Direction;
 import me.mert.world.Glyph;
 
-public class Conveyor extends GameObject {
+public class Conveyor extends Component {
 
-    Glyph bufferedItem;
+    public final Port in;
+    public final Port out;
 
-    public Conveyor(int i, int j, int orientation) {
-        super(i, j, orientation, new int[] { 1, 1 }, "conveyor");
-        this.bufferedItem = null;
+    public Conveyor(int i, int j, Direction dir) {
+        super(i, j, dir, new int[] { 1, 1 }, "conveyor");
         loadImage("conveyor");
+
+        in = addinput(dir.getOpposite().getDi(), dir.getOpposite().getDj(), dir.getOpposite());
+        out = addOutput(dir.getDi(), dir.getDj(), dir);
+
+        in.connectedTo = out;
     }
 
     @Override
     public void update() {
-        if (item != null) {
-            GameObject target = outputs.get(0);
-            if (target.item == null) {
-                bufferedItem = item;
-                item = null;
-            }
-        }
+        if (!in.hasItem())
+            return;
 
-        if (bufferedItem != null) {
-            for (GameObject target : outputs) {
-                if (target.item != null) {
-                    target.receiveItem(bufferedItem);
-                    bufferedItem = null;
-                    return;
-                }
-            }
+        Glyph g = in.getItem();
+
+        if (out.connectedTo != null && out.connectedTo.canAccept(g)) {
+            in.wantsToEject = true;
+            out.connectedTo.nextItem = g;
         }
     }
-
 }

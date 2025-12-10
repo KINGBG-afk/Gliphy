@@ -8,26 +8,41 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import me.mert.core.Direction;
 import me.mert.world.Glyph;
 
-public abstract class GameObject {
+public abstract class Component {
     public int i, j;
-    List<GameObject> inputs, outputs;
     public Glyph item;
     public final String type;
     public final int[] size;
-    public int orientation; // 0 = north; 1 = east; 2 = south; 3 = west
+    public Direction direction;
     public BufferedImage img;
 
-    protected GameObject(int i, int j, int orientation, int[] size, String type) {
+    public final List<Port> inputs;
+    public final List<Port> outputs;
+
+    protected Component(int i, int j, Direction direction, int[] size, String type) {
         this.i = i;
         this.j = j;
         this.outputs = new ArrayList<>();
         this.inputs = new ArrayList<>();
-        this.orientation = orientation;
+        this.direction = direction;
         this.img = null;
         this.size = size;
         this.type = type;
+    }
+
+    protected Port addinput(int i, int j, Direction dir) {
+        Port p = new Port(i, j, this, dir);
+        inputs.add(p);
+        return p;
+    }
+
+    protected Port addOutput(int i, int j, Direction dir) {
+        Port p = new Port(i, j, this, dir);
+        outputs.add(p);
+        return p;
     }
 
     public abstract void update();
@@ -54,19 +69,26 @@ public abstract class GameObject {
 
     }
 
-    public void connectTo(GameObject other) {
-        this.outputs.add(other);
-        other.inputs.add(this);
+    public List<Port> getPorts() {
+        List<Port> all = new ArrayList<>(inputs.size() + outputs.size());
+        all.addAll(inputs);
+        all.addAll(outputs);
+        return all;
     }
 
-    public void receiveItem(Glyph item) {
-        if (item != null) {
-            this.item = item;
+    // we only have to check the input ports bc each update
+    // the item goes from input *update* -> output -> other.input
+    public boolean hasItem() {
+        for (Port p : inputs) {
+            if (p.hasItem()) {
+                return true;
+            }
         }
+        return false;
     }
 
     @Override
     public String toString() {
-        return String.format("%s(i=%d, j=%d, orientation=%d)", getClass().getName(), i, j, orientation);
+        return String.format("%s(i=%d, j=%d, orientation=%s)", getClass().getName(), i, j, direction);
     }
 }

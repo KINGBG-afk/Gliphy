@@ -3,12 +3,13 @@ package me.mert.world;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.mert.components.GameObject;
+import me.mert.components.Component;
+import me.mert.components.Port;
 import me.mert.core.Constants;
 
 public class World {
-    private Tile[][] tiles;
-    private List<GameObject> components;
+    private final Tile[][] tiles;
+    private List<Component> components;
     private final int width = Constants.GRID_CELL_WIDTH;
     private final int height = Constants.GRID_CELL_HEIGHT;
 
@@ -41,7 +42,7 @@ public class World {
         return (tile != null && tile.component != null);
     }
 
-    public boolean placeObject(int i, int j, GameObject obj) {
+    public boolean placeObject(int i, int j, Component obj) {
         int w = obj.size[0];
         int h = obj.size[1];
 
@@ -67,9 +68,16 @@ public class World {
         return true;
     }
 
+    // like we said 2 phase updates bc why not :)
     public void updateComponents() {
-        for (GameObject obj : components) {
+        for (Component obj : components) {
             obj.update();
+        }
+
+        for (Component c : components) {
+            for (Port p : c.getPorts()) {
+                p.commitMovement();
+            }
         }
     }
 
