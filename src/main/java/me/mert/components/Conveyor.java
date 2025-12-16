@@ -1,5 +1,6 @@
 package me.mert.components;
 
+import me.mert.core.ComponentType;
 import me.mert.core.Direction;
 import me.mert.world.Glyph;
 
@@ -9,7 +10,7 @@ public class Conveyor extends Component {
     public final Port out;
 
     public Conveyor(int i, int j, Direction dir) {
-        super(i, j, dir, new int[] { 1, 1 }, "conveyor");
+        super(i, j, dir, new int[] { 1, 1 }, ComponentType.CONVEYOR);
         loadImage("conveyor");
 
         in = addinput(dir.getOpposite().getDi(), dir.getOpposite().getDj(), dir.getOpposite());

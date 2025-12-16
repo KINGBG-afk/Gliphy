@@ -12,7 +12,7 @@ import me.mert.ui.Camera;
 
 public class KeyboardActions {
 
-    private Camera camera;
+    private final Camera camera;
 
     public KeyboardActions(Camera camera) {
         this.camera = camera;

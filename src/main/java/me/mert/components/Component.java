@@ -8,13 +8,14 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import me.mert.core.ComponentType;
 import me.mert.core.Direction;
 import me.mert.world.Glyph;
 
 public abstract class Component {
     public int i, j;
     public Glyph item;
-    public final String type;
+    public final ComponentType type;
     public final int[] size;
     public Direction direction;
     public BufferedImage img;
@@ -22,7 +23,7 @@ public abstract class Component {
     public final List<Port> inputs;
     public final List<Port> outputs;
 
-    protected Component(int i, int j, Direction direction, int[] size, String type) {
+    protected Component(int i, int j, Direction direction, int[] size, ComponentType type) {
         this.i = i;
         this.j = j;
         this.outputs = new ArrayList<>();
@@ -89,6 +90,6 @@ public abstract class Component {
 
     @Override
     public String toString() {
-        return String.format("%s(i=%d, j=%d, orientation=%s)", getClass().getName(), i, j, direction);
+        return String.format("%s(i=%d, j=%d, dir=%s)", type, i, j, direction);
     }
 }

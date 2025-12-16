@@ -1,12 +1,13 @@
 package me.mert.components;
 
+import me.mert.core.ComponentType;
 import me.mert.core.Direction;
 
 public class Hub extends Component {
     int stored;
 
     public Hub(int i, int j, Direction dir) {
-        super(i, j, dir, new int[] { 3, 3 }, "hub");
+        super(i, j, dir, new int[] { 3, 3 }, ComponentType.HUB);
         this.stored = 0;
         loadImage("hub");
 

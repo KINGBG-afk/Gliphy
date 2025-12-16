@@ -3,6 +3,7 @@ package me.mert.core;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,17 +17,31 @@ public class GameRenderer {
 
     private final Camera camera;
     private final World world;
+    public Point mouse;
+    private final int CELL_SIZE;
 
     public GameRenderer(Camera camera, World world) {
         this.camera = camera;
         this.world = world;
+        this.mouse = new Point(0, 0);
+        this.CELL_SIZE = Constants.CELL_SIZE;
+    }
+
+    // --- MOUSE ------------------------------------------------------------
+    public void drawHoveredCell(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.BLUE);
+
+        int worldX = camera.screenToCellX(mouse.x) * CELL_SIZE;
+        int worldY = camera.screenToCellY(mouse.y) * CELL_SIZE;
+
+        g2d.fillRect(camera.worldToScreenX(worldX), camera.worldToScreenY(worldY), (int) (CELL_SIZE * camera.zoom),
+                (int) (CELL_SIZE * camera.zoom));
     }
 
     // --- GRID ------------------------------------------------------------
     public void drawGrid(Graphics g, int screenWidth, int screenHeight) {
         g.setColor(new Color(90, 90, 90));
-
-        int cell = Constants.CELL_SIZE;
 
         // find the visible world bouds
         int worldStartX = (int) camera.screenToWorldX(0);
@@ -48,24 +63,23 @@ public class GameRenderer {
         int screenWorldMaxY = camera.worldToScreenY(Constants.GRID_PIXEL_HEIGHT);
 
         // first world grid line
-        int firstGridX = (worldStartX / cell) * cell;
-        int firstGridY = (worldStartY / cell) * cell;
+        int firstGridX = (worldStartX / CELL_SIZE) * CELL_SIZE;
+        int firstGridY = (worldStartY / CELL_SIZE) * CELL_SIZE;
 
         // vertical lines
-        for (int x = firstGridX; x <= worldEndX; x += cell) {
+        for (int x = firstGridX; x <= worldEndX; x += CELL_SIZE) {
             int sx = camera.worldToScreenX(x);
             g.drawLine(sx, screenWorldMinY, sx, screenWorldMaxY);
         }
 
         // horizontal lines
-        for (int y = firstGridY; y <= worldEndY; y += cell) {
+        for (int y = firstGridY; y <= worldEndY; y += CELL_SIZE) {
             int sy = camera.worldToScreenY(y);
             g.drawLine(screenWorldMinX, sy, screenWorldMaxX, sy);
         }
     }
 
     // --- COMPONENTS ------------------------------------------------------------
-
     private void drawRotatedImage(Graphics g, BufferedImage img,
             int x, int y, int width, int height, Direction dir) {
 
@@ -101,7 +115,6 @@ public class GameRenderer {
     }
 
     public void drawComponents(Graphics g, int screenWidth, int screenHeight) {
-        int cell = Constants.CELL_SIZE;
         double zoom = camera.zoom;
 
         // visible world range
@@ -112,11 +125,11 @@ public class GameRenderer {
         double worldEndY = camera.y + screenHeight / zoom;
 
         // translate to tile indices
-        int startX = Math.max(0, (int) (worldStartX / cell));
-        int endX = Math.min(Constants.GRID_CELL_WIDTH, (int) (worldEndX / cell) + 1);
+        int startX = Math.max(0, (int) (worldStartX / CELL_SIZE));
+        int endX = Math.min(Constants.GRID_CELL_WIDTH, (int) (worldEndX / CELL_SIZE) + 1);
 
-        int startY = Math.max(0, (int) (worldStartY / cell));
-        int endY = Math.min(Constants.GRID_CELL_HEIGHT, (int) (worldEndY / cell) + 1);
+        int startY = Math.max(0, (int) (worldStartY / CELL_SIZE));
+        int endY = Math.min(Constants.GRID_CELL_HEIGHT, (int) (worldEndY / CELL_SIZE) + 1);
 
         // avoid drawing same object multiple times
         Set<Component> drawn = new HashSet<>();
@@ -136,14 +149,14 @@ public class GameRenderer {
                 drawn.add(obj);
 
                 // object world coordinates
-                int worldX = (obj.j * cell);
-                int worldY = (obj.i * cell);
+                int worldX = (obj.j * CELL_SIZE);
+                int worldY = (obj.i * CELL_SIZE);
 
                 int screenX = camera.worldToScreenX(worldX);
                 int screenY = camera.worldToScreenY(worldY);
 
-                int screenW = (int) (obj.size[0] * cell * zoom);
-                int screenH = (int) (obj.size[1] * cell * zoom);
+                int screenW = (int) (obj.size[0] * CELL_SIZE * zoom);
+                int screenH = (int) (obj.size[1] * CELL_SIZE * zoom);
 
                 if (obj.img != null) {
                     drawRotatedImage(g, obj.img, screenX, screenY, screenW, screenH, obj.direction);

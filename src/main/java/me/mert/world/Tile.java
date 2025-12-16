@@ -22,4 +22,12 @@ public class Tile {
     public boolean isEmpty() {
         return (this.component != null);
     }
+
+    @Override
+    public String toString() {
+        if (component != null) {
+            return String.format("Tile(i=%d, j=%d, component=%s)", i, j, component.type);
+        }
+        return String.format("Tile(i=%d, j=%d, component=null)", i, j);
+    }
 }

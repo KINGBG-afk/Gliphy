@@ -1,27 +1,33 @@
 package me.mert.input;
 
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
-import javax.swing.JPanel;
-
+import me.mert.core.GameRenderer;
 import me.mert.ui.Camera;
+import me.mert.ui.GamePanel;
 
 public class MouseInput extends MouseAdapter {
-    private Camera camera;
-    private JPanel panel;
+    private final Camera camera;
+    private final GamePanel panel;
+    private final GameRenderer renderer;
     private int lastX, lastY;
 
-    public MouseInput(Camera camera, JPanel panel) {
+    public MouseInput(Camera camera, GamePanel panel, GameRenderer renderer) {
         this.camera = camera;
         this.panel = panel;
+        this.renderer = renderer;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         lastX = e.getX();
         lastY = e.getY();
+        panel.placeSelectedComponentAt(camera.screenToCellY(lastY), camera.screenToCellX(lastX));
+
+        // TEMP debug
         System.out.println("cell pos: " + camera.screenToCellX(lastX) + ", " + camera.screenToCellY(lastY));
     }
 
@@ -41,6 +47,7 @@ public class MouseInput extends MouseAdapter {
 
         lastX = e.getX();
         lastY = e.getY();
+        renderer.mouse = new Point(lastX, lastY);
 
         panel.repaint();
     }
@@ -51,7 +58,7 @@ public class MouseInput extends MouseAdapter {
         int mouseY = e.getY();
 
         double worldX = camera.screenToWorldX((int) mouseX);
-        double worldY = camera.screenToWorldX((int) mouseY);
+        double worldY = camera.screenToWorldY((int) mouseY);
 
         double zoomDeleta = -e.getPreciseWheelRotation() * 0.1;
         camera.adjustZoom(zoomDeleta);
@@ -61,6 +68,11 @@ public class MouseInput extends MouseAdapter {
 
         camera.update();
         panel.repaint();
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        renderer.mouse = new Point(e.getX(), e.getY());
     }
 
 }

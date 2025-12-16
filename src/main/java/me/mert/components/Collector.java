@@ -1,5 +1,6 @@
 package me.mert.components;
 
+import me.mert.core.ComponentType;
 import me.mert.core.Direction;
 import me.mert.world.Glyph;
 
@@ -8,7 +9,7 @@ public class Collector extends Component {
     public final Port out;
 
     public Collector(int i, int j, Direction dir) {
-        super(i, j, dir, new int[] { 1, 1 }, "collector");
+        super(i, j, dir, new int[] { 1, 1 }, ComponentType.COLLECTOR);
         loadImage("collector");
 
         out = addOutput(dir.getDi(), dir.getDj(), dir);
