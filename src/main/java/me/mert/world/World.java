@@ -41,7 +41,7 @@ public class World {
         return null;
     }
 
-    public boolean isComponent(int i, int j) {
+    public boolean canPlace(int i, int j) {
         Tile tile = getTile(i, j);
         return (tile != null && tile.component != null);
     }
@@ -56,7 +56,7 @@ public class World {
     }
 
     public boolean placeObject(int i, int j, ComponentType comp) {
-        var obj = createComponent(comp, i, j);
+        Component obj = createComponent(comp, i, j);
         if (obj == null)
             return false;
         int w = obj.size[0];
@@ -67,7 +67,7 @@ public class World {
                 int ni = i + di;
                 int nj = j + dj;
 
-                if (!inBounds(ni, nj) || isComponent(ni, nj))
+                if (!inBounds(ni, nj) || !canPlace(ni, nj))
                     return false;
             }
         }
@@ -96,5 +96,4 @@ public class World {
             }
         }
     }
-
 }

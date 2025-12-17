@@ -1,5 +1,7 @@
 package me.mert.components;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,6 +49,41 @@ public abstract class Component {
     }
 
     public abstract void update();
+
+    public void render(Graphics g, int x, int y, double zoom, int cellSize) {
+        Graphics2D g2d = (Graphics2D) g.create();
+
+        int width = (int) (size[0] * cellSize * zoom);
+        int height = (int) (size[1] * cellSize * zoom);
+
+        switch (direction) {
+            case NORTH -> // 0 degree
+                g2d.drawImage(img, x, y, width, height, null);
+
+            case EAST -> {
+                // 90 degrees
+                g2d.translate(x + width, y);
+                g2d.rotate(Math.PI / 2);
+                g2d.drawImage(img, 0, 0, width, height, null);
+            }
+
+            case SOUTH -> {
+                // 180 degrees
+                g2d.translate(x + width, y + height);
+                g2d.rotate(Math.PI);
+                g2d.drawImage(img, 0, 0, width, height, null);
+            }
+
+            case WEST -> {
+                // 270 degree
+                g2d.translate(x, y + height);
+                g2d.rotate(Math.PI / 2);
+                g2d.drawImage(img, 0, 0, width, height, null);
+            }
+        }
+
+        g2d.dispose();
+    }
 
     protected void loadImage(String component) {
         String path = "components/" + component + ".png";

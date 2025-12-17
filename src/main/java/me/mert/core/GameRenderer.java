@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -80,40 +79,6 @@ public class GameRenderer {
     }
 
     // --- COMPONENTS ------------------------------------------------------------
-    private void drawRotatedImage(Graphics g, BufferedImage img,
-            int x, int y, int width, int height, Direction dir) {
-
-        Graphics2D g2d = (Graphics2D) g.create();
-
-        switch (dir) {
-            case Direction.NORTH -> // 0 degree
-                g2d.drawImage(img, x, y, width, height, null);
-
-            case Direction.EAST -> {
-                // 90 degrees
-                g2d.translate(x + width, y);
-                g2d.rotate(Math.PI / 2);
-                g2d.drawImage(img, 0, 0, width, height, null);
-            }
-
-            case Direction.SOUTH -> {
-                // 180 degrees
-                g2d.translate(x + width, y + height);
-                g2d.rotate(Math.PI);
-                g2d.drawImage(img, 0, 0, width, height, null);
-            }
-
-            case Direction.WEST -> {
-                // 270 degree
-                g2d.translate(x, y + height);
-                g2d.rotate(Math.PI / 2);
-                g2d.drawImage(img, 0, 0, width, height, null);
-            }
-        }
-
-        g2d.dispose();
-    }
-
     public void drawComponents(Graphics g, int screenWidth, int screenHeight) {
         double zoom = camera.zoom;
 
@@ -140,6 +105,7 @@ public class GameRenderer {
                 Tile tile = world.getTile(i, j);
                 if (tile == null)
                     continue;
+
                 Component obj = tile.getComponent();
                 if (obj == null)
                     continue;
@@ -155,12 +121,11 @@ public class GameRenderer {
                 int screenX = camera.worldToScreenX(worldX);
                 int screenY = camera.worldToScreenY(worldY);
 
-                int screenW = (int) (obj.size[0] * CELL_SIZE * zoom);
-                int screenH = (int) (obj.size[1] * CELL_SIZE * zoom);
-
                 if (obj.img != null) {
-                    drawRotatedImage(g, obj.img, screenX, screenY, screenW, screenH, obj.direction);
+                    obj.render(g, screenX, screenY, zoom, CELL_SIZE);
                 } else {
+                    int screenW = (int) (obj.size[0] * CELL_SIZE * zoom);
+                    int screenH = (int) (obj.size[1] * CELL_SIZE * zoom);
                     g.setColor(Color.BLUE);
                     g.fillRect(screenX, screenY, screenW, screenH);
                 }
