@@ -105,7 +105,7 @@ public class GameRenderer {
                 Tile tile = world.getTile(i, j);
                 if (tile == null)
                     continue;
-
+                
                 Component obj = tile.getComponent();
                 if (obj == null)
                     continue;

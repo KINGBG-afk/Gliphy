@@ -62,6 +62,7 @@ public abstract class Component {
 
             case EAST -> {
                 // 90 degrees
+                System.out.println("render east");
                 g2d.translate(x + width, y);
                 g2d.rotate(Math.PI / 2);
                 g2d.drawImage(img, 0, 0, width, height, null);

@@ -3,10 +3,7 @@ package me.mert.world;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.mert.components.Collector;
 import me.mert.components.Component;
-import me.mert.components.Conveyor;
-import me.mert.components.Hub;
 import me.mert.components.Port;
 import me.mert.core.ComponentType;
 import me.mert.core.Constants;
@@ -43,20 +40,11 @@ public class World {
 
     public boolean canPlace(int i, int j) {
         Tile tile = getTile(i, j);
-        return (tile != null && tile.component != null);
-    }
-
-    private Component createComponent(ComponentType compType, int i, int j) {
-        return switch (compType) {
-            case CONVEYOR -> new Conveyor(i, j, me.mert.core.Direction.EAST);
-            case COLLECTOR -> new Collector(i, j, me.mert.core.Direction.EAST);
-            case HUB -> new Hub(i, j, me.mert.core.Direction.EAST);
-            default -> null;
-        };
+        return (tile != null && tile.component == null);
     }
 
     public boolean placeObject(int i, int j, ComponentType comp) {
-        Component obj = createComponent(comp, i, j);
+        Component obj = ComponentType.createComponent(comp, i, j);
         if (obj == null)
             return false;
         int w = obj.size[0];
