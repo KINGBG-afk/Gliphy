@@ -2,8 +2,8 @@ package me.mert.core;
 
 public enum Direction {
     NORTH(-1, 0),
-    EAST(1, 0),
-    SOUTH(0, 1),
+    EAST(0, 1),
+    SOUTH(1, 0),
     WEST(0, -1);
 
     // lets not forget that if i didn't think of di and dj i would've probably
@@ -33,7 +33,7 @@ public enum Direction {
         return dj;
     }
 
-    public Direction getOpposite() {
+    public Direction opposite() {
         return switch (this) {
             case NORTH -> SOUTH;
             case EAST -> WEST;

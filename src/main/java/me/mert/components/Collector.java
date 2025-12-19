@@ -22,8 +22,8 @@ public class Collector extends Component {
             out.nextItem = new Glyph(1);
         }
 
-        if (out.hasItem() && out.connectedTo != null) {
-            Port target = out.connectedTo;
+        if (out.hasItem() && out.getConnectedTo() != null) {
+            Port target = out.getConnectedTo();
 
             // we skip "out" having an item at all
             if (!target.hasItem() && target.nextItem == null) {

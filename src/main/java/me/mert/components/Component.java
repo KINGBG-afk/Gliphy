@@ -37,13 +37,13 @@ public abstract class Component {
     }
 
     protected Port addinput(int i, int j, Direction dir) {
-        Port p = new Port(i, j, this, dir);
+        Port p = new Port(i, j, this, dir, true);
         inputs.add(p);
         return p;
     }
 
     protected Port addOutput(int i, int j, Direction dir) {
-        Port p = new Port(i, j, this, dir);
+        Port p = new Port(i, j, this, dir, false);
         outputs.add(p);
         return p;
     }
@@ -62,7 +62,6 @@ public abstract class Component {
 
             case EAST -> {
                 // 90 degrees
-                System.out.println("render east");
                 g2d.translate(x + width, y);
                 g2d.rotate(Math.PI / 2);
                 g2d.drawImage(img, 0, 0, width, height, null);
@@ -108,7 +107,21 @@ public abstract class Component {
 
     }
 
-    public List<Port> getPorts() {
+    public void connectTo(Component other) {
+        // by default connect this.output[0] -> other.input[0]
+        for (Port out : this.outputs) {
+            int outI = out.getWorldI();
+            int outJ = out.getWorldJ();
+
+            for (Port in : other.inputs) {
+                if (outI == in.getWorldI() && outJ == in.getWorldJ()) {
+                    out.connectTo(out);
+                }
+            }
+        }
+    }
+
+    public List<Port> getAllPorts() {
         List<Port> all = new ArrayList<>(inputs.size() + outputs.size());
         all.addAll(inputs);
         all.addAll(outputs);
@@ -124,6 +137,14 @@ public abstract class Component {
             }
         }
         return false;
+    }
+
+    public List<Port> getInputPorts() {
+        return List.copyOf(inputs);
+    }
+
+    public List<Port> getOutputPorts() {
+        return List.copyOf(outputs);
     }
 
     @Override

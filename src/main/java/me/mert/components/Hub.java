@@ -7,32 +7,27 @@ public class Hub extends Component {
     int stored;
 
     public Hub(int i, int j, Direction dir) {
-        super(i, j, dir, new int[] { 3, 3 }, ComponentType.HUB);
+        super(i, j, dir, new int[] { 1, 1 }, ComponentType.HUB);
         this.stored = 0;
         loadImage("hub");
 
-        // hub is 3x3 so we make it accept from all 12 directions
-        // (i, j) is top left tile
-        // and it will be in the middle of the grid so we don't have to check for bounds
-        // TOP
-        addinput(i - 1, j, dir); // LEFT
-        addinput(i - 1, j + 1, dir); // MIDDLE
-        addinput(i - 1, j + 2, dir); // RIGHT
+        // hub is 1x1 so we make it accept from all 4 directions
+        Direction north = Direction.NORTH;
+        Direction west = Direction.WEST;
+        Direction east = west.opposite();
+        Direction south = north.opposite();
 
-        // EAST
-        addinput(i, j + 3, dir); // TOP
-        addinput(i + 1, j + 3, dir); // MIDDLE
-        addinput(i + 2, j + 3, dir); // BOTTOM
+        // top
+        addinput(north.getDi(), north.getDj(), north);
 
-        // SOUTH
-        addinput(i + 3, j, dir); // LEFT
-        addinput(i + 3, j + 1, dir); // MIDDLE
-        addinput(i + 3, j + 2, dir); // RIGHT
+        // left
+        addinput(west.getDi(), west.getDj(), west);
 
-        // WEST
-        addinput(i + 1, j - 1, dir); // TOP
-        addinput(i + 2, j - 1, dir); // MIDDLE
-        addinput(i + 3, j - 1, dir); // DOWN
+        // right
+        addinput(east.getDi(), east.getDj(), east);
+
+        // down
+        addinput(south.getDi(), south.getDj(), south);
 
     }
 

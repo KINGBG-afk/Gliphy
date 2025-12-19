@@ -38,6 +38,14 @@ public class World {
         return null;
     }
 
+    public Component getComponent(int i, int j) {
+        Tile tile = getTile(i, j);
+        if (tile.component != null) {
+            return tile.component;
+        } else
+            return null;
+    }
+
     public boolean canPlace(int i, int j) {
         Tile tile = getTile(i, j);
         return (tile != null && tile.component == null);
@@ -45,6 +53,7 @@ public class World {
 
     public boolean placeObject(int i, int j, ComponentType comp) {
         Component obj = ComponentType.createComponent(comp, i, j);
+        System.out.println("placing: " + obj);
         if (obj == null)
             return false;
         int w = obj.size[0];
@@ -68,8 +77,45 @@ public class World {
                 tiles[ni][nj].component = obj;
             }
         }
+
         components.add(obj);
+        connectPorts(obj);
         return true;
+    }
+
+    private void connectPorts(Component placed) {
+        for (Port p : placed.getAllPorts()) {
+            int wi = p.getWorldI();
+            int wj = p.getWorldJ();
+
+            if (!inBounds(wi, wj))
+                continue;
+
+            Component other = getComponent(wi, wj);
+            // if it exist or its the same as "placed" we skip
+            if (other == null || other == placed)
+                continue;
+
+            for (Port op : other.getAllPorts()) {
+                // if ports does not match
+                System.out.println("::other");
+                System.out.println("world I;J:" + op.getWorldI() + ";" + op.getWorldJ());
+
+                System.out.println("::port of placed");
+                System.out.println(wi + ", " + wj);
+                if (op.getWorldI() != wi || op.getWorldJ() != placed.j)
+                    continue;
+
+                if (!p.isInput && op.isInput && p.getDirection().opposite() == op.getDirection()) {
+                    p.connectTo(op);
+                    System.out.println(placed + " connected to " + op.getOwner());
+                } else if (p.isInput && !op.isInput && op.getDirection().opposite() == p.getDirection()) {
+                    System.out.println(op.getOwner() + " connected to" + placed);
+                    op.connectTo(p);
+                }
+            }
+
+        }
     }
 
     // like we said 2 phase updates bc why not :)
@@ -79,7 +125,7 @@ public class World {
         }
 
         for (Component c : components) {
-            for (Port p : c.getPorts()) {
+            for (Port p : c.getAllPorts()) {
                 p.commitMovement();
             }
         }

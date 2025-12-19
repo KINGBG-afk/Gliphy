@@ -13,10 +13,10 @@ public class Conveyor extends Component {
         super(i, j, dir, new int[] { 1, 1 }, ComponentType.CONVEYOR);
         loadImage("conveyor");
 
-        in = addinput(dir.getOpposite().getDi(), dir.getOpposite().getDj(), dir.getOpposite());
+        in = addinput(dir.opposite().getDi(), dir.opposite().getDj(), dir.opposite());
         out = addOutput(dir.getDi(), dir.getDj(), dir);
 
-        in.connectedTo = out;
+        in.connectTo(out);
     }
 
     @Override
@@ -26,9 +26,9 @@ public class Conveyor extends Component {
 
         Glyph g = in.getItem();
 
-        if (out.connectedTo != null && out.connectedTo.canAccept(g)) {
+        if (out.getConnectedTo() != null && out.getConnectedTo().canAccept(g)) {
             in.wantsToEject = true;
-            out.connectedTo.nextItem = g;
+            out.getConnectedTo().nextItem = g;
         }
     }
 }
