@@ -1,16 +1,17 @@
 package me.mert.ui;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import me.mert.core.ComponentType;
-
 
 public class ComponentMenu extends JPanel {
 
@@ -19,11 +20,14 @@ public class ComponentMenu extends JPanel {
         setOpaque(false);
 
         // Create buttons for components
-        JButton collectorButton = new JButton("Collector");
-        JButton conveyorButton = new JButton("Conveyor");
-        JButton hubButton = new JButton("Hub");
+        IconButton collectorButton = new IconButton(getScaledImage(ComponentType.COLLECTOR));
+        IconButton conveyorButton = new IconButton(getScaledImage(ComponentType.CONVEYOR));
+        IconButton hubButton = new IconButton(getScaledImage(ComponentType.HUB));
 
-        // Optional: Add some spacing between buttons
+        collectorButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
+        conveyorButton. setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
+        hubButton.      setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
+
         collectorButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         conveyorButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         hubButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -36,6 +40,12 @@ public class ComponentMenu extends JPanel {
         collectorButton.addActionListener(e -> gamePanel.setSelectedComponent(ComponentType.COLLECTOR));
         conveyorButton.addActionListener(e -> gamePanel.setSelectedComponent(ComponentType.CONVEYOR));
         hubButton.addActionListener(e -> gamePanel.setSelectedComponent(ComponentType.HUB));
+    }
+
+    private ImageIcon getScaledImage(ComponentType ct) {
+        ImageIcon icon = new ImageIcon(ComponentType.createComponent(ct, 0, 0).img);
+        Image sImage = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        return new ImageIcon(sImage);
     }
 
     @Override

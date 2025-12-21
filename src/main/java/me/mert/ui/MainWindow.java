@@ -55,7 +55,7 @@ public class MainWindow extends JFrame {
 
     private void createMenu(GameUIPanel uiPanel) {
         ComponentMenu menu = new ComponentMenu(gamePanel);
-        menu.setSize(300, 50);
+        menu.setSize(400, 70);
         menu.setLocation(
                 (getWidth() - menu.getWidth()) / 2,
                 getHeight() - menu.getHeight() - 20);
