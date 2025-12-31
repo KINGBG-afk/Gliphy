@@ -21,6 +21,7 @@ public abstract class Component {
     public final int[] size;
     public Direction direction;
     public BufferedImage img;
+    public BufferedImage previewImage;
 
     public final List<Port> inputs;
     public final List<Port> outputs;
@@ -34,6 +35,9 @@ public abstract class Component {
         this.img = null;
         this.size = size;
         this.type = type;
+
+        loadImage(type);
+        loadPreviewImage(img);
     }
 
     protected Port addinput(int i, int j, Direction dir) {
@@ -77,7 +81,7 @@ public abstract class Component {
             case WEST -> {
                 // 270 degree
                 g2d.translate(x, y + height);
-                g2d.rotate(Math.PI / 2);
+                g2d.rotate(-Math.PI / 2);
                 g2d.drawImage(img, 0, 0, width, height, null);
             }
         }
@@ -85,15 +89,15 @@ public abstract class Component {
         g2d.dispose();
     }
 
-    protected void loadImage(String component) {
-        String path = "components/" + component + ".png";
+    protected final void loadImage(ComponentType ct) {
+        String path = "components/" + ct.toString().toLowerCase() + ".png";
 
         try (InputStream iStream = getClass().getClassLoader().getResourceAsStream(path)) {
             if (iStream != null) {
                 this.img = ImageIO.read(iStream);
             }
         } catch (IOException ignored) {
-            System.err.print("Couldn't load " + component);
+            System.err.print("Couldn't load " + ct);
             System.out.println("Loading default image");
         }
 
@@ -104,7 +108,36 @@ public abstract class Component {
         } catch (IOException e) {
             this.img = null;
         }
+        // we do need to remember that this will be checked by my dream university
+        // we have to keep our profesionalism
+    }
 
+    protected final void loadPreviewImage(BufferedImage src) {
+        // random bullshit go
+        BufferedImage out = new BufferedImage(
+                src.getWidth(),
+                src.getHeight(),
+                BufferedImage.TYPE_INT_ARGB);
+
+        for (int y = 0; y < src.getHeight(); y++) {
+            for (int x = 0; x < src.getWidth(); x++) {
+                int argb = src.getRGB(x, y);
+
+                int a = (argb >> 24 & 0xFF);
+                if (a == 0)
+                    continue;
+                int previewA = (int) (a * 0.6f);
+
+                int r = (argb >> 16) & 0xFF;
+                int g = (argb >> 8) & 0xFF;
+                int b = argb & 0xFF;
+
+                int luminance = (int) (0.2126 * r + 0.7152 * g + 0.0722 * b);
+                int green = (previewA << 24) | (luminance << 8);
+                out.setRGB(x, y, green);
+            }
+        }
+        previewImage = out;
     }
 
     public void connectTo(Component other) {

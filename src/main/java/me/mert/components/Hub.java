@@ -9,7 +9,6 @@ public class Hub extends Component {
     public Hub(int i, int j, Direction dir) {
         super(i, j, dir, new int[] { 1, 1 }, ComponentType.HUB);
         this.stored = 0;
-        loadImage("hub");
 
         // hub is 1x1 so we make it accept from all 4 directions
         Direction north = Direction.NORTH;

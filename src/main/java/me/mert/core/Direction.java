@@ -42,4 +42,13 @@ public enum Direction {
         };
     }
 
+    public Direction rotate90() {
+        return switch (this) {
+            case NORTH -> EAST;
+            case EAST -> SOUTH;
+            case SOUTH -> WEST;
+            case WEST -> NORTH;
+        };
+    }
+
 }

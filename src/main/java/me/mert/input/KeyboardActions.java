@@ -9,6 +9,7 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
 import me.mert.ui.Camera;
+import me.mert.ui.GamePanel;
 
 public class KeyboardActions {
 
@@ -18,11 +19,20 @@ public class KeyboardActions {
         this.camera = camera;
     }
 
-    public void register(JComponent panel) {
+    public void register(GamePanel panel) {
         InputMap im = panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap am = panel.getActionMap();
 
         int move = 12;
+
+        // R
+        im.put(KeyStroke.getKeyStroke("R"), "rotate");
+        am.put("rotate", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.rotateDirection();
+            }
+        });
 
         // W
         im.put(KeyStroke.getKeyStroke("W"), "moveUp");

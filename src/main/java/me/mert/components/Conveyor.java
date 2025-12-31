@@ -11,7 +11,7 @@ public class Conveyor extends Component {
 
     public Conveyor(int i, int j, Direction dir) {
         super(i, j, dir, new int[] { 1, 1 }, ComponentType.CONVEYOR);
-        loadImage("conveyor");
+        
 
         in = addinput(dir.opposite().getDi(), dir.opposite().getDj(), dir.opposite());
         out = addOutput(dir.getDi(), dir.getDj(), dir);

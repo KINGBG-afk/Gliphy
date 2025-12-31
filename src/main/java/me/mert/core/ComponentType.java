@@ -18,4 +18,13 @@ public enum ComponentType {
             default -> null;
         };
     }
+
+    public static Component createComponent(ComponentType compType, Direction d, int i, int j) {
+        return switch (compType) {
+            case CONVEYOR -> new Conveyor(i, j, d);
+            case COLLECTOR -> new Collector(i, j, d);
+            case HUB -> new Hub(i, j, d);
+            default -> null;
+        };
+    }
 }

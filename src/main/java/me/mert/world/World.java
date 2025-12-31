@@ -7,6 +7,7 @@ import me.mert.components.Component;
 import me.mert.components.Port;
 import me.mert.core.ComponentType;
 import me.mert.core.Constants;
+import me.mert.core.Direction;
 
 public class World {
     private final Tile[][] tiles;
@@ -51,8 +52,8 @@ public class World {
         return (tile != null && tile.component == null);
     }
 
-    public boolean placeObject(int i, int j, ComponentType comp) {
-        Component obj = ComponentType.createComponent(comp, i, j);
+    public boolean placeObject(int i, int j, ComponentType comp, Direction dir) {
+        Component obj = ComponentType.createComponent(comp, dir, i, j);
         System.out.println("placing: " + obj);
         if (obj == null)
             return false;

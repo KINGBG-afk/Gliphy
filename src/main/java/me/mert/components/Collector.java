@@ -10,7 +10,6 @@ public class Collector extends Component {
 
     public Collector(int i, int j, Direction dir) {
         super(i, j, dir, new int[] { 1, 1 }, ComponentType.COLLECTOR);
-        loadImage("collector");
 
         out = addOutput(dir.getDi(), dir.getDj(), dir);
     }

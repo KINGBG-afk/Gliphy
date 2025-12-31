@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.AffineTransform;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,16 +27,51 @@ public class GameRenderer {
         this.CELL_SIZE = Constants.CELL_SIZE;
     }
 
+    private int getSize() {
+        return (int) (CELL_SIZE * camera.zoom);
+    }
+
     // --- MOUSE ------------------------------------------------------------
-    public void drawHoveredCell(Graphics g) {
+    public void drawPreviewComponent(Graphics g, Component c, boolean correct) {
+        if (!correct)
+            return;
+
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.BLUE);
 
         int worldX = camera.screenToCellX(mouse.x) * CELL_SIZE;
         int worldY = camera.screenToCellY(mouse.y) * CELL_SIZE;
 
-        g2d.fillRect(camera.worldToScreenX(worldX), camera.worldToScreenY(worldY), (int) (CELL_SIZE * camera.zoom),
-                (int) (CELL_SIZE * camera.zoom));
+        int screenX = camera.worldToScreenX(worldX);
+        int screenY = camera.worldToScreenY(worldY);
+        int size = getSize();
+
+        // Save original transform
+        AffineTransform oldTransform = g2d.getTransform();
+
+        // Move origin to center of the cell
+        g2d.translate(screenX + size / 2.0, screenY + size / 2.0);
+
+        // Rotate based on direction
+        g2d.rotate(directionToRadians(c.direction));
+
+        g2d.drawImage(
+                c.previewImage,
+                -size / 2,
+                -size / 2,
+                size,
+                size,
+                null);
+
+        g2d.setTransform(oldTransform);
+    }
+
+    private double directionToRadians(Direction d) {
+        return switch (d) {
+            case NORTH -> 0;
+            case EAST -> Math.PI / 2;
+            case SOUTH -> Math.PI;
+            case WEST -> -Math.PI / 2;
+        };
     }
 
     // --- GRID ------------------------------------------------------------
