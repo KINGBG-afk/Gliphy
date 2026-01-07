@@ -1,4 +1,4 @@
-package me.mert.ui;
+package me.mert.ui.window;
 
 import javax.swing.JFrame;
 

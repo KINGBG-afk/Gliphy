@@ -1,4 +1,4 @@
-package me.mert.ui;
+package me.mert.ui.menu;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -11,7 +11,9 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import me.mert.core.ComponentType;
+import me.mert.core.enums.ComponentType;
+import me.mert.ui.panel.GamePanel;
+import me.mert.ui.widgets.IconButton;
 
 public class ComponentMenu extends JPanel {
 
@@ -43,7 +45,7 @@ public class ComponentMenu extends JPanel {
     }
 
     private ImageIcon getScaledImage(ComponentType ct) {
-        ImageIcon icon = new ImageIcon(ComponentType.createComponent(ct, 0, 0).img);
+        ImageIcon icon = new ImageIcon(ComponentType.createComponent(ct, 0, 0).getImage());
         Image sImage = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         return new ImageIcon(sImage);
     }

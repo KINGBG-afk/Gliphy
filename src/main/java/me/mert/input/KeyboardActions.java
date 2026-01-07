@@ -9,7 +9,7 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
 import me.mert.ui.Camera;
-import me.mert.ui.GamePanel;
+import me.mert.ui.panel.GamePanel;
 
 public class KeyboardActions {
 

@@ -10,8 +10,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import me.mert.core.ComponentType;
-import me.mert.core.Direction;
+import me.mert.core.enums.ComponentType;
+import me.mert.core.enums.Direction;
+import me.mert.core.enums.PortType;
 import me.mert.world.Glyph;
 
 public abstract class Component {
@@ -20,12 +21,13 @@ public abstract class Component {
     public final ComponentType type;
     public final int[] size;
     public Direction direction;
-    public BufferedImage img;
+    protected BufferedImage img;
     public BufferedImage previewImage;
 
     public final List<Port> inputs;
     public final List<Port> outputs;
 
+    // uh this class is total chaos
     protected Component(int i, int j, Direction direction, int[] size, ComponentType type) {
         this.i = i;
         this.j = j;
@@ -40,16 +42,33 @@ public abstract class Component {
         loadPreviewImage(img);
     }
 
-    protected Port addinput(int i, int j, Direction dir) {
-        Port p = new Port(i, j, this, dir, true);
+    protected final Port addinput(int i, int j, Direction dir) {
+        Port p = new Port(i, j, this, dir, PortType.INPUT);
         inputs.add(p);
         return p;
     }
 
-    protected Port addOutput(int i, int j, Direction dir) {
-        Port p = new Port(i, j, this, dir, false);
+    protected final Port addOutput(int i, int j, Direction dir) {
+        Port p = new Port(i, j, this, dir, PortType.OUTPUT);
         outputs.add(p);
         return p;
+    }
+
+    protected final Port addOutput(Port p) {
+        outputs.add(p);
+        return p;
+    }
+
+    protected final void removePort(Port p) {
+        switch (p.type) {
+            case INPUT -> inputs.remove(p);
+            case OUTPUT -> outputs.remove(p);
+        }
+    }
+
+    // classic case of polymorphism
+    public BufferedImage getImage() {
+        return this.img;
     }
 
     public abstract void update();
@@ -60,6 +79,8 @@ public abstract class Component {
         int width = (int) (size[0] * cellSize * zoom);
         int height = (int) (size[1] * cellSize * zoom);
 
+        BufferedImage renderImg = getImage();
+
         switch (direction) {
             case NORTH -> // 0 degree
                 g2d.drawImage(img, x, y, width, height, null);
@@ -68,25 +89,40 @@ public abstract class Component {
                 // 90 degrees
                 g2d.translate(x + width, y);
                 g2d.rotate(Math.PI / 2);
-                g2d.drawImage(img, 0, 0, width, height, null);
+                g2d.drawImage(renderImg, 0, 0, width, height, null);
             }
 
             case SOUTH -> {
                 // 180 degrees
                 g2d.translate(x + width, y + height);
                 g2d.rotate(Math.PI);
-                g2d.drawImage(img, 0, 0, width, height, null);
+                g2d.drawImage(renderImg, 0, 0, width, height, null);
             }
 
             case WEST -> {
                 // 270 degree
                 g2d.translate(x, y + height);
                 g2d.rotate(-Math.PI / 2);
-                g2d.drawImage(img, 0, 0, width, height, null);
+                g2d.drawImage(renderImg, 0, 0, width, height, null);
             }
         }
 
         g2d.dispose();
+    }
+
+    protected final BufferedImage loadImage(String p) {
+        String path = "components/" + p.toLowerCase() + ".png";
+
+        try (InputStream iStream = getClass().getClassLoader().getResourceAsStream(path)) {
+            if (iStream != null) {
+                return ImageIO.read(iStream);
+            }
+        } catch (IOException ignored) {
+            System.err.print("Couldn't load " + p + ".png");
+            System.out.println("Loading default image");
+        }
+        return null; // well too bad it doesn't load
+
     }
 
     protected final void loadImage(ComponentType ct) {
@@ -123,15 +159,27 @@ public abstract class Component {
             for (int x = 0; x < src.getWidth(); x++) {
                 int argb = src.getRGB(x, y);
 
+                /*
+                 * little explanation here
+                 * there is 8 bits per channle (RGBA)
+                 * so if we want to get alpha channle we shift by 24 positions
+                 * so alpha bits will be the first byte and (& 0xFF) masks out everything
+                 * except the first 8 bits
+                 */
                 int a = (argb >> 24 & 0xFF);
+                // skip if transparrent
                 if (a == 0)
                     continue;
+
+                // scale alpha by 60%
                 int previewA = (int) (a * 0.6f);
 
+                // get rgb values
                 int r = (argb >> 16) & 0xFF;
                 int g = (argb >> 8) & 0xFF;
                 int b = argb & 0xFF;
 
+                // idk, got this fomula from the internet and it works
                 int luminance = (int) (0.2126 * r + 0.7152 * g + 0.0722 * b);
                 int green = (previewA << 24) | (luminance << 8);
                 out.setRGB(x, y, green);
@@ -140,8 +188,7 @@ public abstract class Component {
         previewImage = out;
     }
 
-    public void connectTo(Component other) {
-        // by default connect this.output[0] -> other.input[0]
+    public final void connectTo(Component other) {
         for (Port out : this.outputs) {
             int outI = out.getWorldI();
             int outJ = out.getWorldJ();
@@ -154,7 +201,7 @@ public abstract class Component {
         }
     }
 
-    public List<Port> getAllPorts() {
+    public final List<Port> getAllPorts() {
         List<Port> all = new ArrayList<>(inputs.size() + outputs.size());
         all.addAll(inputs);
         all.addAll(outputs);
@@ -163,7 +210,7 @@ public abstract class Component {
 
     // we only have to check the input ports bc each update
     // the item goes from input *update* -> output -> other.input
-    public boolean hasItem() {
+    public final boolean hasItem() {
         for (Port p : inputs) {
             if (p.hasItem()) {
                 return true;
@@ -172,11 +219,11 @@ public abstract class Component {
         return false;
     }
 
-    public List<Port> getInputPorts() {
+    public final List<Port> getInputPorts() {
         return List.copyOf(inputs);
     }
 
-    public List<Port> getOutputPorts() {
+    public final List<Port> getOutputPorts() {
         return List.copyOf(outputs);
     }
 

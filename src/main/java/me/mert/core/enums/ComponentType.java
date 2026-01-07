@@ -1,4 +1,4 @@
-package me.mert.core;
+package me.mert.core.enums;
 
 import me.mert.components.Collector;
 import me.mert.components.Component;
@@ -12,9 +12,9 @@ public enum ComponentType {
 
     public static Component createComponent(ComponentType compType, int i, int j) {
         return switch (compType) {
-            case CONVEYOR -> new Conveyor(i, j, Direction.EAST);
-            case COLLECTOR -> new Collector(i, j, Direction.EAST);
-            case HUB -> new Hub(i, j, Direction.EAST);
+            case CONVEYOR -> new Conveyor(i, j, Direction.NORTH);
+            case COLLECTOR -> new Collector(i, j, Direction.NORTH);
+            case HUB -> new Hub(i, j, Direction.NORTH);
             default -> null;
         };
     }

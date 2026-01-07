@@ -1,4 +1,4 @@
-package me.mert.core;
+package me.mert.core.enums;
 
 public enum Direction {
     NORTH(-1, 0),
@@ -42,7 +42,16 @@ public enum Direction {
         };
     }
 
-    public Direction rotate90() {
+    public Direction left() {
+        return switch (this) {
+            case NORTH -> WEST;
+            case WEST -> SOUTH;
+            case SOUTH -> EAST;
+            case EAST -> NORTH;
+        };
+    }
+
+    public Direction right() {
         return switch (this) {
             case NORTH -> EAST;
             case EAST -> SOUTH;

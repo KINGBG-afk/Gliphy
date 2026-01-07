@@ -1,4 +1,4 @@
-package me.mert.core;
+package me.mert.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -9,7 +9,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import me.mert.components.Component;
-import me.mert.ui.Camera;
+import me.mert.core.Constants;
+import me.mert.core.enums.Direction;
 import me.mert.world.Tile;
 import me.mert.world.World;
 
@@ -143,11 +144,9 @@ public class GameRenderer {
                     continue;
 
                 Component obj = tile.getComponent();
-                if (obj == null)
+                if (obj == null || drawn.contains(obj))
                     continue;
 
-                if (drawn.contains(obj))
-                    continue;
                 drawn.add(obj);
 
                 // object world coordinates
@@ -157,14 +156,9 @@ public class GameRenderer {
                 int screenX = camera.worldToScreenX(worldX);
                 int screenY = camera.worldToScreenY(worldY);
 
-                if (obj.img != null) {
-                    obj.render(g, screenX, screenY, zoom, CELL_SIZE);
-                } else {
-                    int screenW = (int) (obj.size[0] * CELL_SIZE * zoom);
-                    int screenH = (int) (obj.size[1] * CELL_SIZE * zoom);
-                    g.setColor(Color.BLUE);
-                    g.fillRect(screenX, screenY, screenW, screenH);
-                }
+                // it's impossible for obj to not have an image
+                // except if you are retarted and remove the resource folder
+                obj.render(g, screenX, screenY, zoom, CELL_SIZE);
 
                 // TEMP to visualize the items flowing through
                 if (obj.hasItem()) {

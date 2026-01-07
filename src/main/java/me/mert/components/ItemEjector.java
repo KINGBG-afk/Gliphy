@@ -2,8 +2,9 @@ package me.mert.components;
 
 import me.mert.world.Glyph;
 
-public interface itemEjector {
+public interface ItemEjector {
 
     boolean canEject();
+
     Glyph eject();
 }

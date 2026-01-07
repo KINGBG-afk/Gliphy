@@ -1,4 +1,4 @@
-package me.mert.ui;
+package me.mert.ui.panel;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,11 +6,12 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import me.mert.components.Component;
-import me.mert.core.ComponentType;
-import me.mert.core.Direction;
-import me.mert.core.GameRenderer;
+import me.mert.core.enums.ComponentType;
+import me.mert.core.enums.Direction;
 import me.mert.input.KeyboardActions;
 import me.mert.input.MouseInput;
+import me.mert.ui.Camera;
+import me.mert.ui.GameRenderer;
 import me.mert.world.World;
 
 public class GamePanel extends JPanel {
@@ -18,9 +19,9 @@ public class GamePanel extends JPanel {
     private final World world;
     private final GameRenderer gameRenderer;
 
-    protected ComponentType selectedType = ComponentType.CONVEYOR;
+    protected ComponentType selectedType = ComponentType.COLLECTOR;
     protected Direction selectedDirection = Direction.NORTH;
-    protected Component selectedComponent = ComponentType.createComponent(selectedType, 0, 0);
+    protected Component selectedComponent = ComponentType.createComponent(selectedType, selectedDirection, 0, 0);
 
     public GamePanel(Camera camera, World world, GameRenderer gameRenderer) {
         this.camera = camera;
@@ -38,8 +39,8 @@ public class GamePanel extends JPanel {
 
         // keyboard
         KeyboardActions kActions = new KeyboardActions(camera);
+        setVisible(true);
         kActions.register(this);
-
     }
 
     public void setSelectedType(ComponentType c) {
@@ -49,13 +50,12 @@ public class GamePanel extends JPanel {
     }
 
     public void rotateDirection() {
-        selectedDirection = selectedDirection.rotate90();
+        selectedDirection = selectedDirection.right();
         selectedComponent.direction = selectedDirection;
-        System.out.println("Direction is " + selectedDirection);
     }
 
     public void placeSelectedComponentAt(int i, int j) {
-        world.placeObject(i, j, selectedType, selectedDirection);
+        world.placeComponent(i, j, selectedType, selectedDirection);
     }
 
     @Override

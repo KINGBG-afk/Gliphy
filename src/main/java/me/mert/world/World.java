@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.mert.components.Component;
+import me.mert.components.Conveyor;
 import me.mert.components.Port;
-import me.mert.core.ComponentType;
 import me.mert.core.Constants;
-import me.mert.core.Direction;
+import me.mert.core.enums.ComponentType;
+import me.mert.core.enums.Direction;
+import me.mert.core.enums.PortType;
 
 public class World {
     private final Tile[][] tiles;
-    private List<Component> components;
+    private final List<Component> components;
     private final int width = Constants.GRID_CELL_WIDTH;
     private final int height = Constants.GRID_CELL_HEIGHT;
 
@@ -52,7 +54,21 @@ public class World {
         return (tile != null && tile.component == null);
     }
 
-    public boolean placeObject(int i, int j, ComponentType comp, Direction dir) {
+    public boolean removeComponent(int i, int j) {
+        if (!inBounds(i, j))
+            return false;
+
+        Component c = getComponent(i, j);
+
+        if (c == null)
+            return false;
+
+        components.remove(c);
+        tiles[i][j] = new Tile(i, j);
+        return true;
+    }
+
+    public boolean placeComponent(int i, int j, ComponentType comp, Direction dir) {
         Component obj = ComponentType.createComponent(comp, dir, i, j);
         System.out.println("placing: " + obj);
         if (obj == null)
@@ -81,10 +97,14 @@ public class World {
 
         components.add(obj);
         connectPorts(obj);
+
         return true;
     }
 
+    // not the most efficient thing but im proud of it
     private void connectPorts(Component placed) {
+        Component other;
+
         for (Port p : placed.getAllPorts()) {
             int wi = p.getWorldI();
             int wj = p.getWorldJ();
@@ -92,30 +112,77 @@ public class World {
             if (!inBounds(wi, wj))
                 continue;
 
-            Component other = getComponent(wi, wj);
-            // if it exist or its the same as "placed" we skip
+            other = getComponent(wi, wj);
+            // if it doesn't exist or its the same as "placed" we skip
             if (other == null || other == placed)
                 continue;
 
             for (Port op : other.getAllPorts()) {
-                // if ports does not match
                 System.out.println("::other");
                 System.out.println("world I;J:" + op.getWorldI() + ";" + op.getWorldJ());
 
                 System.out.println("::port of placed");
                 System.out.println(wi + ", " + wj);
-                if (op.getWorldI() != wi || op.getWorldJ() != placed.j)
+
+                makeConnection(placed, p, wi, wj, op);
+            }
+        }
+
+        if (placed instanceof Conveyor conveyor) {
+            Direction[] dirs = new Direction[] {
+                    Direction.NORTH,
+                    Direction.EAST,
+                    Direction.SOUTH,
+                    Direction.WEST
+            };
+
+            // BUG: a lot of directional bugs but im just tired at this point
+            // this is the third hours in here
+            // i can't anymore. Futere me pls don't blame me
+            for (Direction d : dirs) {
+                if (conveyor.direction == d || conveyor.direction.opposite() != d)
                     continue;
 
-                if (!p.isInput && op.isInput && p.getDirection().opposite() == op.getDirection()) {
-                    p.connectTo(op);
-                    System.out.println(placed + " connected to " + op.getOwner());
-                } else if (p.isInput && !op.isInput && op.getDirection().opposite() == p.getDirection()) {
-                    System.out.println(op.getOwner() + " connected to" + placed);
-                    op.connectTo(p);
-                }
-            }
+                int ni = conveyor.i + d.getDi();
+                int nj = conveyor.j + d.getDj();
 
+                if (!inBounds(ni, nj))
+                    continue;
+                other = getComponent(ni, nj);
+                if (other == null || other == conveyor)
+                    continue;
+
+                for (Port p : other.getAllPorts()) {
+                    // rule all cases wehere we do not need to change ports
+                    if (p.type == PortType.OUTPUT || p.getDirection() == conveyor.direction)
+                        continue;
+
+                    if (conveyor.changeOutputPort(ni, nj, p.getDirection().opposite())) {
+                        makeConnection(placed, conveyor.out, ni, nj, p);
+                        System.out.println("::Changed ports");
+                        break;
+                    }
+                }
+
+            }
+        }
+    }
+
+    private void makeConnection(Component placed, Port p, int wi, int wj, Port op) {
+        // if ports does not match
+        // placed's ports should not be on the same po as other's ports
+        if (op.getWorldI() != wi && op.getWorldJ() != wj)
+            return;
+
+        if (p.type == PortType.OUTPUT && op.type == PortType.INPUT
+                && p.getDirection().opposite() == op.getDirection()) {
+            p.connectTo(op);
+            System.out.println(placed + " connected to " + op.getOwner());
+
+        } else if (p.type == PortType.INPUT && op.type == PortType.OUTPUT
+                && op.getDirection().opposite() == p.getDirection()) {
+            System.out.println(op.getOwner() + " connected to" + placed);
+            op.connectTo(p);
         }
     }
 

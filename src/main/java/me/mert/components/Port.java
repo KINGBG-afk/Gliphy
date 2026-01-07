@@ -1,16 +1,16 @@
 package me.mert.components;
 
-import me.mert.core.Direction;
+import me.mert.core.enums.Direction;
+import me.mert.core.enums.PortType;
 import me.mert.world.Glyph;
 
 // Port uses 2 phase update so items won't travel the whole path in 1 frame
-public class Port implements itemAcceptor, itemEjector {
+public class Port implements ItemAcceptor, ItemEjector {
 
     // this is where each port is physically located based on the compoent position
     public int localI, localJ;
 
-    // if its true then its input othewise its output
-    public final boolean isInput;
+    public PortType type;
 
     private Glyph item;
     private final Component owner;
@@ -20,12 +20,12 @@ public class Port implements itemAcceptor, itemEjector {
     public Glyph nextItem = null; // items ready to get accepted in here
     public boolean wantsToEject = false;
 
-    public Port(int i, int j, Component owner, Direction direction, boolean isInput) {
+    public Port(int localI, int localJ, Component owner, Direction direction, PortType type) {
         this.owner = owner;
         this.direction = direction;
-        this.localI = i;
-        this.localJ = j;
-        this.isInput = isInput;
+        this.type = type;
+        this.localI = localI;
+        this.localJ = localJ;
     }
 
     public Component getOwner() {

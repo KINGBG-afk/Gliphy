@@ -1,4 +1,4 @@
-package me.mert.ui;
+package me.mert.ui.window;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -7,7 +7,11 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.Timer;
 
-import me.mert.core.GameRenderer;
+import me.mert.ui.Camera;
+import me.mert.ui.GameRenderer;
+import me.mert.ui.menu.ComponentMenu;
+import me.mert.ui.panel.GamePanel;
+import me.mert.ui.panel.GameUIPanel;
 import me.mert.world.World;
 
 // container holding UI and game panels
@@ -20,7 +24,7 @@ public class MainWindow extends JFrame {
     public MainWindow() {
         setTitle("Gliphy");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(screenDimension.width, screenDimension.height);
+        setSize(screenDimension);
         setLocationRelativeTo(null);
         setResizable(false);
         setFocusable(true);

@@ -1,4 +1,4 @@
-package me.mert.ui;
+package me.mert.ui.panel;
 
 import javax.swing.JPanel;
 

@@ -1,7 +1,7 @@
 package me.mert.components;
 
-import me.mert.core.ComponentType;
-import me.mert.core.Direction;
+import me.mert.core.enums.ComponentType;
+import me.mert.core.enums.Direction;
 
 public class Hub extends Component {
     int stored;

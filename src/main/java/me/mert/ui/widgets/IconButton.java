@@ -1,4 +1,4 @@
-package me.mert.ui;
+package me.mert.ui.widgets;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -15,11 +15,11 @@ public class IconButton extends JButton {
     Color bgColor;
     Color highlight;
 
-    IconButton(ImageIcon icon) {
-        
+    public IconButton(ImageIcon icon) {
+
         super(icon);
 
-        setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        setFont(new Font("Segoe UI", Font.PLAIN, 14)); // idk why this is here
         bgColor = new Color(0, 0, 0, 0);
         highlight = new Color(255);
 
@@ -58,6 +58,7 @@ public class IconButton extends JButton {
         });
 
     }
+
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;

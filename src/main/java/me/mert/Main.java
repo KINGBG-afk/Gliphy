@@ -5,7 +5,7 @@ import java.awt.GraphicsEnvironment;
 
 import javax.swing.SwingUtilities;
 
-import me.mert.ui.MainWindow;
+import me.mert.ui.window.MainWindow;
 
 public class Main {
     public static void main(String[] args) {

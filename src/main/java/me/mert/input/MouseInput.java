@@ -5,9 +5,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
-import me.mert.core.GameRenderer;
 import me.mert.ui.Camera;
-import me.mert.ui.GamePanel;
+import me.mert.ui.GameRenderer;
+import me.mert.ui.panel.GamePanel;
 
 public class MouseInput extends MouseAdapter {
     private final Camera camera;
