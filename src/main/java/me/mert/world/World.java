@@ -70,7 +70,6 @@ public class World {
 
     public boolean placeComponent(int i, int j, ComponentType comp, Direction dir) {
         Component obj = ComponentType.createComponent(comp, dir, i, j);
-        System.out.println("placing: " + obj);
         if (obj == null)
             return false;
         int w = obj.size[0];
@@ -95,6 +94,7 @@ public class World {
             }
         }
 
+        System.out.println("Placing: " + obj);
         components.add(obj);
         connectPorts(obj);
 
@@ -136,11 +136,11 @@ public class World {
                     Direction.WEST
             };
 
-            // BUG: a lot of directional bugs but im just tired at this point
-            // this is the third hours in here
-            // i can't anymore. Futere me pls don't blame me
+            // BUG: visually the image is not changed when placed facing NORTH for SOME
+            // FUCKING REASON
+
             for (Direction d : dirs) {
-                if (conveyor.direction == d || conveyor.direction.opposite() != d)
+                if (conveyor.direction == d || conveyor.direction.opposite() == d)
                     continue;
 
                 int ni = conveyor.i + d.getDi();
@@ -154,23 +154,32 @@ public class World {
 
                 for (Port p : other.getAllPorts()) {
                     // rule all cases wehere we do not need to change ports
-                    if (p.type == PortType.OUTPUT || p.getDirection() == conveyor.direction)
+                    int wi = p.getWorldI();
+                    int wj = p.getWorldJ();
+                    Direction pDir = p.getDirection();
+
+                    if (!inBounds(wi, wj))
                         continue;
 
-                    if (conveyor.changeOutputPort(ni, nj, p.getDirection().opposite())) {
-                        makeConnection(placed, conveyor.out, ni, nj, p);
-                        System.out.println("::Changed ports");
-                        break;
+                    if (p.type == PortType.OUTPUT || pDir == conveyor.direction)
+                        continue;
+
+                    if (conveyor.i == wi && conveyor.j == wj) {
+
+                        if (conveyor.changeOutputPort(ni, nj, pDir.opposite())) {
+                            System.out.println("::Conveyor changed ports");
+                            makeConnection(placed, conveyor.out, ni, nj, p);
+                            return;
+                        }
                     }
                 }
-
             }
         }
     }
 
     private void makeConnection(Component placed, Port p, int wi, int wj, Port op) {
         // if ports does not match
-        // placed's ports should not be on the same po as other's ports
+        // placed's ports should not be on the same pos as other's ports
         if (op.getWorldI() != wi && op.getWorldJ() != wj)
             return;
 

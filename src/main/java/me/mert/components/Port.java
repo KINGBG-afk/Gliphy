@@ -101,4 +101,9 @@ public class Port implements ItemAcceptor, ItemEjector {
         if (canAccept(g))
             this.item = g;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Port(i=%d, j=%d, dir=%s, type=%s)", getWorldI(), getWorldJ(), direction, type);
+    }
 }

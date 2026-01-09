@@ -26,9 +26,6 @@ public class MouseInput extends MouseAdapter {
         lastX = e.getX();
         lastY = e.getY();
         panel.placeSelectedComponentAt(camera.screenToCellY(lastY), camera.screenToCellX(lastX));
-
-        // TEMP debug
-        System.out.println("cell pos: " + camera.screenToCellX(lastX) + ", " + camera.screenToCellY(lastY));
     }
 
     @Override
