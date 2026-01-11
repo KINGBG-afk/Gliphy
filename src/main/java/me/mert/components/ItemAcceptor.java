@@ -1,6 +1,6 @@
 package me.mert.components;
 
-import me.mert.world.Glyph;
+import me.mert.glyph.Glyph;
 
 public interface ItemAcceptor {
     boolean canAccept(Glyph g);

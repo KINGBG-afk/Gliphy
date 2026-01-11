@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.PortType;
-import me.mert.world.Glyph;
+import me.mert.glyph.Glyph;
 
 public class Conveyor extends Component {
 

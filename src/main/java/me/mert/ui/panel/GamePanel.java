@@ -15,7 +15,6 @@ import me.mert.ui.GameRenderer;
 import me.mert.world.World;
 
 public class GamePanel extends JPanel {
-    private final Camera camera;
     private final World world;
     private final GameRenderer gameRenderer;
 
@@ -24,7 +23,6 @@ public class GamePanel extends JPanel {
     protected Component selectedComponent = ComponentType.createComponent(selectedType, selectedDirection, 0, 0);
 
     public GamePanel(Camera camera, World world, GameRenderer gameRenderer) {
-        this.camera = camera;
         this.world = world;
         this.gameRenderer = gameRenderer;
 

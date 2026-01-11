@@ -10,7 +10,9 @@ import java.util.Set;
 
 import me.mert.components.Component;
 import me.mert.core.Constants;
+import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
+import me.mert.glyph.Glyph;
 import me.mert.world.Tile;
 import me.mert.world.World;
 
@@ -28,6 +30,8 @@ public class GameRenderer {
         this.CELL_SIZE = Constants.CELL_SIZE;
     }
 
+    // with the amount of math in this file i deserve at least a bit of appreciation
+    // but sadly nobody is here to see it :(
     private int getSize() {
         return (int) (CELL_SIZE * camera.zoom);
     }
@@ -119,6 +123,9 @@ public class GameRenderer {
     public void drawComponents(Graphics g, int screenWidth, int screenHeight) {
         double zoom = camera.zoom;
 
+        // still don't get why there is Graphics and Graphics2D :|
+        Graphics2D g2d = (Graphics2D) g;
+
         // visible world range
         double worldStartX = camera.x;
         double worldEndX = camera.x + screenWidth / zoom;
@@ -160,10 +167,17 @@ public class GameRenderer {
                 // except if you are retarted and remove the resource folder
                 obj.render(g, screenX, screenY, zoom, CELL_SIZE);
 
-                // TEMP to visualize the items flowing through
-                if (obj.hasItem()) {
-                    g.setColor(Color.RED);
-                    g.fillOval(screenX, screenY, 20, 20);
+                if (obj.hasItem() && obj.type != ComponentType.HUB) {
+                    Glyph glyph = obj.getItem();
+
+                    if (glyph == null)
+                        continue;
+
+                    int glyphSize = (int) (CELL_SIZE * zoom * 0.6);
+                    int gx = screenX + (int) (CELL_SIZE * zoom / 2 - glyphSize / 2);
+                    int gy = screenY + (int) (CELL_SIZE * zoom / 2 - glyphSize / 2);
+
+                    Glyph.render(g2d, glyph, gx, gy, glyphSize);
                 }
             }
         }

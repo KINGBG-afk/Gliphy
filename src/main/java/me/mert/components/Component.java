@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.PortType;
-import me.mert.world.Glyph;
+import me.mert.glyph.Glyph;
 
 public abstract class Component {
     public int i, j;
@@ -217,6 +217,17 @@ public abstract class Component {
             }
         }
         return false;
+    }
+
+    public final Glyph getItem() {
+        if (hasItem()) {
+            for (Port p : inputs) {
+                if (p.hasItem()) {
+                    return p.getItem();
+                }
+            }
+        }
+        return null;
     }
 
     public final List<Port> getInputPorts() {

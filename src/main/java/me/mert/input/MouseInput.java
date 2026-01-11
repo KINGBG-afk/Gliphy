@@ -49,6 +49,7 @@ public class MouseInput extends MouseAdapter {
         panel.repaint();
     }
 
+    // i wish i wasn't the person i am
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         int mouseX = e.getX();

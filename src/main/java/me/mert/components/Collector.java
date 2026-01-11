@@ -2,7 +2,8 @@ package me.mert.components;
 
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
-import me.mert.world.Glyph;
+import me.mert.core.enums.Primitive;
+import me.mert.glyph.Glyph;
 
 public class Collector extends Component {
 
@@ -18,7 +19,8 @@ public class Collector extends Component {
     public void update() {
         // if emtpy create new one
         if (!out.hasItem() && out.nextItem == null) {
-            out.nextItem = new Glyph(1);
+            Glyph glyph = new Glyph(Primitive.LINE);
+            out.nextItem = glyph;
         }
 
         if (out.hasItem() && out.getConnectedTo() != null) {

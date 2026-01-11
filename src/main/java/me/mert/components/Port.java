@@ -2,7 +2,7 @@ package me.mert.components;
 
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.PortType;
-import me.mert.world.Glyph;
+import me.mert.glyph.Glyph;
 
 // Port uses 2 phase update so items won't travel the whole path in 1 frame
 public class Port implements ItemAcceptor, ItemEjector {
