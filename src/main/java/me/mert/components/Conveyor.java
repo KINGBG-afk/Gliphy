@@ -1,6 +1,7 @@
 package me.mert.components;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
@@ -8,14 +9,21 @@ import me.mert.core.enums.PortType;
 import me.mert.glyph.Glyph;
 
 public class Conveyor extends Component {
+    // frames do not match :/
+    public static final int FRAME_COUNT = 11;
+    public static final int FRAME_TICK = 6;
 
     public final Port in;
     public Port out; // well no you are not final
 
-    public final BufferedImage leftImg;
-    public final BufferedImage rightImg;
-
     protected BufferedImage usedImg;
+
+    private static final BufferedImage[] straightFrames;
+    private static final BufferedImage[] leftFrames;
+    private static final BufferedImage[] rightFrames;
+
+    private static int globalFrame = 0;
+    private static int tickCounter = 0;
 
     public Conveyor(int i, int j, Direction dir) {
         super(i, j, dir, new int[] { 1, 1 }, ComponentType.CONVEYOR);
@@ -25,19 +33,48 @@ public class Conveyor extends Component {
 
         in.connectTo(out);
 
-        leftImg = loadImage("conveyor-left");
-        rightImg = loadImage("conveyor-right");
+    }
 
-        // currenctly used image
-        usedImg = this.img;
+    static {
+        straightFrames = new BufferedImage[FRAME_COUNT];
+        leftFrames = new BufferedImage[FRAME_COUNT];
+        rightFrames = new BufferedImage[FRAME_COUNT];
+
+        for (int i = 0; i < FRAME_COUNT; i++) {
+            String idx = String.format("%02d", i);
+
+            straightFrames[i] = loadStatic(
+                    "/components/conveyor/forward_" + idx + ".png");
+
+            leftFrames[i] = loadStatic(
+                    "/components/conveyor/left_" + idx + ".png");
+
+            rightFrames[i] = loadStatic(
+                    "/components/conveyor/right_" + idx + ".png");
+        }
+    }
+
+    private static BufferedImage loadStatic(String path) {
+        try {
+            return javax.imageio.ImageIO.read(
+                    Conveyor.class.getResourceAsStream(path));
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load: " + path, e);
+        }
+    }
+
+    public static void updateAnimation() {
+        tickCounter++;
+
+        if (tickCounter >= FRAME_TICK) {
+            tickCounter = 0;
+            globalFrame = (globalFrame + 1) % FRAME_COUNT;
+        }
     }
 
     public boolean isStraight() {
         return in.getDirection() == out.getDirection().opposite();
-    }
-
-    public boolean isCorner() {
-        return !isStraight();
     }
 
     private boolean checkValidOutputPort(Port np) {
@@ -53,23 +90,6 @@ public class Conveyor extends Component {
                 || npDir == inDir.right()) && npDir != inDir;
     }
 
-    private void changeUsedImage() {
-        Direction inDir = in.getDirection();
-        Direction outDir = out.getDirection();
-
-        if (inDir == outDir.left()) {
-            usedImg = leftImg;
-            System.out.println("Changed image to left corner");
-        } else if (inDir == outDir.right()) {
-            usedImg = rightImg;
-            System.out.println("Changed image to right corner");
-        } else if (inDir == outDir.opposite()) {
-            usedImg = img;
-            System.out.println("Changed image to straaight img");
-        }
-
-    }
-
     public boolean changeOutputPort(int i, int j, Direction direction) {
         Port p = new Port(direction.getDi(), direction.getDj(), this, direction, PortType.OUTPUT);
 
@@ -80,13 +100,22 @@ public class Conveyor extends Component {
         removePort(out);
         out = addOutput(p);
         System.out.println("Adding new port: " + p);
-        changeUsedImage();
         return true;
     }
 
     @Override
     public BufferedImage getImage() {
-        return usedImg;
+
+        Direction inDir = in.getDirection();
+        Direction outDir = out.getDirection();
+
+        if (inDir == outDir.left())
+            return leftFrames[globalFrame];
+
+        if (inDir == outDir.right())
+            return rightFrames[globalFrame];
+
+        return straightFrames[globalFrame];
     }
 
     @Override

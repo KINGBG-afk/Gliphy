@@ -26,7 +26,8 @@ public class GamePanel extends JPanel {
         this.world = world;
         this.gameRenderer = gameRenderer;
 
-        setBackground(Color.BLACK);
+        setBackground(new Color(120, 120, 120));
+        //setBackground(new Color(234, 234, 234));
         setFocusable(true);
 
         // mouse

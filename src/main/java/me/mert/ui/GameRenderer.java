@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import me.mert.components.Component;
+import me.mert.components.Conveyor;
 import me.mert.core.Constants;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
@@ -181,5 +182,7 @@ public class GameRenderer {
                 }
             }
         }
+        // update animation for conveyor
+        Conveyor.updateAnimation();
     }
 }

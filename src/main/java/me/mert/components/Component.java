@@ -83,7 +83,7 @@ public abstract class Component {
 
         switch (direction) {
             case NORTH -> // 0 degree
-                g2d.drawImage(img, x, y, width, height, null);
+                g2d.drawImage(renderImg, x, y, width, height, null);
 
             case EAST -> {
                 // 90 degrees
