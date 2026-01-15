@@ -2,8 +2,9 @@ package me.mert.components;
 
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
-import me.mert.core.enums.Primitive;
+import me.mert.core.enums.LayerType;
 import me.mert.glyph.Glyph;
+import me.mert.glyph.GlyphLayer;
 
 public class Collector extends Component {
 
@@ -19,7 +20,11 @@ public class Collector extends Component {
     public void update() {
         // if emtpy create new one
         if (!out.hasItem() && out.nextItem == null) {
-            Glyph glyph = new Glyph(Primitive.LINE);
+
+            GlyphLayer l = GlyphLayer.createLayer(LayerType.SQUARE);
+
+            System.out.println(l);
+            Glyph glyph = new Glyph(l);
             out.nextItem = glyph;
         }
 

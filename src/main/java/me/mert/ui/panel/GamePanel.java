@@ -15,6 +15,7 @@ import me.mert.ui.GameRenderer;
 import me.mert.world.World;
 
 public class GamePanel extends JPanel {
+    // i swaer at some point imma run into performance issues
     private final World world;
     private final GameRenderer gameRenderer;
 
@@ -27,7 +28,7 @@ public class GamePanel extends JPanel {
         this.gameRenderer = gameRenderer;
 
         setBackground(new Color(120, 120, 120));
-        //setBackground(new Color(234, 234, 234));
+        // setBackground(new Color(234, 234, 234));
         setFocusable(true);
 
         // mouse

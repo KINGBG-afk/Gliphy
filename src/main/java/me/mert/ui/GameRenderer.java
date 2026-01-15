@@ -169,6 +169,7 @@ public class GameRenderer {
                 obj.render(g, screenX, screenY, zoom, CELL_SIZE);
 
                 if (obj.hasItem() && obj.type != ComponentType.HUB) {
+
                     Glyph glyph = obj.getItem();
 
                     if (glyph == null)

@@ -118,10 +118,10 @@ public class World {
                 continue;
 
             for (Port op : other.getAllPorts()) {
-                System.out.println("::other");
-                System.out.println("world I;J:" + op.getWorldI() + ";" + op.getWorldJ());
+                System.out.println(":: Other");
+                System.out.println("World:" + op.getWorldI() + ";" + op.getWorldJ());
 
-                System.out.println("::port of placed");
+                System.out.println(":: Port of placed");
                 System.out.println(wi + ", " + wj);
 
                 makeConnection(placed, p, wi, wj, op);
@@ -135,9 +135,6 @@ public class World {
                     Direction.SOUTH,
                     Direction.WEST
             };
-
-            // BUG: visually the image is not changed when placed facing NORTH for SOME
-            // FUCKING REASON
 
             for (Direction d : dirs) {
                 if (conveyor.direction == d || conveyor.direction.opposite() == d)
@@ -167,7 +164,7 @@ public class World {
                     if (conveyor.i == wi && conveyor.j == wj) {
 
                         if (conveyor.changeOutputPort(ni, nj, pDir.opposite())) {
-                            System.out.println("::Conveyor changed ports");
+                            System.out.println(":: Conveyor changed ports");
                             makeConnection(placed, conveyor.out, ni, nj, p);
                             return;
                         }
@@ -190,7 +187,7 @@ public class World {
 
         } else if (p.type == PortType.INPUT && op.type == PortType.OUTPUT
                 && op.getDirection().opposite() == p.getDirection()) {
-            System.out.println(op.getOwner() + " connected to" + placed);
+            System.out.println(op.getOwner() + " connected to " + placed);
             op.connectTo(p);
         }
     }
