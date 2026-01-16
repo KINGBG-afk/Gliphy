@@ -1,6 +1,7 @@
 package me.mert.glyph;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.ArrayList;
@@ -46,7 +47,8 @@ public class Glyph {
             int size) {
 
         Stroke old = g2d.getStroke();
-        g2d.setStroke(new BasicStroke(Math.max(1, size / 6)));
+        g2d.setStroke(new BasicStroke(Math.max(1, size / 8)));
+        g2d.setColor(Color.BLACK);
 
         if (layer.getType() == LayerType.SQUARE) {
             drawSquare(g2d, x, y, size);
@@ -102,50 +104,77 @@ public class Glyph {
             int px = x + QX[q] * qs;
             int py = y + QY[q] * qs;
 
-            renderPrimitive(g2d, p, px, py, qs);
+            switch (p) {
+                case CIRCLE -> drawCircleQuarter(g2d, px, py, qs, q);
+                case SQUARE -> drawSquareQuarter(g2d, px, py, qs, q);
+            }
         }
         g2d.setStroke(old);
     }
 
-    // tbh idk if this is good to do (idk what else)
-    private static void renderPrimitive(
-            Graphics2D g2d,
-            Primitive p,
-            int x,
-            int y,
-            int size) {
-
-        switch (p) {
-            case SQUARE -> drawSquare(g2d, x, y, size);
-            case CIRCLE -> drawCircle(g2d, x, y, size);
-        }
-
-    }
-
+    // ----------------- LINE -----------------
     private static void drawHorizontalLine(Graphics2D g, int x, int y, int s) {
         g.drawLine(
                 x + s / 6, y + s / 2,
                 x + 5 * s / 6, y + s / 2);
-
     }
 
     private static void drawVerticalLine(Graphics2D g, int x, int y, int s) {
-        Stroke old = g.getStroke();
-        g.setStroke(new BasicStroke(Math.max(2, s / 6)));
-
         g.drawLine(
                 x + s / 2, y + s / 6,
                 x + s / 2, y + 5 * s / 6);
-
-        g.setStroke(old);
     }
 
+    // ----------------- SQUARE -----------------
     private static void drawSquare(Graphics2D g2d, int x, int y, int s) {
         g2d.drawRect(x + 1, y + 1, s - 2, s - 2);
     }
 
+    private static void drawSquareQuarter(Graphics2D g2d, int x, int y, int s, int q) {
+        int x1 = x + 1;
+        int y1 = y + 1;
+        int x2 = x + s - 2;
+        int y2 = y + s - 2;
+
+        switch (q) {
+            case 0 -> { // TR
+                g2d.drawLine(x1, y1, x2, y1);
+                g2d.drawLine(x2, y1, x2, y2);
+            }
+            case 1 -> { // TL
+                g2d.drawLine(x1, y1, x2, y1);
+                g2d.drawLine(x1, y1, x1, y2);
+            }
+            case 2 -> { // BL
+                g2d.drawLine(x1, y2, x2, y2);
+                g2d.drawLine(x1, y1, x1, y2);
+            }
+            case 3 -> { // BR
+                g2d.drawLine(x1, y2, x2, y2);
+                g2d.drawLine(x2, y1, x2, y2);
+            }
+        }
+
+    }
+
+    // ----------------- CIRLCE -----------------
     private static void drawCircle(Graphics2D g2d, int x, int y, int s) {
         g2d.drawOval(x + 1, y + 1, s - 2, s - 2);
+    }
+
+    private static void drawCircleQuarter(Graphics2D g2d, int x, int y, int s, int q) {
+        int startAngle = switch (q) {
+            case 0 -> 0; // TR
+            case 1 -> 90; // TL
+            case 2 -> 180; // BL
+            case 3 -> 270; // BR
+            default -> 0;
+        };
+
+        g2d.drawArc(x + 1, y + 1,
+                s - 2, s - 2,
+                startAngle,
+                90);
     }
 
 }

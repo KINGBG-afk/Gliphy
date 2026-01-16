@@ -4,6 +4,7 @@ import me.mert.core.enums.LayerType;
 import me.mert.core.enums.Primitive;
 
 public class GlyphLayer {
+    // at this point this is here to just remind me what a quarter is
     public static final int QUARTERS = 4;
 
     // quarter pos:
@@ -41,6 +42,18 @@ public class GlyphLayer {
                 l.q[i] = shape;
             }
         }
+        return l;
+    }
+
+    public static GlyphLayer createLayer(Primitive... quarters) {
+        // TODO this method could receive a normal layer type and it won't know
+        if (quarters.length != 4) {
+            throw new IllegalArgumentException("Need 4 quarters");
+        }
+
+        GlyphLayer l = new GlyphLayer();
+        l.type = LayerType.CUSTOM;
+        System.arraycopy(quarters, 0, l.q, 0, 4);
         return l;
     }
 
