@@ -1,9 +1,12 @@
 package me.mert.ui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Point;
+import java.awt.RadialGradientPaint;
 import java.awt.geom.AffineTransform;
 import java.util.HashSet;
 import java.util.Set;
@@ -80,9 +83,35 @@ public class GameRenderer {
         };
     }
 
+    // --- BACKGROUND ------------------------------------------------------------
+    public void drawVignette(Graphics2D g2d, int w, int h) {
+        float radius = Math.max(w, h) * 0.75f;
+
+        float[] dist = { 0.0f, 0.4f, 1.0f };
+        Color[] colors = {
+                new Color(0, 0, 0, 0),
+                new Color(0, 0, 0, 70),
+                new Color(0, 0, 0, 129)
+        };
+
+        RadialGradientPaint paint = new RadialGradientPaint(
+                w / 2f,
+                h / 2f,
+                radius,
+                dist,
+                colors);
+
+        Paint old = g2d.getPaint();
+        g2d.setPaint(paint);
+        g2d.fillRect(0, 0, w, h);
+        g2d.setPaint(old);
+
+    }
+
     // --- GRID ------------------------------------------------------------
-    public void drawGrid(Graphics g, int screenWidth, int screenHeight) {
-        g.setColor(new Color(90, 90, 90));
+    public void drawGrid(Graphics2D g2d, int screenWidth, int screenHeight) {
+        g2d.setColor(new Color(230, 230, 230));
+        g2d.setStroke(new BasicStroke(Math.max(1, (int) ((20 * camera.zoom * 0.6f) / 6))));
 
         // find the visible world bouds
         int worldStartX = (int) camera.screenToWorldX(0);
@@ -110,13 +139,13 @@ public class GameRenderer {
         // vertical lines
         for (int x = firstGridX; x <= worldEndX; x += CELL_SIZE) {
             int sx = camera.worldToScreenX(x);
-            g.drawLine(sx, screenWorldMinY, sx, screenWorldMaxY);
+            g2d.drawLine(sx, screenWorldMinY, sx, screenWorldMaxY);
         }
 
         // horizontal lines
         for (int y = firstGridY; y <= worldEndY; y += CELL_SIZE) {
             int sy = camera.worldToScreenY(y);
-            g.drawLine(screenWorldMinX, sy, screenWorldMaxX, sy);
+            g2d.drawLine(screenWorldMinX, sy, screenWorldMaxX, sy);
         }
     }
 

@@ -2,6 +2,7 @@ package me.mert.ui.panel;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
@@ -27,8 +28,9 @@ public class GamePanel extends JPanel {
         this.world = world;
         this.gameRenderer = gameRenderer;
 
-        setBackground(new Color(120, 120, 120));
-        // setBackground(new Color(234, 234, 234));
+        // setBackground(new Color(120, 120, 120));
+        // setBackground(new Color(234, 235, 237));
+        setBackground(new Color(255, 255, 255));
         setFocusable(true);
 
         // mouse
@@ -63,9 +65,11 @@ public class GamePanel extends JPanel {
         super.paintComponent(g);
         int sWidth = getWidth();
         int sHeight = getHeight();
-        gameRenderer.drawGrid(g, sWidth, sHeight);
+        gameRenderer.drawGrid((Graphics2D) g, sWidth, sHeight);
         gameRenderer.drawComponents(g, sWidth, sHeight);
         gameRenderer.drawPreviewComponent(g, selectedComponent, true);
+
+        gameRenderer.drawVignette((Graphics2D) g, sWidth, sHeight);
 
     }
 }

@@ -31,12 +31,16 @@ public class Glyph {
 
         int layerOffset = size / 6;
 
+        Stroke old = g2d.getStroke();
+        g2d.setStroke(new BasicStroke(Math.max(1, size / 8)));
+        g2d.setColor(Color.BLACK);
         for (int l = 0; l < g.layers.size(); l++) {
             int ly = y - l * layerOffset;
             GlyphLayer layer = g.layers.get(l);
 
             renderLayer(g2d, layer, x, ly, size);
         }
+        g2d.setStroke(old);
     }
 
     private static void renderLayer(
@@ -46,21 +50,14 @@ public class Glyph {
             int y,
             int size) {
 
-        Stroke old = g2d.getStroke();
-        g2d.setStroke(new BasicStroke(Math.max(1, size / 8)));
-        g2d.setColor(Color.BLACK);
-
         if (layer.getType() == LayerType.SQUARE) {
             drawSquare(g2d, x, y, size);
-            g2d.setStroke(old);
             return;
         }
 
         if (layer.getType() == LayerType.CIRCLE) {
             drawCircle(g2d, x, y, size);
-            g2d.setStroke(old);
             return;
-
         }
 
         // well yeah at least i won't worry about performance for this one
@@ -73,22 +70,18 @@ public class Glyph {
         switch (mask) {
             case 0b0011 -> {
                 drawHorizontalLine(g2d, x, y, size);
-                g2d.setStroke(old);
                 return;
             }
             case 0b1100 -> {
                 drawHorizontalLine(g2d, x, y, size);
-                g2d.setStroke(old);
                 return;
             }
             case 0b1001 -> {
                 drawVerticalLine(g2d, x, y, size);
-                g2d.setStroke(old);
                 return;
             }
             case 0b0110 -> {
                 drawVerticalLine(g2d, x, y, size);
-                g2d.setStroke(old);
                 return;
             }
         }
@@ -109,7 +102,6 @@ public class Glyph {
                 case SQUARE -> drawSquareQuarter(g2d, px, py, qs, q);
             }
         }
-        g2d.setStroke(old);
     }
 
     // ----------------- LINE -----------------
