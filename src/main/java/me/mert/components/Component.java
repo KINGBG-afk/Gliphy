@@ -119,7 +119,6 @@ public abstract class Component {
             }
         } catch (IOException ignored) {
             System.err.print("Couldn't load " + p + ".png");
-            System.out.println("Loading default image");
         }
         return null; // well too bad it doesn't load
 

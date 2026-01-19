@@ -118,11 +118,8 @@ public class World {
                 continue;
 
             for (Port op : other.getAllPorts()) {
-                System.out.println(":: Other");
-                System.out.println("World:" + op.getWorldI() + ";" + op.getWorldJ());
-
-                System.out.println(":: Port of placed");
-                System.out.println(wi + ", " + wj);
+                System.out.println("Other port: i=" + op.getWorldI() + ", j=" + op.getWorldJ());
+                System.out.println("Port of placed: i=" + wi + ", j=" + wj);
 
                 makeConnection(placed, p, wi, wj, op);
             }

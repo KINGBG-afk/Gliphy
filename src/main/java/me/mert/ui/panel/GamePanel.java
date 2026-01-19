@@ -48,7 +48,6 @@ public class GamePanel extends JPanel {
     public void setSelectedType(ComponentType c) {
         selectedType = c;
         selectedComponent = ComponentType.createComponent(selectedType, selectedDirection, 0, 0);
-        System.out.println("Selected component: " + c);
     }
 
     public void rotateDirection() {

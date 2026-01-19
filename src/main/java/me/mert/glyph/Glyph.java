@@ -29,11 +29,13 @@ public class Glyph {
             return;
         }
 
+        // give illusion for depth
         int layerOffset = size / 6;
 
         Stroke old = g2d.getStroke();
         g2d.setStroke(new BasicStroke(Math.max(1, size / 8)));
         g2d.setColor(Color.BLACK);
+
         for (int l = 0; l < g.layers.size(); l++) {
             int ly = y - l * layerOffset;
             GlyphLayer layer = g.layers.get(l);
@@ -59,7 +61,7 @@ public class Glyph {
             drawCircle(g2d, x, y, size);
             return;
         }
-
+        
         // well yeah at least i won't worry about performance for this one
         // hehe...
         int mask = (layer.q[0] == Primitive.LINE ? 1 : 0) |
@@ -70,19 +72,24 @@ public class Glyph {
         switch (mask) {
             case 0b0011 -> {
                 drawHorizontalLine(g2d, x, y, size);
-                return;
+                if (layer.q[2] == Primitive.EMPTY && layer.q[3] == Primitive.EMPTY)
+                    return;
             }
             case 0b1100 -> {
                 drawHorizontalLine(g2d, x, y, size);
-                return;
+                if (layer.q[0] == Primitive.EMPTY && layer.q[1] == Primitive.EMPTY)
+                    return;
             }
             case 0b1001 -> {
                 drawVerticalLine(g2d, x, y, size);
-                return;
+                if (layer.q[1] == Primitive.EMPTY && layer.q[2] == Primitive.EMPTY)
+                    return;
             }
             case 0b0110 -> {
                 drawVerticalLine(g2d, x, y, size);
-                return;
+                if (layer.q[0] == Primitive.EMPTY && layer.q[3] == Primitive.EMPTY)
+                    return;
+
             }
         }
 
@@ -94,12 +101,13 @@ public class Glyph {
             if (p == Primitive.EMPTY)
                 continue;
 
-            int px = x + QX[q] * qs;
-            int py = y + QY[q] * qs;
-
             switch (p) {
-                case CIRCLE -> drawCircleQuarter(g2d, px, py, qs, q);
-                case SQUARE -> drawSquareQuarter(g2d, px, py, qs, q);
+                case CIRCLE -> drawCircleQuarter(g2d, x, y, size, q);
+                case SQUARE -> {
+                    int px = x + QX[q] * qs;
+                    int py = y + QY[q] * qs;
+                    drawSquareQuarter(g2d, px, py, qs, q);
+                }
             }
         }
     }

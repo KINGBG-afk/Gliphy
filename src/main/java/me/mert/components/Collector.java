@@ -2,7 +2,7 @@ package me.mert.components;
 
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
-import me.mert.core.enums.LayerType;
+import me.mert.core.enums.Primitive;
 import me.mert.glyph.Glyph;
 import me.mert.glyph.GlyphLayer;
 
@@ -21,13 +21,11 @@ public class Collector extends Component {
         // if emtpy create new one
         if (!out.hasItem() && out.nextItem == null) {
 
-            /*
-             * GlyphLayer l = GlyphLayer.createLayer(
-             * Primitive.CIRCLE, Primitive.CIRCLE,
-             * Primitive.CIRCLE, Primitive.SQUARE);
-             */
-
-            GlyphLayer l = GlyphLayer.createLayer(LayerType.LINE);
+            GlyphLayer l = GlyphLayer.createLayer(
+                    Primitive.SQUARE, Primitive.SQUARE,
+                    Primitive.LINE, Primitive.LINE);
+            GlyphLayer.rotateCCW(l);
+            // GlyphLayer l = GlyphLayer.createLayer(LayerType.LINE);
 
             System.out.println(l);
             Glyph glyph = new Glyph(l);
