@@ -27,7 +27,7 @@ public enum ComponentType {
             case CONVEYOR -> new Conveyor(i, j, d);
             case COLLECTOR -> new Collector(i, j, d);
             case HUB -> new Hub(i, j, d);
-            case CUTTER -> new Cutter(i, j, Direction.NORTH);
+            case CUTTER -> new Cutter(i, j, d);
             default -> null;
         };
     }

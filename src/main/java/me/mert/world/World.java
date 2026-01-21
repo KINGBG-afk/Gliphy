@@ -69,11 +69,19 @@ public class World {
     }
 
     public boolean placeComponent(int i, int j, ComponentType comp, Direction dir) {
+        int[] size;
         Component obj = ComponentType.createComponent(comp, dir, i, j);
         if (obj == null)
             return false;
-        int w = obj.size[0];
-        int h = obj.size[1];
+
+        if (dir == Direction.EAST || dir == Direction.WEST) {
+            size = new int[] { obj.size[1], obj.size[0] };
+        } else {
+            size = new int[] { obj.size[0], obj.size[1] };
+        }
+
+        int w = size[0];
+        int h = size[1];
 
         for (int di = 0; di < h; di++) {
             for (int dj = 0; dj < w; dj++) {
