@@ -25,23 +25,28 @@ public class ComponentMenu extends JPanel {
         IconButton collectorButton = new IconButton(getScaledImage(ComponentType.COLLECTOR));
         IconButton conveyorButton = new IconButton(getScaledImage(ComponentType.CONVEYOR));
         IconButton hubButton = new IconButton(getScaledImage(ComponentType.HUB));
+        IconButton cutterButton = new IconButton(getScaledImage(ComponentType.CUTTER));
 
         collectorButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
         conveyorButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
         hubButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
+        cutterButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
 
         collectorButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         conveyorButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         hubButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cutterButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         add(collectorButton);
         add(conveyorButton);
         add(hubButton);
+        add(cutterButton);
 
         // Add action listeners
         collectorButton.addActionListener(e -> gamePanel.setSelectedType(ComponentType.COLLECTOR));
         conveyorButton.addActionListener(e -> gamePanel.setSelectedType(ComponentType.CONVEYOR));
         hubButton.addActionListener(e -> gamePanel.setSelectedType(ComponentType.HUB));
+        cutterButton.addActionListener(e -> gamePanel.setSelectedType(ComponentType.CUTTER));
     }
 
     private ImageIcon getScaledImage(ComponentType ct) {

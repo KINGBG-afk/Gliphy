@@ -16,7 +16,53 @@ public class Glyph {
     static final int[] QY = { 0, 0, 1, 1 };
 
     public Glyph(GlyphLayer l) {
+        if (l == null)
+            return; // layers will be added later
         layers.add(l);
+    }
+
+    // an idiot admires complexity
+    // a genius admires simplicity
+    private static void rotateLayerCW(GlyphLayer l) {
+        Primitive[] q = l.q.clone();
+
+        Primitive tmp = q[1];
+        q[1] = q[2];
+        q[2] = q[3];
+        q[3] = q[0];
+        q[0] = tmp;
+    }
+
+    private static void rotateLayerCCW(GlyphLayer l) {
+        Primitive[] q = l.q.clone();
+
+        Primitive tmp = q[1];
+        q[1] = q[0];
+        q[0] = q[3];
+        q[3] = q[2];
+        q[2] = tmp;
+    }
+
+    public static void rotateCW(Glyph g) {
+        for (GlyphLayer l : g.layers) {
+            rotateLayerCW(l);
+        }
+    }
+
+    public static void rotateCCW(Glyph g) {
+        for (GlyphLayer l : g.layers) {
+            rotateLayerCCW(l);
+        }
+    }
+
+    public static Glyph[] cut(Glyph g) {
+        Glyph left = new Glyph(null);
+        Glyph right = new Glyph(null);
+        for (GlyphLayer l : g.layers) {
+            left.layers.add(GlyphLayer.createLayer(Primitive.EMPTY, l.q[1], l.q[2], Primitive.EMPTY));
+            right.layers.add(GlyphLayer.createLayer(l.q[0], Primitive.EMPTY, Primitive.EMPTY, l.q[3]));
+        }
+        return new Glyph[] { left, right };
     }
 
     public static void render(
@@ -61,7 +107,7 @@ public class Glyph {
             drawCircle(g2d, x, y, size);
             return;
         }
-        
+
         // well yeah at least i won't worry about performance for this one
         // hehe...
         int mask = (layer.q[0] == Primitive.LINE ? 1 : 0) |

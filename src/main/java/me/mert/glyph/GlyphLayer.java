@@ -57,25 +57,6 @@ public class GlyphLayer {
         return l;
     }
 
-    public static void rotateCW(GlyphLayer l) {
-        Primitive[] q = l.q;
-
-        Primitive tmp = q[1];
-        q[1] = q[2];
-        q[2] = q[3];
-        q[3] = q[0];
-        q[0] = tmp;
-    }
-
-    public static void rotateCCW(GlyphLayer l) {
-        Primitive[] q = l.q;
-
-        Primitive tmp = q[1];
-        q[1] = q[0];
-        q[0] = q[3];
-        q[3] = q[2];
-        q[2] = tmp;
-    }
 
     public LayerType getType() {
         return type;

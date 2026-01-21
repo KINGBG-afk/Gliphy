@@ -22,10 +22,10 @@ public class Collector extends Component {
         if (!out.hasItem() && out.nextItem == null) {
 
             // GlyphLayer l = GlyphLayer.createLayer(
-            //         Primitive.SQUARE, Primitive.SQUARE,
-            //         Primitive.LINE, Primitive.LINE);
+            // Primitive.SQUARE, Primitive.SQUARE,
+            // Primitive.LINE, Primitive.LINE);
             // GlyphLayer.rotateCCW(l);
-            GlyphLayer l = GlyphLayer.createLayer(LayerType.SQUARE);
+            GlyphLayer l = GlyphLayer.createLayer(LayerType.CIRCLE);
 
             System.out.println(l);
             Glyph glyph = new Glyph(l);

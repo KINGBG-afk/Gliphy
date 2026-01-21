@@ -16,8 +16,6 @@ public class Conveyor extends Component {
     public final Port in;
     public Port out; // well no you are not final
 
-    protected BufferedImage usedImg;
-
     private static final BufferedImage[] straightFrames;
     private static final BufferedImage[] leftFrames;
     private static final BufferedImage[] rightFrames;
@@ -32,7 +30,6 @@ public class Conveyor extends Component {
         out = addOutput(dir.getDi(), dir.getDj(), dir);
 
         in.connectTo(out);
-
     }
 
     static {
