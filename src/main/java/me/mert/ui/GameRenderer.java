@@ -47,28 +47,37 @@ public class GameRenderer {
 
         Graphics2D g2d = (Graphics2D) g;
 
+        int cellPx = getSize();
+
         int worldX = camera.screenToCellX(mouse.x) * CELL_SIZE;
         int worldY = camera.screenToCellY(mouse.y) * CELL_SIZE;
 
         int screenX = camera.worldToScreenX(worldX);
         int screenY = camera.worldToScreenY(worldY);
-        int size = getSize();
 
-        // Save original transform
+        int cellsW = c.size[0];
+        int cellsH = c.size[1];
+
+        // for 90/270 rotations the footprint swaps on screen
+        boolean swap = (c.direction == Direction.EAST || c.direction == Direction.WEST);
+        int drawW = (swap ? cellsH : cellsW) * cellPx;
+        int drawH = (swap ? cellsW : cellsH) * cellPx;
+
         AffineTransform oldTransform = g2d.getTransform();
 
-        // Move origin to center of the cell
-        g2d.translate(screenX + size / 2.0, screenY + size / 2.0);
-
-        // Rotate based on direction
+        g2d.translate(screenX + drawW / 2.0, screenY + drawH / 2.0);
         g2d.rotate(directionToRadians(c.direction));
+
+        // after rotation draw the unrotated img
+        int unrotW = cellsW * cellPx;
+        int unrotH = cellsH * cellPx;
 
         g2d.drawImage(
                 c.previewImage,
-                -size / 2,
-                -size / 2,
-                size,
-                size,
+                -unrotW / 2,
+                -unrotH / 2,
+                unrotW,
+                unrotH,
                 null);
 
         g2d.setTransform(oldTransform);
@@ -153,7 +162,7 @@ public class GameRenderer {
     public void drawComponents(Graphics g, int screenWidth, int screenHeight) {
         double zoom = camera.zoom;
 
-        // still don't get why there is Graphics and Graphics2D :|
+        // still don't get why there is Graphics and Graphics2D :/
         Graphics2D g2d = (Graphics2D) g;
 
         // visible world range
@@ -198,7 +207,7 @@ public class GameRenderer {
                 obj.render(g, screenX, screenY, zoom, CELL_SIZE);
 
                 // the collector doesn't have input port so it doesn't render anyway
-                if (obj.hasItem() && (obj.type != ComponentType.HUB || obj.type == ComponentType.CUTTER)) {
+                if (obj.hasItem() && (obj.type != ComponentType.HUB || obj.type != ComponentType.CUTTER)) {
 
                     Glyph glyph = obj.getItem();
 

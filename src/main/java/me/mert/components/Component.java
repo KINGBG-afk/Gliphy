@@ -76,34 +76,34 @@ public abstract class Component {
     public void render(Graphics g, int x, int y, double zoom, int cellSize) {
         Graphics2D g2d = (Graphics2D) g.create();
 
-        int width = (int) (size[0] * cellSize * zoom);
-        int height = (int) (size[1] * cellSize * zoom);
+        int w = (int) (size[0] * cellSize * zoom);
+        int h = (int) (size[1] * cellSize * zoom);
 
         BufferedImage renderImg = getImage();
 
         switch (direction) {
             case NORTH -> // 0 degree
-                g2d.drawImage(renderImg, x, y, width, height, null);
+                g2d.drawImage(renderImg, x, y, w, h, null);
 
             case EAST -> {
                 // 90 degrees
-                g2d.translate(x + width, y);
+                g2d.translate(x + h, y);
                 g2d.rotate(Math.PI / 2);
-                g2d.drawImage(renderImg, 0, 0, width, height, null);
+                g2d.drawImage(renderImg, 0, 0, w, h, null);
             }
 
             case SOUTH -> {
                 // 180 degrees
-                g2d.translate(x + width, y + height);
+                g2d.translate(x + w, y + h);
                 g2d.rotate(Math.PI);
-                g2d.drawImage(renderImg, 0, 0, width, height, null);
+                g2d.drawImage(renderImg, 0, 0, w, h, null);
             }
 
             case WEST -> {
                 // 270 degree
-                g2d.translate(x, y + height);
+                g2d.translate(x, y + w);
                 g2d.rotate(-Math.PI / 2);
-                g2d.drawImage(renderImg, 0, 0, width, height, null);
+                g2d.drawImage(renderImg, 0, 0, w, h, null);
             }
         }
 
@@ -134,14 +134,6 @@ public abstract class Component {
         } catch (IOException ignored) {
             System.err.print("Couldn't load " + ct);
             System.out.println("Loading default image");
-        }
-
-        if (this.img != null)
-            return;
-        try (InputStream fallback = getClass().getClassLoader().getResourceAsStream("components/default.png")) {
-            this.img = ImageIO.read(fallback);
-        } catch (IOException e) {
-            this.img = null;
         }
         // we do need to remember that this will be checked by my dream university
         // we have to keep our profesionalism

@@ -4,7 +4,6 @@ import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.glyph.Glyph;
 
-// TODO: my stupid ass made the input port from left of "direction" in the asset fix it
 public class Cutter extends Component {
     public Port in;
     public Port out1, out2;

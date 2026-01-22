@@ -17,14 +17,6 @@ public enum Direction {
         this.dj = dj;
     }
 
-    // from int to direction
-    public static Direction fromOrientation(int o) {
-        // COUTION: DO NOT use negative values
-        // just in case the number is heigher than 4 we do
-        // x % 4
-        return values()[o % 4];
-    }
-
     public int getDi() {
         return di;
     }
