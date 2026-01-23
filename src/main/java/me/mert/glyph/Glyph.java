@@ -27,7 +27,7 @@ public class Glyph {
     // rotating
     // #region
     private static void rotateLayerCW(GlyphLayer l) {
-        Primitive[] q = l.q.clone();
+        Primitive[] q = l.q;
 
         Primitive tmp = q[1];
         q[1] = q[2];
@@ -37,7 +37,7 @@ public class Glyph {
     }
 
     private static void rotateLayerCCW(GlyphLayer l) {
-        Primitive[] q = l.q.clone();
+        Primitive[] q = l.q;
 
         Primitive tmp = q[1];
         q[1] = q[0];
@@ -69,6 +69,8 @@ public class Glyph {
         return new Glyph[] { left, right };
     }
 
+    // render
+    // #region
     public static void render(
             Graphics2D g2d,
             Glyph g,
@@ -89,7 +91,6 @@ public class Glyph {
         for (int l = 0; l < g.layers.size(); l++) {
             int ly = y - l * layerOffset;
             GlyphLayer layer = g.layers.get(l);
-
             renderLayer(g2d, layer, x, ly, size);
         }
         g2d.setStroke(old);
@@ -204,7 +205,6 @@ public class Glyph {
                 g2d.drawLine(x2, y1, x2, y2);
             }
         }
-
     }
 
     // ----------------- CIRLCE -----------------
@@ -226,5 +226,5 @@ public class Glyph {
                 startAngle,
                 90);
     }
-
+    // #endregion
 }

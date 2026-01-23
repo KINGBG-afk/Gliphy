@@ -73,5 +73,14 @@ public class KeyboardActions {
                 panel.repaint();
             }
         });
+
+        // ESCAPE
+        im.put(KeyStroke.getKeyStroke("ESCAPE"), "esc");
+        am.put("esc", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
     }
 }

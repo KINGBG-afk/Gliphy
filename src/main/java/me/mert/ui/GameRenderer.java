@@ -99,7 +99,7 @@ public class GameRenderer {
         float[] dist = { 0.0f, 0.4f, 1.0f };
         Color[] colors = {
                 new Color(0, 0, 0, 0),
-                new Color(0, 0, 0, 70),
+                new Color(0, 0, 0, 60),
                 new Color(0, 0, 0, 129)
         };
 
@@ -210,7 +210,7 @@ public class GameRenderer {
                 if (obj.hasItem() && !(obj.type == ComponentType.HUB || obj.type == ComponentType.CUTTER)) {
 
                     Glyph glyph = obj.getItem();
-                    int glyphSize = (int) (CELL_SIZE * zoom * 0.6);
+                    int glyphSize = (int) (CELL_SIZE * zoom * 0.6f);
                     int gx = screenX + (int) (CELL_SIZE * zoom / 2 - glyphSize / 2);
                     int gy = screenY + (int) (CELL_SIZE * zoom / 2 - glyphSize / 2);
 

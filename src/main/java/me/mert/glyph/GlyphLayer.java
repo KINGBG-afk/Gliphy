@@ -46,7 +46,6 @@ public class GlyphLayer {
     }
 
     public static GlyphLayer createLayer(Primitive... quarters) {
-        // TODO this method could receive a normal layer type and it won't know
         if (quarters.length != 4) {
             throw new IllegalArgumentException("Need 4 quarters");
         }

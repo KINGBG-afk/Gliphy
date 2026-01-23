@@ -55,8 +55,8 @@ public class MouseInput extends MouseAdapter {
         int mouseX = e.getX();
         int mouseY = e.getY();
 
-        double worldX = camera.screenToWorldX((int) mouseX);
-        double worldY = camera.screenToWorldY((int) mouseY);
+        double worldX = camera.screenToWorldX(mouseX);
+        double worldY = camera.screenToWorldY(mouseY);
 
         double zoomDeleta = -e.getPreciseWheelRotation() * 0.1;
         camera.adjustZoom(zoomDeleta);
