@@ -11,7 +11,7 @@ import me.mert.core.enums.LayerType;
 import me.mert.core.enums.Primitive;
 
 public class Glyph {
-    List<GlyphLayer> layers = new ArrayList<>();
+    public List<GlyphLayer> layers = new ArrayList<>();
     static final int[] QX = { 1, 0, 0, 1 };
     static final int[] QY = { 0, 0, 1, 1 };
 
@@ -23,6 +23,9 @@ public class Glyph {
 
     // an idiot admires complexity
     // a genius admires simplicity
+
+    // rotating
+    // #region
     private static void rotateLayerCW(GlyphLayer l) {
         Primitive[] q = l.q.clone();
 
@@ -54,6 +57,7 @@ public class Glyph {
             rotateLayerCCW(l);
         }
     }
+    // #endregion
 
     public static Glyph[] cut(Glyph g) {
         Glyph left = new Glyph(null);
