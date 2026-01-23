@@ -54,7 +54,6 @@ public class MainWindow extends JFrame {
         Timer updateTimer = new Timer(1000, e -> world.updateComponents());
         updateTimer.start();
 
-        setVisible(true);
     }
 
     private void createMenu(GameUIPanel uiPanel) {

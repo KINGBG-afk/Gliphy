@@ -13,7 +13,11 @@ public class Main {
             GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
             MainWindow frame = new MainWindow();
-            device.setFullScreenWindow(frame);
+            frame.setUndecorated(true);
+            frame.setResizable(false);
+            frame.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+            frame.setVisible(true);
+            
         });
     }
 }

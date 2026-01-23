@@ -207,13 +207,9 @@ public class GameRenderer {
                 obj.render(g, screenX, screenY, zoom, CELL_SIZE);
 
                 // the collector doesn't have input port so it doesn't render anyway
-                if (obj.hasItem() && (obj.type != ComponentType.HUB || obj.type != ComponentType.CUTTER)) {
+                if (obj.hasItem() && !(obj.type == ComponentType.HUB || obj.type == ComponentType.CUTTER)) {
 
                     Glyph glyph = obj.getItem();
-
-                    if (glyph == null)
-                        continue;
-
                     int glyphSize = (int) (CELL_SIZE * zoom * 0.6);
                     int gx = screenX + (int) (CELL_SIZE * zoom / 2 - glyphSize / 2);
                     int gy = screenY + (int) (CELL_SIZE * zoom / 2 - glyphSize / 2);
