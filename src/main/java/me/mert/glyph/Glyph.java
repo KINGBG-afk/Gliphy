@@ -3,6 +3,7 @@ package me.mert.glyph;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,17 @@ public class Glyph {
         if (g == null) {
             return;
         }
+        g2d.setRenderingHint(
+                RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2d.setRenderingHint(
+                RenderingHints.KEY_STROKE_CONTROL,
+                RenderingHints.VALUE_STROKE_PURE);
+
+        g2d.setRenderingHint(
+                RenderingHints.KEY_RENDERING,
+                RenderingHints.VALUE_RENDER_QUALITY);
 
         // give illusion for depth
         int layerOffset = size / 6;
@@ -184,8 +196,8 @@ public class Glyph {
     private static void drawSquareQuarter(Graphics2D g2d, int x, int y, int s, int q) {
         int x1 = x + 1;
         int y1 = y + 1;
-        int x2 = x + s - 2;
-        int y2 = y + s - 2;
+        int x2 = x + s - 1;
+        int y2 = y + s - 1;
 
         switch (q) {
             case 0 -> { // TR

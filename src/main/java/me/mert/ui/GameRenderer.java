@@ -206,7 +206,6 @@ public class GameRenderer {
                 // except if you are retarted and remove the resource folder
                 obj.render(g, screenX, screenY, zoom, CELL_SIZE);
 
-                // the collector doesn't have input port so it doesn't render anyway
                 if (obj.hasItem() && !(obj.type == ComponentType.HUB || obj.type == ComponentType.CUTTER)) {
 
                     Glyph glyph = obj.getItem();
