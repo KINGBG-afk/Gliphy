@@ -9,7 +9,7 @@ import me.mert.core.enums.PortType;
 import me.mert.glyph.Glyph;
 
 public class Conveyor extends Component {
-    // frames do not match :/
+    // frames do not match with the turns:/
     public static final int FRAME_COUNT = 11;
     public static final int FRAME_TICK = 6;
 
