@@ -124,22 +124,12 @@ public class GameRenderer {
 
         // find the visible world bouds
         int worldStartX = (int) camera.screenToWorldX(0);
-        int worldEndX = (int) camera.screenToWorldX(Constants.GRID_PIXEL_WIDTH);
+        int worldEndX = (int) camera.screenToWorldX(screenWidth);
         int worldStartY = (int) camera.screenToWorldY(0);
-        int worldEndY = (int) camera.screenToWorldY(Constants.GRID_PIXEL_HEIGHT);
-
-        // clamp boundaries
-        worldStartX = Math.max(worldStartX, 0);
-        worldEndX = Math.min(worldEndX, Constants.GRID_PIXEL_WIDTH);
-
-        worldStartY = Math.max(worldStartY, 0);
-        worldEndY = Math.min(worldEndY, Constants.GRID_PIXEL_HEIGHT);
+        int worldEndY = (int) camera.screenToWorldY(screenHeight);
 
         int screenWorldMinX = camera.worldToScreenX(0);
         int screenWorldMinY = camera.worldToScreenY(0);
-
-        int screenWorldMaxX = camera.worldToScreenX(Constants.GRID_PIXEL_WIDTH);
-        int screenWorldMaxY = camera.worldToScreenY(Constants.GRID_PIXEL_HEIGHT);
 
         // first world grid line
         int firstGridX = (worldStartX / CELL_SIZE) * CELL_SIZE;
@@ -148,13 +138,13 @@ public class GameRenderer {
         // vertical lines
         for (int x = firstGridX; x <= worldEndX; x += CELL_SIZE) {
             int sx = camera.worldToScreenX(x);
-            g2d.drawLine(sx, screenWorldMinY, sx, screenWorldMaxY);
+            g2d.drawLine(sx, screenWorldMinY, sx, screenHeight);
         }
 
         // horizontal lines
         for (int y = firstGridY; y <= worldEndY; y += CELL_SIZE) {
             int sy = camera.worldToScreenY(y);
-            g2d.drawLine(screenWorldMinX, sy, screenWorldMaxX, sy);
+            g2d.drawLine(screenWorldMinX, sy, screenWidth, sy);
         }
     }
 
@@ -174,10 +164,10 @@ public class GameRenderer {
 
         // translate to tile indices
         int startX = Math.max(0, (int) (worldStartX / CELL_SIZE));
-        int endX = Math.min(Constants.GRID_CELL_WIDTH, (int) (worldEndX / CELL_SIZE) + 1);
+        int endX = Math.min(screenWidth, (int) (worldEndX / CELL_SIZE) + 1);
 
         int startY = Math.max(0, (int) (worldStartY / CELL_SIZE));
-        int endY = Math.min(Constants.GRID_CELL_HEIGHT, (int) (worldEndY / CELL_SIZE) + 1);
+        int endY = Math.min(screenHeight, (int) (worldEndY / CELL_SIZE) + 1);
 
         // avoid drawing same object multiple times
         Set<Component> drawn = new HashSet<>();

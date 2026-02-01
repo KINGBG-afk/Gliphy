@@ -1,6 +1,7 @@
 package me.mert.world;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import me.mert.components.Component;
@@ -12,41 +13,54 @@ import me.mert.core.enums.Direction;
 import me.mert.core.enums.PortType;
 
 public class World {
-    private final Tile[][] tiles;
     private final List<Component> components;
-    private final int width = Constants.GRID_CELL_WIDTH;
-    private final int height = Constants.GRID_CELL_HEIGHT;
+
+    // funnily enough this is the first time i ever used the long type
+    private HashMap<Long, Chunk> chunks;
+
+    private final int CHUNK_SIZE = Constants.CHUNK_SIZE;
 
     public World() {
-        tiles = new Tile[height][width];
+        chunks = new HashMap<>();
         generateEmptyWorld();
         this.components = new ArrayList<>();
     }
 
     private void generateEmptyWorld() {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < height; j++) {
-                tiles[i][j] = new Tile(i, j);
+        for (int y = -2; y <= 2; y++) {
+            for (int x = -2; x <= 2; x++) {
+                Chunk c = new Chunk(x, y);
+                chunks.put(chunkKey(x, y), c);
             }
         }
     }
 
-    private boolean inBounds(int i, int j) {
-        return i >= 0 && i < height && j >= 0 && j < width;
+    private long chunkKey(int x, int y) {
+        return (((long) x) << 32) | (y & 0xffffffffL);
     }
 
     public Tile getTile(int i, int j) {
-        if (inBounds(i, j))
-            return tiles[i][j];
-        return null;
+        // NOTE: use floorDiv to get the x,y of the chunk and floorDiv to convert into
+        // local pos in the chunk
+        int chunkX = Math.floorDiv(j, CHUNK_SIZE);
+        int chunkY = Math.floorDiv(i, CHUNK_SIZE);
+
+        long key = chunkKey(chunkX, chunkY);
+        Chunk chunk = chunks.get(key);
+
+        if (chunk == null) {
+            // REVIEW: or generate a new chunk
+            return null;
+        }
+
+        int localX = Math.floorMod(j, CHUNK_SIZE);
+        int localY = Math.floorMod(i, CHUNK_SIZE);
+        return chunk.tiles[localY * CHUNK_SIZE + localX];
     }
 
     public Component getComponent(int i, int j) {
         Tile tile = getTile(i, j);
-        if (tile.component != null) {
-            return tile.component;
-        } else
-            return null;
+        return tile != null ? tile.component : null;
     }
 
     public boolean canPlace(int i, int j) {
@@ -54,17 +68,34 @@ public class World {
         return (tile != null && tile.component == null);
     }
 
-    public boolean removeComponent(int i, int j) {
-        if (!inBounds(i, j))
-            return false;
+    public void setTile(int i, int j, Tile tile) {
+        int chunkX = Math.floorDiv(j, CHUNK_SIZE);
+        int chunkY = Math.floorDiv(i, CHUNK_SIZE);
 
+        Chunk chunk = chunks.computeIfAbsent(
+                chunkKey(chunkX, chunkY),
+                k -> new Chunk(chunkX, chunkY));
+
+        int localX = Math.floorMod(j, CHUNK_SIZE);
+        int localY = Math.floorMod(i, CHUNK_SIZE);
+
+        chunk.tiles[localY * CHUNK_SIZE + localX] = tile;
+    }
+
+    public boolean removeComponent(int i, int j) {
         Component c = getComponent(i, j);
 
         if (c == null)
             return false;
 
         components.remove(c);
-        tiles[i][j] = new Tile(i, j);
+
+        // clear ALL occupied tiles
+        for (int di = 0; di < c.size[1]; di++) {
+            for (int dj = 0; dj < c.size[0]; dj++) {
+                setTile(c.i + di, c.j + dj, new Tile(c.i + di, c.j + dj));
+            }
+        }
         return true;
     }
 
@@ -88,7 +119,7 @@ public class World {
                 int ni = i + di;
                 int nj = j + dj;
 
-                if (!inBounds(ni, nj) || !canPlace(ni, nj))
+                if (!canPlace(ni, nj))
                     return false;
             }
         }
@@ -98,7 +129,9 @@ public class World {
             for (int dj = 0; dj < w; dj++) {
                 int ni = i + di;
                 int nj = j + dj;
-                tiles[ni][nj].component = obj;
+                // good luck to future me :)
+                // but no fr this could return null
+                getTile(ni, nj).component = obj;
             }
         }
 
@@ -109,16 +142,12 @@ public class World {
         return true;
     }
 
-    // not the most efficient thing but im proud of it
     private void connectPorts(Component placed) {
         Component other;
 
         for (Port p : placed.getAllPorts()) {
             int wi = p.getWorldI();
             int wj = p.getWorldJ();
-
-            if (!inBounds(wi, wj))
-                continue;
 
             other = getComponent(wi, wj);
             // if it doesn't exist or its the same as "placed" we skip
@@ -148,8 +177,6 @@ public class World {
                 int ni = conveyor.i + d.getDi();
                 int nj = conveyor.j + d.getDj();
 
-                if (!inBounds(ni, nj))
-                    continue;
                 other = getComponent(ni, nj);
                 if (other == null || other == conveyor)
                     continue;
@@ -159,9 +186,6 @@ public class World {
                     int wi = p.getWorldI();
                     int wj = p.getWorldJ();
                     Direction pDir = p.getDirection();
-
-                    if (!inBounds(wi, wj))
-                        continue;
 
                     if (p.type == PortType.OUTPUT || pDir == conveyor.direction)
                         continue;

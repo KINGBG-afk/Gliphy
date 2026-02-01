@@ -2,6 +2,8 @@ package me.mert.world;
 
 import me.mert.components.Component;
 
+// ive started this as a limited grid so these positions remain as i,j
+// and no i wont be changing them
 public class Tile {
     int i, j;
     Component component = null;
