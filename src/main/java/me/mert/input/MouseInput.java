@@ -25,6 +25,7 @@ public class MouseInput extends MouseAdapter {
     public void mouseClicked(MouseEvent e) {
         lastX = e.getX();
         lastY = e.getY();
+        System.out.println("mouse pos: " + lastX + " " + lastY);
         panel.placeSelectedComponentAt(camera.screenToCellY(lastY), camera.screenToCellX(lastX));
     }
 

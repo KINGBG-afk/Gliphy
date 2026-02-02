@@ -63,12 +63,12 @@ public class World {
         return tile != null ? tile.component : null;
     }
 
-    public boolean canPlace(int i, int j) {
+    private boolean canPlace(int i, int j) {
         Tile tile = getTile(i, j);
         return (tile != null && tile.component == null);
     }
 
-    public void setTile(int i, int j, Tile tile) {
+    private void clearComponent(int i, int j) {
         int chunkX = Math.floorDiv(j, CHUNK_SIZE);
         int chunkY = Math.floorDiv(i, CHUNK_SIZE);
 
@@ -79,7 +79,7 @@ public class World {
         int localX = Math.floorMod(j, CHUNK_SIZE);
         int localY = Math.floorMod(i, CHUNK_SIZE);
 
-        chunk.tiles[localY * CHUNK_SIZE + localX] = tile;
+        chunk.tiles[localY * CHUNK_SIZE + localX].component = null;
     }
 
     public boolean removeComponent(int i, int j) {
@@ -93,7 +93,7 @@ public class World {
         // clear ALL occupied tiles
         for (int di = 0; di < c.size[1]; di++) {
             for (int dj = 0; dj < c.size[0]; dj++) {
-                setTile(c.i + di, c.j + dj, new Tile(c.i + di, c.j + dj));
+                clearComponent(i, j);
             }
         }
         return true;
@@ -102,6 +102,7 @@ public class World {
     public boolean placeComponent(int i, int j, ComponentType comp, Direction dir) {
         int[] size;
         Component obj = ComponentType.createComponent(comp, dir, i, j);
+        int ox = 0, oy = 0;
         if (obj == null)
             return false;
 
@@ -113,11 +114,15 @@ public class World {
 
         int w = size[0];
         int h = size[1];
+        switch (dir) {
+            case NORTH -> oy = -(h - 1);
+            case WEST -> ox = -(w - 1);
+        }
 
         for (int di = 0; di < h; di++) {
             for (int dj = 0; dj < w; dj++) {
-                int ni = i + di;
-                int nj = j + dj;
+                int ni = i + ox + di;
+                int nj = j + oy + dj;
 
                 if (!canPlace(ni, nj))
                     return false;
@@ -129,9 +134,10 @@ public class World {
             for (int dj = 0; dj < w; dj++) {
                 int ni = i + di;
                 int nj = j + dj;
+
                 // good luck to future me :)
-                // but no fr this could return null
                 getTile(ni, nj).component = obj;
+                // but no fr this could return null
             }
         }
 

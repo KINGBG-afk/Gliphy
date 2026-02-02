@@ -43,13 +43,11 @@ public class Camera {
     }
 
     public int screenToCellX(int screenX) {
-        double worldX = screenToWorldX(screenX);
-        return (int) Math.floor(worldX / Constants.CELL_SIZE);
+        return (int) Math.floorDiv((int) Math.floor(screenToWorldX(screenX)), Constants.CELL_SIZE);
     }
 
     public int screenToCellY(int screenY) {
-        double worldY = screenToWorldY(screenY);
-        return (int) Math.floor(worldY / Constants.CELL_SIZE);
+        return (int) Math.floorDiv((int) Math.floor(screenToWorldY(screenY)), Constants.CELL_SIZE);
     }
 
     public void update() {

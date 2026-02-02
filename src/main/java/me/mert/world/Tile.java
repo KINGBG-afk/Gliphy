@@ -1,19 +1,22 @@
 package me.mert.world;
 
 import me.mert.components.Component;
+import me.mert.core.enums.LayerType;
 
 // ive started this as a limited grid so these positions remain as i,j
 // and no i wont be changing them
 public class Tile {
-    int i, j;
+    private final int i, j;
+    LayerType recourse;
     Component component = null;
 
-    Tile(int i, int j) {
+    Tile(int i, int j, LayerType recourse) {
         this.i = i;
         this.j = j;
+        this.recourse = recourse;
     }
 
-    public void setComponent(Component component) {
+    protected void setComponent(Component component) {
         this.component = component;
     }
 
@@ -21,8 +24,12 @@ public class Tile {
         return this.component;
     }
 
-    public boolean isEmpty() {
-        return (this.component != null);
+    protected boolean isEmpty() {
+        return (this.component == null);
+    }
+
+    public LayerType getRecourse() {
+        return recourse;
     }
 
     @Override

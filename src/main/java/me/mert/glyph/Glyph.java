@@ -22,6 +22,13 @@ public class Glyph {
         layers.add(l);
     }
 
+    public Glyph(LayerType l) {
+        if (l == null) {
+            return;
+        }
+        layers.add(GlyphLayer.createLayer(l));
+    }
+
     // an idiot admires complexity
     // a genius admires simplicity
 
@@ -61,8 +68,10 @@ public class Glyph {
     // #endregion
 
     public static Glyph[] cut(Glyph g) {
-        Glyph left = new Glyph(null);
-        Glyph right = new Glyph(null);
+        // i know it looks disgustiong
+        Glyph left = new Glyph((GlyphLayer) null);
+        Glyph right = new Glyph((GlyphLayer) null);
+
         for (GlyphLayer l : g.layers) {
             left.layers.add(GlyphLayer.createLayer(Primitive.EMPTY, l.q[1], l.q[2], Primitive.EMPTY));
             right.layers.add(GlyphLayer.createLayer(l.q[0], Primitive.EMPTY, Primitive.EMPTY, l.q[3]));

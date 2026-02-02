@@ -106,7 +106,6 @@ public abstract class Component {
                 g2d.drawImage(renderImg, 0, 0, w, h, null);
             }
         }
-
         g2d.dispose();
     }
 

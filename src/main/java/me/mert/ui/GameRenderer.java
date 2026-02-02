@@ -16,6 +16,7 @@ import me.mert.components.Conveyor;
 import me.mert.core.Constants;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
+import me.mert.core.enums.LayerType;
 import me.mert.glyph.Glyph;
 import me.mert.world.Tile;
 import me.mert.world.World;
@@ -35,7 +36,7 @@ public class GameRenderer {
     }
 
     // with the amount of math in this file i deserve at least a bit of appreciation
-    // but sadly nobody is here to see it :(
+    // but sadly nobody will see it :(
     private int getSize() {
         return (int) (CELL_SIZE * camera.zoom);
     }
@@ -128,23 +129,20 @@ public class GameRenderer {
         int worldStartY = (int) camera.screenToWorldY(0);
         int worldEndY = (int) camera.screenToWorldY(screenHeight);
 
-        int screenWorldMinX = camera.worldToScreenX(0);
-        int screenWorldMinY = camera.worldToScreenY(0);
-
         // first world grid line
-        int firstGridX = (worldStartX / CELL_SIZE) * CELL_SIZE;
-        int firstGridY = (worldStartY / CELL_SIZE) * CELL_SIZE;
+        int firstGridX = Math.floorDiv(worldStartX, CELL_SIZE) * CELL_SIZE;
+        int firstGridY = Math.floorDiv(worldStartY, CELL_SIZE) * CELL_SIZE;
 
         // vertical lines
         for (int x = firstGridX; x <= worldEndX; x += CELL_SIZE) {
             int sx = camera.worldToScreenX(x);
-            g2d.drawLine(sx, screenWorldMinY, sx, screenHeight);
+            g2d.drawLine(sx, 0, sx, screenHeight);
         }
 
         // horizontal lines
         for (int y = firstGridY; y <= worldEndY; y += CELL_SIZE) {
             int sy = camera.worldToScreenY(y);
-            g2d.drawLine(screenWorldMinX, sy, screenWidth, sy);
+            g2d.drawLine(0, sy, screenWidth, sy);
         }
     }
 
@@ -159,19 +157,22 @@ public class GameRenderer {
         double worldStartX = camera.x;
         double worldEndX = camera.x + screenWidth / zoom;
 
+        // ofc division is an expensive math calculation
+        // i'm aware of that
         double worldStartY = camera.y;
         double worldEndY = camera.y + screenHeight / zoom;
 
         // translate to tile indices
-        int startX = Math.max(0, (int) (worldStartX / CELL_SIZE));
-        int endX = Math.min(screenWidth, (int) (worldEndX / CELL_SIZE) + 1);
+        int startX = (int) Math.floor(worldStartX / CELL_SIZE);
+        int endX = (int) Math.ceil(worldEndX / CELL_SIZE);
 
-        int startY = Math.max(0, (int) (worldStartY / CELL_SIZE));
-        int endY = Math.min(screenHeight, (int) (worldEndY / CELL_SIZE) + 1);
+        int startY = (int) Math.floor(worldStartY / CELL_SIZE);
+        int endY = (int) Math.ceil(worldEndY / CELL_SIZE);
 
         // avoid drawing same object multiple times
         Set<Component> drawn = new HashSet<>();
 
+        // REVIEW: maybe iterate over the list of components
         for (int i = startY; i < endY; i++) {
             for (int j = startX; j < endX; j++) {
 
@@ -210,4 +211,42 @@ public class GameRenderer {
         // update animation for conveyor
         Conveyor.updateAnimation();
     }
+
+    // --- RECOURSES ------------------------------------------------------------
+    public void drawTiles(Graphics2D g2d, int screenWidth, int screenHeight) {
+        double zoom = camera.zoom;
+
+        double worldStartX = camera.x;
+        double worldEndX = camera.x + screenWidth / zoom;
+
+        double worldStartY = camera.y;
+        double worldEndY = camera.y + screenHeight / zoom;
+
+        int startX = (int) Math.floor(worldStartX / CELL_SIZE);
+        int endX = (int) Math.ceil(worldEndX / CELL_SIZE);
+
+        int startY = (int) Math.floor(worldStartY / CELL_SIZE);
+        int endY = (int) Math.ceil(worldEndY / CELL_SIZE);
+
+        for (int i = startY; i < endY; i++) {
+            for (int j = startX; j < endX; j++) {
+
+                Tile tile = world.getTile(i, j);
+                if (tile == null) {
+                    continue;
+                }
+
+                LayerType r = tile.getRecourse();
+                if (r == null) {
+                    continue;
+                }
+
+                int screenX = camera.worldToScreenX(j * CELL_SIZE);
+                int screenY = camera.worldToScreenY(i * CELL_SIZE);
+                int size = (int) (CELL_SIZE * zoom);
+                Glyph.render(g2d, new Glyph(r), screenX, screenY, size);
+            }
+        }
+    }
+
 }

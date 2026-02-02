@@ -65,10 +65,9 @@ public class GamePanel extends JPanel {
         int sWidth = getWidth();
         int sHeight = getHeight();
         gameRenderer.drawGrid((Graphics2D) g, sWidth, sHeight);
+        gameRenderer.drawTiles((Graphics2D) g, sWidth, sHeight);
         gameRenderer.drawComponents(g, sWidth, sHeight);
         gameRenderer.drawPreviewComponent(g, selectedComponent, true);
-
-        gameRenderer.drawVignette((Graphics2D) g, sWidth, sHeight);
 
     }
 }
