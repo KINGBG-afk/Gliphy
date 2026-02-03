@@ -48,6 +48,7 @@ public abstract class Component {
         return p;
     }
 
+    // but what if there is a cosmic ray and it flips one of the bits?
     protected final Port addOutput(int i, int j, Direction dir) {
         Port p = new Port(i, j, this, dir, PortType.OUTPUT);
         outputs.add(p);

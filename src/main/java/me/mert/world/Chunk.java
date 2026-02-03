@@ -30,9 +30,9 @@ public class Chunk {
     private void generate() {
         for (int i = 0; i < CHUNK_SIZE; i++) {
             for (int j = 0; j < CHUNK_SIZE; j++) {
-                int worldX = x * CHUNK_SIZE + i;
-                int worldY = y * CHUNK_SIZE + j;
-                tiles[i + j * CHUNK_SIZE] = createTile(worldX, worldY);
+                int worldX = x * CHUNK_SIZE + j;
+                int worldY = y * CHUNK_SIZE + i;
+                tiles[i * CHUNK_SIZE + j] = createTile(worldX, worldY);
             }
         }
     }
@@ -52,8 +52,9 @@ public class Chunk {
 
     }
 
-    public static void draw(Chunk chunk, int cx, int cy) {
-
+    @Override
+    public String toString() {
+        return String.format("CHUNK(x=%d, y=%d)", x, y);
     }
 
 }

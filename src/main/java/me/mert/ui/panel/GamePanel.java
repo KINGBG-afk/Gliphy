@@ -55,6 +55,10 @@ public class GamePanel extends JPanel {
         selectedComponent.direction = selectedDirection;
     }
 
+    public void setChunkLocation(int x, int y) {
+        world.updateCenter(x, y);
+    }
+
     public void placeSelectedComponentAt(int i, int j) {
         world.placeComponent(i, j, selectedType, selectedDirection);
     }
@@ -68,6 +72,8 @@ public class GamePanel extends JPanel {
         gameRenderer.drawTiles((Graphics2D) g, sWidth, sHeight);
         gameRenderer.drawComponents(g, sWidth, sHeight);
         gameRenderer.drawPreviewComponent(g, selectedComponent, true);
+
+        gameRenderer.drawVignette((Graphics2D) g, sWidth, sHeight);
 
     }
 }

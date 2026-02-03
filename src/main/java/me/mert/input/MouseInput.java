@@ -47,6 +47,8 @@ public class MouseInput extends MouseAdapter {
         lastY = e.getY();
         renderer.mouse = new Point(lastX, lastY);
 
+        panel.setChunkLocation((int) camera.screenToWorldX(panel.getWidth() / 2),
+                (int) camera.screenToWorldY(panel.getHeight() / 2));
         panel.repaint();
     }
 
