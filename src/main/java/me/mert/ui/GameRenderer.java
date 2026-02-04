@@ -200,7 +200,7 @@ public class GameRenderer {
                 if (obj.hasItem() && !(obj.type == ComponentType.HUB || obj.type == ComponentType.CUTTER)) {
 
                     Glyph glyph = obj.getItem();
-                    int glyphSize = (int) (CELL_SIZE * zoom * 0.6f);
+                    int glyphSize = (int) (getSize() * 0.6f);
                     int gx = screenX + (int) (CELL_SIZE * zoom / 2 - glyphSize / 2);
                     int gy = screenY + (int) (CELL_SIZE * zoom / 2 - glyphSize / 2);
 
@@ -243,7 +243,8 @@ public class GameRenderer {
 
                 int screenX = camera.worldToScreenX(j * CELL_SIZE);
                 int screenY = camera.worldToScreenY(i * CELL_SIZE);
-                int size = (int) (CELL_SIZE * zoom);
+                int size = (int) (getSize() * 0.6f);
+
                 Glyph.render(g2d, new Glyph(r), screenX, screenY, size);
             }
         }

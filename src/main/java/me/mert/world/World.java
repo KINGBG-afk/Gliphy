@@ -23,7 +23,7 @@ public class World {
     private Set<Long> activeChunks = new HashSet<>();
     private final int CHUNK_SIZE = Constants.CHUNK_SIZE;
 
-    private static final int CHUNK_LOAD_RADIUS = 3;
+    private static final int CHUNK_LOAD_RADIUS = 1;
     private static final int CHUNK_UNLOAD_RADIUS = 3;
 
     private int centerChunkX = 0;
@@ -35,6 +35,11 @@ public class World {
         loadChunksAroundCenter();
     }
 
+    // --- CHUNKS ------------------------------------------------------------
+    public Set<Long> getChunks() {
+        return activeChunks;
+    }
+
     public void updateCenter(int x, int y) {
         int ncX = Math.floorDiv(x, CHUNK_SIZE);
         int ncY = Math.floorDiv(y, CHUNK_SIZE);
@@ -44,15 +49,15 @@ public class World {
 
         centerChunkX = ncX;
         centerChunkY = ncY;
-        manageChunks();
+        updateCenterChunk(ncX, ncY);
     }
 
     public void updateCenterChunk(int cx, int cy) {
         if (cx != centerChunkX || cy != centerChunkY) {
             centerChunkX = cx;
             centerChunkY = cy;
-            manageChunks();
         }
+        manageChunks();
     }
 
     private void manageChunks() {
@@ -66,7 +71,7 @@ public class World {
                 long key = chunkKey(chunkX, chunkY);
 
                 if (!chunks.containsKey(key)) {
-                    loadChunk(chunkX, chunkY);
+                    loadChunk(x, y);
                 }
                 nActiveChunks.add(key);
             }
@@ -78,14 +83,16 @@ public class World {
             chunkX = (int) (key >> 32);
             chunkY = (int) (key & 0xFFFFFFFFL);
 
-            int cx = Math.abs(chunkX - centerChunkX);
-            int cy = Math.abs(chunkY - centerChunkY);
+            int cx = chunkX - centerChunkX;
+            int cy = chunkY - centerChunkY;
 
-            if (cx > CHUNK_UNLOAD_RADIUS || cy > CHUNK_UNLOAD_RADIUS) {
+            if (Math.abs(cx) > CHUNK_UNLOAD_RADIUS || Math.abs(cy) > CHUNK_UNLOAD_RADIUS) {
                 chunksToUnload.add(key);
             }
         }
 
+        System.out.println("Total loaded chunks: " + chunks.size());
+        System.out.println("Active chunks: " + nActiveChunks.size());
         for (Long key : chunksToUnload) {
             unloadChunk(key);
         }
@@ -93,17 +100,7 @@ public class World {
         activeChunks = nActiveChunks;
     }
 
-    /*
-     * private void generateEmptyWorld() {
-     * for (int y = -2; y <= 2; y++) {
-     * for (int x = -2; x <= 2; x++) {
-     * Chunk c = new Chunk(x, y);
-     * chunks.put(chunkKey(x, y), c);
-     * }
-     * }
-     * }
-     */
-
+    // NOTE: called only to generate chunks in the constructor
     private void loadChunksAroundCenter() {
         for (int y = -CHUNK_LOAD_RADIUS; y <= CHUNK_LOAD_RADIUS; y++) {
             for (int x = -CHUNK_LOAD_RADIUS; x <= CHUNK_LOAD_RADIUS; x++) {
@@ -130,13 +127,17 @@ public class World {
         // all components are never removed unless the user does that
         // chunks stays unloaded but the components are still getting updated
 
-        // System.out.println("Unloaded: " + chunk);
+        //System.out.println("Unloaded: " + chunk);
     }
 
     private long chunkKey(int x, int y) {
+        // casting x as long and shifting left by32 bits to the upper 32
+        // then mask y to ensure it's unsigned and them combine them with "|"
+
         return (((long) x) << 32) | (y & 0xffffffffL);
     }
 
+    // --- COMPONENTS ------------------------------------------------------------
     public Tile getTile(int i, int j) {
         // NOTE: use floorDiv to get the x,y of the chunk and floorMod to convert into
         // local pos in the chunk
@@ -148,6 +149,7 @@ public class World {
 
         if (chunk == null) {
             // REVIEW: or generate a new chunk
+            loadChunk(chunkX, chunkY);
             return null;
         }
 
