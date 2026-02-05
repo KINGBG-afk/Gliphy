@@ -41,6 +41,11 @@ public class GameRenderer {
         return (int) (CELL_SIZE * camera.zoom);
     }
 
+    public void debugDraw(Graphics g, int w, int h) {
+        g.setColor(Color.BLUE);
+        g.fillOval(w / 2, h / 2, 10, 10);
+    }
+
     // --- MOUSE ------------------------------------------------------------
     public void drawPreviewComponent(Graphics g, Component c, boolean correct) {
         if (!correct)
@@ -172,7 +177,7 @@ public class GameRenderer {
         // avoid drawing same object multiple times
         Set<Component> drawn = new HashSet<>();
 
-        // REVIEW: maybe iterate over the list of components
+        // REVIEW: maybe iterate over the list of components?
         for (int i = startY; i < endY; i++) {
             for (int j = startX; j < endX; j++) {
 

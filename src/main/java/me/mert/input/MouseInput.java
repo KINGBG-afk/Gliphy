@@ -25,7 +25,6 @@ public class MouseInput extends MouseAdapter {
     public void mouseClicked(MouseEvent e) {
         lastX = e.getX();
         lastY = e.getY();
-        System.out.println("mouse pos: " + lastX + " " + lastY);
         panel.placeSelectedComponentAt(camera.screenToCellY(lastY), camera.screenToCellX(lastX));
     }
 
@@ -47,8 +46,9 @@ public class MouseInput extends MouseAdapter {
         lastY = e.getY();
         renderer.mouse = new Point(lastX, lastY);
 
-        panel.setChunkLocation((int) camera.screenToWorldX(panel.getWidth() / 2),
-                (int) camera.screenToWorldY(panel.getHeight() / 2));
+        panel.setChunkLocation(
+                camera.screenToCellX(panel.getWidth() / 2),
+                camera.screenToCellY(panel.getHeight() / 2));
         panel.repaint();
     }
 

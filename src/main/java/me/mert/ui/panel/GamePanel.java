@@ -75,5 +75,6 @@ public class GamePanel extends JPanel {
 
         gameRenderer.drawVignette((Graphics2D) g, sWidth, sHeight);
 
+        // gameRenderer.debugDraw(g, sWidth, sHeight);
     }
 }

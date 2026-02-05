@@ -18,13 +18,15 @@ public class World {
     private final List<Component> components;
 
     // funnily enough this is the first time i ever used the long type
-    private HashMap<Long, Chunk> chunks;
+    private final HashMap<Long, Chunk> chunks;
 
     private Set<Long> activeChunks = new HashSet<>();
     private final int CHUNK_SIZE = Constants.CHUNK_SIZE;
 
     private static final int CHUNK_LOAD_RADIUS = 1;
-    private static final int CHUNK_UNLOAD_RADIUS = 3;
+    private static final int CHUNK_UNLOAD_RADIUS = 1;
+
+    private static final int CELL_SIZE = Constants.CELL_SIZE;
 
     private int centerChunkX = 0;
     private int centerChunkY = 0;
@@ -40,24 +42,21 @@ public class World {
         return activeChunks;
     }
 
+    /**
+     * This method accepts positions in TILE coordinates
+     * 
+     * @param x x position in tile coordinates
+     * @param y y position in tile coordinates
+     */
     public void updateCenter(int x, int y) {
         int ncX = Math.floorDiv(x, CHUNK_SIZE);
         int ncY = Math.floorDiv(y, CHUNK_SIZE);
 
-        if (ncX == centerChunkX && ncY == centerChunkY)
-            return;
-
-        centerChunkX = ncX;
-        centerChunkY = ncY;
-        updateCenterChunk(ncX, ncY);
-    }
-
-    public void updateCenterChunk(int cx, int cy) {
-        if (cx != centerChunkX || cy != centerChunkY) {
-            centerChunkX = cx;
-            centerChunkY = cy;
+        if (ncX != centerChunkX || ncY != centerChunkY) {
+            centerChunkX = ncX;
+            centerChunkY = ncY;
+            manageChunks();
         }
-        manageChunks();
     }
 
     private void manageChunks() {
@@ -71,7 +70,7 @@ public class World {
                 long key = chunkKey(chunkX, chunkY);
 
                 if (!chunks.containsKey(key)) {
-                    loadChunk(x, y);
+                    loadChunk(chunkX, chunkY);
                 }
                 nActiveChunks.add(key);
             }
@@ -79,20 +78,17 @@ public class World {
 
         List<Long> chunksToUnload = new ArrayList<>();
         for (Long key : chunks.keySet()) {
-            // BUG: my detective skill are telling me there is something wrong with the keys
             chunkX = (int) (key >> 32);
             chunkY = (int) (key & 0xFFFFFFFFL);
 
-            int cx = chunkX - centerChunkX;
-            int cy = chunkY - centerChunkY;
+            int cx = Math.abs(chunkX - centerChunkX);
+            int cy = Math.abs(chunkY - centerChunkY);
 
-            if (Math.abs(cx) > CHUNK_UNLOAD_RADIUS || Math.abs(cy) > CHUNK_UNLOAD_RADIUS) {
+            if (cx > CHUNK_UNLOAD_RADIUS || cy > CHUNK_UNLOAD_RADIUS) {
                 chunksToUnload.add(key);
             }
         }
 
-        System.out.println("Total loaded chunks: " + chunks.size());
-        System.out.println("Active chunks: " + nActiveChunks.size());
         for (Long key : chunksToUnload) {
             unloadChunk(key);
         }
@@ -123,17 +119,16 @@ public class World {
         Chunk chunk = chunks.get(key);
         if (chunk == null)
             return;
-        chunks.remove(key);
+        activeChunks.remove(key);
         // all components are never removed unless the user does that
         // chunks stays unloaded but the components are still getting updated
 
-        //System.out.println("Unloaded: " + chunk);
+        // System.out.println("Unloaded: " + chunk);
     }
 
     private long chunkKey(int x, int y) {
         // casting x as long and shifting left by32 bits to the upper 32
         // then mask y to ensure it's unsigned and them combine them with "|"
-
         return (((long) x) << 32) | (y & 0xffffffffL);
     }
 
