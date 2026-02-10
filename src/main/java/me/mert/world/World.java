@@ -13,6 +13,8 @@ import me.mert.core.Constants;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.PortType;
+import personthecat.fastnoise.FastNoise;
+import personthecat.fastnoise.data.NoiseType;
 
 public class World {
     private final List<Component> components;
@@ -26,15 +28,39 @@ public class World {
     private static final int CHUNK_LOAD_RADIUS = 1;
     private static final int CHUNK_UNLOAD_RADIUS = 1;
 
-    private static final int CELL_SIZE = Constants.CELL_SIZE;
+    private final int seed;
+    private final FastNoise noise;
 
     private int centerChunkX = 0;
     private int centerChunkY = 0;
 
+    public World(int seed) {
+        this.seed = seed;
+        chunks = new HashMap<>();
+        this.components = new ArrayList<>();
+        this.noise = FastNoise.builder()
+                .seed(seed)
+                .type(NoiseType.SIMPLEX2)
+                .frequency(0.25f)
+                .build();
+        loadChunksAroundCenter();
+    }
+
     public World() {
         chunks = new HashMap<>();
         this.components = new ArrayList<>();
+
+        this.seed = World.generateSeed();
+        this.noise = FastNoise.builder()
+                .seed(seed)
+                .type(NoiseType.SIMPLEX2)
+                .frequency(0.25f)
+                .build();
         loadChunksAroundCenter();
+    }
+
+    public static int generateSeed() {
+        return (int) System.nanoTime();
     }
 
     // --- CHUNKS ------------------------------------------------------------
@@ -109,7 +135,7 @@ public class World {
     private void loadChunk(int x, int y) {
         long key = chunkKey(x, y);
         if (!chunks.containsKey(key)) {
-            Chunk chunk = new Chunk(x, y);
+            Chunk chunk = new Chunk(x, y, noise);
             chunks.put(key, chunk);
             // System.out.println("Loaded chunk: " + chunk);
         }
@@ -169,7 +195,7 @@ public class World {
 
         Chunk chunk = chunks.computeIfAbsent(
                 chunkKey(chunkX, chunkY),
-                k -> new Chunk(chunkX, chunkY));
+                k -> new Chunk(chunkX, chunkY, noise));
 
         int localX = Math.floorMod(j, CHUNK_SIZE);
         int localY = Math.floorMod(i, CHUNK_SIZE);

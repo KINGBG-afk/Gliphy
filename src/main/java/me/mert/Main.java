@@ -13,11 +13,9 @@ public class Main {
 
         SwingUtilities.invokeLater(() -> {
 
-            MainWindow frame = new MainWindow();
-            frame.setUndecorated(true);
-            frame.setResizable(false);
+            MainWindow frame = new MainWindow(false);
 
-            // this is wayland panels doesn't cover the window
+            // this is so wayland panels (waybar and quick shell) doesn't cover the window
             GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
                     .getDefaultScreenDevice();
             gd.setFullScreenWindow(frame);

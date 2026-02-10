@@ -28,6 +28,8 @@ public class GameRenderer {
     public Point mouse;
     private final int CELL_SIZE;
 
+    private static final Color TILE_COLOR = new Color(0, 0, 0, 17);
+
     public GameRenderer(Camera camera, World world) {
         this.camera = camera;
         this.world = world;
@@ -223,34 +225,40 @@ public class GameRenderer {
 
         double worldStartX = camera.x;
         double worldEndX = camera.x + screenWidth / zoom;
-
         double worldStartY = camera.y;
         double worldEndY = camera.y + screenHeight / zoom;
 
         int startX = (int) Math.floor(worldStartX / CELL_SIZE);
         int endX = (int) Math.ceil(worldEndX / CELL_SIZE);
-
         int startY = (int) Math.floor(worldStartY / CELL_SIZE);
         int endY = (int) Math.ceil(worldEndY / CELL_SIZE);
+
+        int cellPx = getSize();
+        int glyphSize = (int) (cellPx * 0.6f);
+        int glyphOffset = (cellPx - glyphSize) / 2;
 
         for (int i = startY; i < endY; i++) {
             for (int j = startX; j < endX; j++) {
 
                 Tile tile = world.getTile(i, j);
-                if (tile == null) {
+                if (tile == null)
                     continue;
-                }
 
                 LayerType r = tile.getRecourse();
-                if (r == null) {
+                if (r == null)
                     continue;
-                }
 
                 int screenX = camera.worldToScreenX(j * CELL_SIZE);
                 int screenY = camera.worldToScreenY(i * CELL_SIZE);
-                int size = (int) (getSize() * 0.6f);
 
-                Glyph.render(g2d, new Glyph(r), screenX, screenY, size);
+                g2d.setColor(TILE_COLOR);
+                g2d.fillRect(screenX, screenY, cellPx, cellPx);
+
+                Glyph.render(g2d,
+                        new Glyph(r),
+                        screenX + glyphOffset,
+                        screenY + glyphOffset,
+                        glyphSize);
             }
         }
     }
