@@ -1,0 +1,31 @@
+make currency manager - coins i guess
+
+upgrade manager:
+    update time of components
+    buy new components
+
+finish the stacker
+
+make the ui for the world
+pause menu ui - doesn't pause update of components:
+    exit button
+    settings button
+    continue button
+
+add settings:
+    language maybe
+    slider or toggle button for sound effects
+    maybe dark/light theme if there is time
+
+
+saving world system:
+    json format
+    and serialized
+
+add world selection menu ui:
+    list of all worlds that are made
+    new world button
+    delete world button
+    
+
+
