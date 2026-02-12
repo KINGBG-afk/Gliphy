@@ -23,6 +23,7 @@ public class Cutter extends Component {
 
         // eh it gets the job done
         in.connectTo(out1);
+        // just for consistency
     }
 
     @Override

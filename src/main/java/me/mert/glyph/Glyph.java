@@ -29,6 +29,19 @@ public class Glyph {
         layers.add(GlyphLayer.createLayer(l));
     }
 
+    private Glyph copy() {
+        Glyph copy = new Glyph((GlyphLayer) null);
+
+        for (GlyphLayer l : this.layers) {
+            GlyphLayer nl = new GlyphLayer();
+            System.arraycopy(l.q, 0, nl.q, 0, GlyphLayer.QUARTERS);
+
+            copy.layers.add(nl);
+        }
+        return copy;
+
+    }
+
     // an idiot admires complexity
     // a genius admires simplicity
 
@@ -66,6 +79,45 @@ public class Glyph {
         }
     }
     // #endregion
+
+    // stacking
+    /**
+     * This method accepts 2 glyphs and stacks g2 on top of g1
+     * 
+     * @param g1 first glyph as base
+     * @param g2 the glyph that is added on top of g1
+     */
+    public static Glyph stack(Glyph g1, Glyph g2) {
+
+        Glyph base = g1.copy();
+        Glyph added = g2.copy();
+
+        if (added.layers.isEmpty())
+            return base;
+
+        GlyphLayer bottomG2 = added.layers.get(0);
+
+        if (base.layers.isEmpty()) {
+            base.layers.add(new GlyphLayer());
+        }
+
+        GlyphLayer topG1 = base.layers.get(base.layers.size() - 1);
+
+        for (int i = 0; i < GlyphLayer.QUARTERS; i++) {
+
+            Primitive p = bottomG2.q[i];
+
+            if (p != Primitive.EMPTY) {
+
+                if (topG1.q[i] == Primitive.EMPTY) {
+                    topG1.q[i] = p;
+                    bottomG2.q[i] = Primitive.EMPTY;
+                }
+            }
+        }
+
+        return base;
+    }
 
     public static Glyph[] cut(Glyph g) {
         // i know it looks disgustiong

@@ -27,7 +27,6 @@ public class Collector extends Component {
 
             // GlyphLayer l = GlyphLayer.createLayer(Primitive.SQUARE, Primitive.CIRCLE, Primitive.SQUARE,Primitive.SQUARE);
 
-            System.out.println(l);
             Glyph glyph = new Glyph(l);
             Glyph.rotateCCW(glyph);
             out.nextItem = glyph;

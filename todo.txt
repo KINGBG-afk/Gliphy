@@ -4,7 +4,7 @@ upgrade manager:
     update time of components
     buy new components
 
-finish the stacker
+finish the collector
 
 make the ui for the world
 pause menu ui - doesn't pause update of components:

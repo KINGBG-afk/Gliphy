@@ -32,7 +32,7 @@ public enum ComponentType {
             case COLLECTOR -> new Collector(i, j, d);
             case HUB -> new Hub(i, j, d);
             case CUTTER -> new Cutter(i, j, d);
-            case STACKER -> new Stacker(i, j, Direction.NORTH) ;
+            case STACKER -> new Stacker(i, j, d) ;
             default -> null;
         };
     }

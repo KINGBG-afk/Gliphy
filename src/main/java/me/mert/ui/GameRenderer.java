@@ -204,7 +204,7 @@ public class GameRenderer {
                 // except if you are retarted and remove the resource folder
                 obj.render(g, screenX, screenY, zoom, CELL_SIZE);
 
-                if (obj.hasItem() && !(obj.type == ComponentType.HUB || obj.type == ComponentType.CUTTER)) {
+                if (obj.hasItem() && (obj.type == ComponentType.CONVEYOR || obj.type == ComponentType.COLLECTOR)) {
 
                     Glyph glyph = obj.getItem();
                     int glyphSize = (int) (getSize() * 0.6f);
