@@ -5,8 +5,8 @@ import me.mert.core.enums.Direction;
 import me.mert.glyph.Glyph;
 
 public class Stacker extends Component {
-    private Port in1, in2;
-    private Port out;
+    private final Port in1, in2;
+    private final Port out;
 
     public Stacker(int i, int j, Direction direction) {
         super(i, j, direction, new int[] { 2, 1 }, ComponentType.STACKER);

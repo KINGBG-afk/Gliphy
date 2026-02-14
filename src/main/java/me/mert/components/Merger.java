@@ -6,8 +6,8 @@ import me.mert.glyph.Glyph;
 
 public class Merger extends Component {
 
-    private Port in1, in2;
-    private Port out;
+    private final Port in1, in2;
+    private final Port out;
 
     private boolean turn;
 

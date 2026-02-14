@@ -5,8 +5,8 @@ import me.mert.core.enums.Direction;
 import me.mert.glyph.Glyph;
 
 public class Cutter extends Component {
-    private Port in;
-    private Port out1, out2;
+    private final Port in;
+    private final Port out1, out2;
 
     public Cutter(int i, int j, Direction dir) {
         super(i, j, dir, new int[] { 2, 1 }, ComponentType.CUTTER);
