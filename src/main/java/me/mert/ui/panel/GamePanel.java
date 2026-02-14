@@ -27,9 +27,11 @@ public class GamePanel extends JPanel {
     private final GameRenderer gameRenderer;
     private final GameUIPanel uiPanel;
 
-    protected ComponentType selectedType = ComponentType.COLLECTOR;
-    protected Direction selectedDirection = Direction.NORTH;
-    protected Component selectedComponent = ComponentType.createComponent(selectedType, selectedDirection, 0, 0);
+    private ComponentType selectedType = ComponentType.COLLECTOR;
+    private Direction selectedDirection = Direction.NORTH;
+    private Component selectedComponent = ComponentType.createComponent(selectedType, selectedDirection, 0, 0, false);
+
+    private boolean variant = false;
 
     // lesson relearned - do not use getWIdth and getHeight in the constructor :)
     public GamePanel(Camera camera, World world, GameRenderer gameRenderer) {
@@ -63,7 +65,7 @@ public class GamePanel extends JPanel {
 
     private void createMenu() {
         ComponentMenu menu = new ComponentMenu(this);
-        menu.setSize(400, 70);
+        menu.setSize(600, 70);
         menu.setLocation(
                 (uiPanel.getWidth() - menu.getWidth()) / 2,
                 uiPanel.getHeight() - menu.getHeight() - 20);
@@ -71,9 +73,10 @@ public class GamePanel extends JPanel {
 
     }
 
-    public void setSelectedType(ComponentType c) {
+    public void setSelectedType(ComponentType c, boolean v) {
         selectedType = c;
-        selectedComponent = ComponentType.createComponent(selectedType, selectedDirection, 0, 0);
+        variant = v;
+        selectedComponent = ComponentType.createComponent(selectedType, selectedDirection, 0, 0, v);
     }
 
     public void rotateDirection() {
@@ -86,7 +89,7 @@ public class GamePanel extends JPanel {
     }
 
     public void placeSelectedComponentAt(int i, int j) {
-        world.placeComponent(i, j, selectedType, selectedDirection);
+        world.placeComponent(i, j, selectedType, selectedDirection, variant);
     }
 
     // it gets the job done

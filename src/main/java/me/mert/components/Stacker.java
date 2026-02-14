@@ -5,21 +5,21 @@ import me.mert.core.enums.Direction;
 import me.mert.glyph.Glyph;
 
 public class Stacker extends Component {
-    public Port in1, in2;
-    public Port out;
+    private Port in1, in2;
+    private Port out;
 
     public Stacker(int i, int j, Direction direction) {
         super(i, j, direction, new int[] { 2, 1 }, ComponentType.STACKER);
         Direction inDir = direction.opposite();
         Direction side = direction.right();
 
-        in1 = addinput(inDir.getDi(), inDir.getDj(), inDir);
+        in1 = addinput(inDir);
         in2 = addinput(
                 inDir.getDi() + side.getDi(),
                 inDir.getDj() + side.getDj(),
                 inDir);
 
-        out = addOutput(direction.getDi(), direction.getDj(), direction);
+        out = addOutput(direction);
         in1.connectTo(out);
     }
 

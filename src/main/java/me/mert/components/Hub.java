@@ -16,10 +16,10 @@ public class Hub extends Component {
         Direction east = west.opposite();
         Direction south = north.opposite();
 
-        addinput(north.getDi(), north.getDj(), north);
-        addinput(west.getDi(), west.getDj(), west);
-        addinput(east.getDi(), east.getDj(), east);
-        addinput(south.getDi(), south.getDj(), south);
+        addinput(north);
+        addinput(west);
+        addinput(east);
+        addinput(south);
 
     }
 

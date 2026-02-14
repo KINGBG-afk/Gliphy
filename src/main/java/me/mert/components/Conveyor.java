@@ -13,8 +13,8 @@ public class Conveyor extends Component {
     public static final int FRAME_COUNT = 11;
     public static final int FRAME_TICK = 6;
 
-    public final Port in;
-    public Port out; // well no you are not final
+    private final Port in;
+    private Port out; // well no you are not final
 
     private static final BufferedImage[] straightFrames;
     private static final BufferedImage[] leftFrames;
@@ -26,8 +26,8 @@ public class Conveyor extends Component {
     public Conveyor(int i, int j, Direction dir) {
         super(i, j, dir, new int[] { 1, 1 }, ComponentType.CONVEYOR);
 
-        in = addinput(dir.opposite().getDi(), dir.opposite().getDj(), dir.opposite());
-        out = addOutput(dir.getDi(), dir.getDj(), dir);
+        in = addinput(dir.opposite());
+        out = addOutput(dir);
 
         in.connectTo(out);
     }

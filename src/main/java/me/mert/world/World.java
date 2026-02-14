@@ -220,9 +220,9 @@ public class World {
         return true;
     }
 
-    public boolean placeComponent(int i, int j, ComponentType comp, Direction dir) {
+    public boolean placeComponent(int i, int j, ComponentType comp, Direction dir, boolean variant) {
         int[] size;
-        Component obj = ComponentType.createComponent(comp, dir, i, j);
+        Component obj = ComponentType.createComponent(comp, dir, i, j, variant);
         int ox = 0, oy = 0;
         if (obj == null)
             return false;
@@ -319,7 +319,8 @@ public class World {
 
                         if (conveyor.changeOutputPort(ni, nj, pDir.opposite())) {
                             System.out.println(":: Conveyor changed ports");
-                            makeConnection(placed, conveyor.out, ni, nj, p);
+                            makeConnection(placed, conveyor.outputs.get(0), ni, nj, p);
+                            // conveyor has only 1 output at a time
                             return;
                         }
                     }

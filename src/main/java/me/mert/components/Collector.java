@@ -8,13 +8,13 @@ import me.mert.glyph.GlyphLayer;
 
 public class Collector extends Component {
 
-    public final Port out;
-    public final Port in;
+    private final Port out;
+    private final Port in;
 
     public Collector(int i, int j, Direction dir) {
         super(i, j, dir, new int[] { 1, 1 }, ComponentType.COLLECTOR);
 
-        out = addOutput(dir.getDi(), dir.getDj(), dir);
+        out = addOutput(dir);
         in = addinput(0, 0, dir);
     }
 
@@ -25,7 +25,8 @@ public class Collector extends Component {
 
             GlyphLayer l = GlyphLayer.createLayer(LayerType.SQUARE);
 
-            // GlyphLayer l = GlyphLayer.createLayer(Primitive.SQUARE, Primitive.CIRCLE, Primitive.SQUARE,Primitive.SQUARE);
+            // GlyphLayer l = GlyphLayer.createLayer(Primitive.SQUARE, Primitive.CIRCLE,
+            // Primitive.SQUARE,Primitive.SQUARE);
 
             Glyph glyph = new Glyph(l);
             Glyph.rotateCCW(glyph);

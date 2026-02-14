@@ -17,36 +17,46 @@ import me.mert.ui.panel.GamePanel;
 import me.mert.ui.widgets.IconButton;
 
 public class ComponentMenu extends JPanel {
-
     public ComponentMenu(GamePanel gamePanel) {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setOpaque(false);
 
+        Color fore = new Color(201, 201, 201);
         // Create buttons for components
         IconButton collectorButton = new IconButton("",
-                getScaledImage(ComponentType.COLLECTOR),
+                getScaledImage(ComponentType.COLLECTOR, false),
                 null,
-                new Color(201, 201, 201),
+                fore,
                 true);
         IconButton conveyorButton = new IconButton("",
-                getScaledImage(ComponentType.CONVEYOR),
+                getScaledImage(ComponentType.CONVEYOR, false),
                 null,
-                new Color(201, 201, 201),
+                fore,
                 true);
         IconButton hubButton = new IconButton("",
-                getScaledImage(ComponentType.HUB),
+                getScaledImage(ComponentType.HUB, false),
                 null,
-                new Color(201, 201, 201),
+                fore,
                 true);
         IconButton cutterButton = new IconButton("",
-                getScaledImage(ComponentType.CUTTER),
+                getScaledImage(ComponentType.CUTTER, false),
                 null,
-                new Color(201, 201, 201),
+                fore,
                 true);
         IconButton stackerButton = new IconButton("",
-                getScaledImage(ComponentType.STACKER),
+                getScaledImage(ComponentType.STACKER, false),
                 null,
-                new Color(201, 201, 201),
+                fore,
+                true);
+        IconButton lMergerButton = new IconButton("",
+                getScaledImage(ComponentType.MERGER, false),
+                null,
+                fore,
+                true);
+        IconButton rMergerButton = new IconButton("",
+                getScaledImage(ComponentType.MERGER, true),
+                null,
+                fore,
                 true);
 
         collectorButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
@@ -54,31 +64,39 @@ public class ComponentMenu extends JPanel {
         hubButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
         cutterButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
         stackerButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
+        lMergerButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
+        rMergerButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
 
         collectorButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         conveyorButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         hubButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         cutterButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         stackerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lMergerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        rMergerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         add(collectorButton);
         add(conveyorButton);
         add(hubButton);
         add(cutterButton);
         add(stackerButton);
+        add(lMergerButton);
+        add(rMergerButton);
 
         // Add action listeners
-        collectorButton.addActionListener(e -> gamePanel.setSelectedType(ComponentType.COLLECTOR));
-        conveyorButton.addActionListener(e -> gamePanel.setSelectedType(ComponentType.CONVEYOR));
-        hubButton.addActionListener(e -> gamePanel.setSelectedType(ComponentType.HUB));
-        cutterButton.addActionListener(e -> gamePanel.setSelectedType(ComponentType.CUTTER));
-        stackerButton.addActionListener(e -> gamePanel.setSelectedType(ComponentType.STACKER));
+        collectorButton.addActionListener(e -> gamePanel.setSelectedType(ComponentType.COLLECTOR, false));
+        conveyorButton.addActionListener(e -> gamePanel.setSelectedType(ComponentType.CONVEYOR, false));
+        hubButton.addActionListener(e -> gamePanel.setSelectedType(ComponentType.HUB, false));
+        cutterButton.addActionListener(e -> gamePanel.setSelectedType(ComponentType.CUTTER, false));
+        stackerButton.addActionListener(e -> gamePanel.setSelectedType(ComponentType.STACKER, false));
+        lMergerButton.addActionListener(e -> gamePanel.setSelectedType(ComponentType.MERGER, false));
+        rMergerButton.addActionListener(e -> gamePanel.setSelectedType(ComponentType.MERGER, true));
     }
 
-    private ImageIcon getScaledImage(ComponentType ct) {
+    private ImageIcon getScaledImage(ComponentType ct, boolean variant) {
         ImageIcon icon;
         if (ct != ComponentType.CUTTER && ct != ComponentType.STACKER) {
-            icon = new ImageIcon(ComponentType.createComponent(ct, 0, 0).getImage());
+            icon = new ImageIcon(ComponentType.createComponent(ct, 0, 0, variant).getImage());
         } else {
             System.out.println("/icons/" + ct.toString().toLowerCase() + ".png");
             icon = new ImageIcon(

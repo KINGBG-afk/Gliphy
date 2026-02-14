@@ -39,11 +39,21 @@ public abstract class Component {
         this.type = type;
 
         loadImage(type);
-        loadPreviewImage(img);
+
+        // i swaer im going too far just for one component
+        if (this.type != ComponentType.MERGER) {
+            loadPreviewImage(img);
+        }
     }
 
     protected final Port addinput(int i, int j, Direction dir) {
         Port p = new Port(i, j, this, dir, PortType.INPUT);
+        inputs.add(p);
+        return p;
+    }
+
+    protected final Port addinput(Direction dir) {
+        Port p = new Port(dir.getDi(), dir.getDj(), this, dir, PortType.INPUT);
         inputs.add(p);
         return p;
     }
@@ -55,6 +65,13 @@ public abstract class Component {
         return p;
     }
 
+    protected final Port addOutput(Direction dir) {
+        Port p = new Port(dir.getDi(), dir.getDj(), this, dir, PortType.OUTPUT);
+        outputs.add(p);
+        return p;
+    }
+
+    // this is just so conveyor can change its port
     protected final Port addOutput(Port p) {
         outputs.add(p);
         return p;
