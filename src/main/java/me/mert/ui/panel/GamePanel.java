@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import me.mert.components.Component;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
+import me.mert.core.enums.LayerType;
 import me.mert.input.KeyboardActions;
 import me.mert.input.MouseInput;
 import me.mert.ui.Camera;
@@ -29,7 +30,12 @@ public class GamePanel extends JPanel {
 
     private ComponentType selectedType = ComponentType.COLLECTOR;
     private Direction selectedDirection = Direction.NORTH;
-    private Component selectedComponent = ComponentType.createComponent(selectedType, selectedDirection, 0, 0, false);
+    private Component selectedComponent = ComponentType.createComponent(
+            selectedType,
+            selectedDirection,
+            0, 0,
+            false,
+            null);
 
     private boolean variant = false;
 
@@ -73,10 +79,10 @@ public class GamePanel extends JPanel {
 
     }
 
-    public void setSelectedType(ComponentType c, boolean v) {
+    public void setSelectedType(ComponentType c, boolean v, LayerType r) {
         selectedType = c;
         variant = v;
-        selectedComponent = ComponentType.createComponent(selectedType, selectedDirection, 0, 0, v);
+        selectedComponent = ComponentType.createComponent(selectedType, selectedDirection, 0, 0, v, r);
     }
 
     public void rotateDirection() {

@@ -18,10 +18,10 @@ public enum ComponentType {
     MERGER,
     HUB;
 
-    public static Component createComponent(ComponentType compType, int i, int j, boolean variant) {
+    public static Component createComponent(ComponentType compType, int i, int j, boolean variant, LayerType r) {
         return switch (compType) {
             case CONVEYOR -> new Conveyor(i, j, Direction.NORTH);
-            case COLLECTOR -> new Collector(i, j, Direction.NORTH);
+            case COLLECTOR -> new Collector(i, j, Direction.NORTH, r);
             case HUB -> new Hub(i, j, Direction.NORTH);
             case CUTTER -> new Cutter(i, j, Direction.NORTH);
             case STACKER -> new Stacker(i, j, Direction.NORTH);
@@ -31,10 +31,11 @@ public enum ComponentType {
         };
     }
 
-    public static Component createComponent(ComponentType compType, Direction d, int i, int j, boolean variant) {
+    public static Component createComponent(ComponentType compType, Direction d, int i, int j, boolean variant,
+            LayerType r) {
         return switch (compType) {
             case CONVEYOR -> new Conveyor(i, j, d);
-            case COLLECTOR -> new Collector(i, j, d);
+            case COLLECTOR -> new Collector(i, j, d, r);
             case HUB -> new Hub(i, j, d);
             case CUTTER -> new Cutter(i, j, d);
             case STACKER -> new Stacker(i, j, d);

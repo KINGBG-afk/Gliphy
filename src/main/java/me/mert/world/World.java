@@ -12,6 +12,7 @@ import me.mert.components.Port;
 import me.mert.core.Constants;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
+import me.mert.core.enums.LayerType;
 import me.mert.core.enums.PortType;
 import personthecat.fastnoise.FastNoise;
 import personthecat.fastnoise.data.NoiseType;
@@ -222,7 +223,8 @@ public class World {
 
     public boolean placeComponent(int i, int j, ComponentType comp, Direction dir, boolean variant) {
         int[] size;
-        Component obj = ComponentType.createComponent(comp, dir, i, j, variant);
+        LayerType lt = getTile(i, j).recourse;
+        Component obj = ComponentType.createComponent(comp, dir, i, j, variant, lt);
         int ox = 0, oy = 0;
         if (obj == null)
             return false;

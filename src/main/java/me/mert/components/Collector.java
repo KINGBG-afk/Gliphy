@@ -4,15 +4,16 @@ import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.LayerType;
 import me.mert.glyph.Glyph;
-import me.mert.glyph.GlyphLayer;
 
 public class Collector extends Component {
 
     private final Port out;
     private final Port in;
+    private final LayerType resource;
 
-    public Collector(int i, int j, Direction dir) {
+    public Collector(int i, int j, Direction dir, LayerType resource) {
         super(i, j, dir, new int[] { 1, 1 }, ComponentType.COLLECTOR);
+        this.resource = resource;
 
         out = addOutput(dir);
         in = addinput(0, 0, dir);
@@ -23,13 +24,10 @@ public class Collector extends Component {
         // if emtpy create new one
         if (!out.hasItem() && out.nextItem == null) {
 
-            GlyphLayer l = GlyphLayer.createLayer(LayerType.SQUARE);
-
             // GlyphLayer l = GlyphLayer.createLayer(Primitive.SQUARE, Primitive.CIRCLE,
             // Primitive.SQUARE,Primitive.SQUARE);
 
-            Glyph glyph = new Glyph(l);
-            Glyph.rotateCCW(glyph);
+            Glyph glyph = new Glyph(resource);
             out.nextItem = glyph;
 
             // quick and dirty to display the glyph
