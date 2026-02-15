@@ -68,8 +68,8 @@ public class ComponentMenu extends JPanel {
         add(conveyorButton);
         add(rotaterButton);
         add(cutterButton);
-        add(hubButton);
         add(stackerButton);
+        add(hubButton);
         add(lMergerButton);
         add(rMergerButton);
 
@@ -98,7 +98,6 @@ public class ComponentMenu extends JPanel {
         if (ct != ComponentType.CUTTER && ct != ComponentType.STACKER) {
             icon = new ImageIcon(ComponentType.createComponent(ct, 0, 0, variant, null).getImage());
         } else {
-            System.out.println("/icons/" + ct.toString().toLowerCase() + ".png");
             icon = new ImageIcon(
                     ComponentMenu.class.getResource(
                             "/icons/" + ct.toString().toLowerCase() + "-icon.png"));

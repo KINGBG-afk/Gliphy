@@ -1,22 +1,14 @@
 make currency manager - coins i guess
 
-upgrade manager:
+upgrade manager, level manager, currancy manager:
     update time of components
     buy new components
-
-finish the collector
 
 make the ui for the world
 pause menu ui - doesn't pause update of components:
     exit button
     settings button
     continue button
-
-add settings:
-    language maybe
-    slider or toggle button for sound effects
-    maybe dark/light theme if there is time
-
 
 saving world system:
     json format
