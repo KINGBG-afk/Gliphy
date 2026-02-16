@@ -1,0 +1,29 @@
+{
+    "1": {
+        "amount": 20,
+        "glyph": [
+            "circle",
+            "circle",
+            "cirlce",
+            "circle"
+        ]
+    },
+    "2": {
+        "amount": 40,
+        "glyph": [
+            "square",
+            "square",
+            "square",
+            "square"
+        ]
+    },
+    "3": {
+        "amount": 50,
+        "glyph": [
+            "circle",
+            "line",
+            "circle",
+            "line"
+        ]
+    }
+}

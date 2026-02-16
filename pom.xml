@@ -26,7 +26,13 @@
       <artifactId>fastnoise</artifactId>
       <version>0.10</version>
     </dependency>
+  <dependency>
+    <groupId>org.json</groupId>
+    <artifactId>json</artifactId>
+    <version>20231013</version>
+   </dependency>
   </dependencies>
+
 
   <build>
     <plugins>
