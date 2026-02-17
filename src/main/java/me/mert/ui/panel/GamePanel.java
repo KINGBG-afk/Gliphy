@@ -13,6 +13,7 @@ import me.mert.components.Component;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.LayerType;
+import me.mert.game.LevelManager;
 import me.mert.input.KeyboardActions;
 import me.mert.input.MouseInput;
 import me.mert.ui.Camera;
@@ -57,6 +58,8 @@ public class GamePanel extends JPanel {
         layers.add(uiPanel, JLayeredPane.PALETTE_LAYER);
         createMenu();
 
+        LevelManager levelManager = new LevelManager();
+
         // mouse
         MouseInput mouseInput = new MouseInput(camera, this, gameRenderer);
         addMouseListener(mouseInput);
@@ -98,6 +101,10 @@ public class GamePanel extends JPanel {
         world.placeComponent(i, j, selectedType, selectedDirection, variant);
     }
 
+    public void removeComponentAt(int i, int j) {
+        world.removeComponent(i, j);
+    }
+
     // it gets the job done
     public World getWorld() {
         return world;
@@ -121,9 +128,9 @@ public class GamePanel extends JPanel {
         gameRenderer.drawGrid((Graphics2D) g, sWidth, sHeight);
         gameRenderer.drawTiles((Graphics2D) g, sWidth, sHeight);
         gameRenderer.drawComponents(g, sWidth, sHeight);
-        gameRenderer.drawPreviewComponent(g, selectedComponent, true);
-
+        gameRenderer.drawPreviewComponent(g, selectedComponent);
         gameRenderer.drawVignette((Graphics2D) g, sWidth, sHeight);
+        gameRenderer.drawGoal(g, sWidth, sHeight);
 
         // gameRenderer.debugDraw(g, sWidth, sHeight);
     }

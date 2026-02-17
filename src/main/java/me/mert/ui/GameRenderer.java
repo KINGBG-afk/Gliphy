@@ -2,6 +2,7 @@ package me.mert.ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -17,6 +18,7 @@ import me.mert.core.Constants;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.LayerType;
+import me.mert.game.LevelManager;
 import me.mert.glyph.Glyph;
 import me.mert.world.Tile;
 import me.mert.world.World;
@@ -49,10 +51,7 @@ public class GameRenderer {
     }
 
     // --- MOUSE ------------------------------------------------------------
-    public void drawPreviewComponent(Graphics g, Component c, boolean correct) {
-        if (!correct)
-            return;
-
+    public void drawPreviewComponent(Graphics g, Component c) {
         Graphics2D g2d = (Graphics2D) g;
 
         int cellPx = getSize();
@@ -263,4 +262,19 @@ public class GameRenderer {
         }
     }
 
+    public void drawGoal(Graphics g, int screenWidth, int screenHeight) {
+        LevelManager mgr = LevelManager.getInstance();
+        Glyph glyph = mgr.getLevelGoal();
+
+        g.setColor(new Color(179, 179, 179));
+        g.fillOval(10, screenHeight / 2 - 70, 50, 50);
+
+        Glyph.render((Graphics2D) g, glyph, 18, screenHeight / 2 - 63, 35);
+
+        g.setFont(new Font("sans-serif", Font.PLAIN, 27));
+        g.setColor(Color.BLACK);
+        g.drawString("/" + mgr.getGoalAmount(), 69, screenHeight / 2 - 20);
+        
+        g.drawString(String.valueOf(mgr.getStored()), 69, screenHeight / 2 - 50);
+    }
 }

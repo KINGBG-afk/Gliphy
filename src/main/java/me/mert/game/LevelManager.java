@@ -11,17 +11,43 @@ import me.mert.glyph.Glyph;
 import me.mert.glyph.GlyphLayer;
 
 public class LevelManager {
+    private static LevelManager instance;
+
     private int stored;
     private int level;
     private Glyph levelGoal;
+    private int goalAmount;
     private JSONObject levelObj;
 
+    public LevelManager() {
+        level = 1;
+        loadNextLevel(level);
+    }
+
+    public static LevelManager getInstance() {
+        if (instance == null) {
+            instance = new LevelManager();
+        }
+        return instance;
+    }
+
     private boolean checkLevelCompleted() {
-        return stored <= levelObj.getInt("amount");
+        return stored >= goalAmount;
+    }
+
+    public void addToStored(Glyph g) {
+        if (g.equals(levelGoal)) {
+            stored++;
+            System.out.println("Stored glyph");
+
+            if (checkLevelCompleted()) {
+                goNextLevel();
+            }
+        }
     }
 
     // there will only be one layer even tho i added the option for multiple layers
-    private void getLevelGoal() {
+    private void getGoalGlyph() {
         JSONArray arr = levelObj.getJSONArray("glyph");
         Primitive[] ps = new Primitive[4];
         for (int i = 0; i < arr.length(); i++) {
@@ -30,36 +56,45 @@ public class LevelManager {
         levelGoal = new Glyph(GlyphLayer.createLayer(ps));
     }
 
-    public void addToStored(Glyph g) {
-        if (g.equals(levelGoal)) {
-            stored++;
-        }
-    }
-
-    public boolean goNextLevel() {
+    public void goNextLevel() {
         if (level == 3) {
-            return false;
+            return;
         }
 
-        if (checkLevelCompleted()) {
-            level++;
-            loadNextLevel(level);
-            return true;
-        }
-
-        return false;
+        level++;
+        loadNextLevel(level);
+        System.out.println("Leve up");
+        System.out.println("Going to level: " + level);
     }
 
+    public int getGoalAmount() {
+        return goalAmount;
+    }
+
+    public int getStored() {
+        return stored;
+    }
+
+    public Glyph getLevelGoal() {
+        return levelGoal;
+    }
+
+    @SuppressWarnings("CallToPrintStackTrace") // the warning in my editor bothers me a lot
     private void loadNextLevel(int lvl) {
-        try (InputStream iStream = LevelManager.class.getClassLoader().getResourceAsStream("data/level-data.json")) {
+        try (InputStream iStream = LevelManager.class
+                .getClassLoader()
+                .getResourceAsStream("data/level-data.json")) {
             if (iStream == null) {
-                throw new RuntimeException("level-data.json is not found");
+                throw new RuntimeException("level-data.json not found");
             }
 
             JSONObject obj = new JSONObject(new JSONTokener(iStream));
+
             this.levelObj = obj.getJSONObject(String.valueOf(lvl));
+            this.goalAmount = levelObj.getInt("amount");
             this.stored = 0;
-            getLevelGoal();
+            getGoalGlyph();
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to load leve " + lvl);

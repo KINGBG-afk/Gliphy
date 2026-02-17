@@ -300,4 +300,45 @@ public class Glyph {
                 90);
     }
     // #endregion
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+
+        // just in case
+        if (getClass() != obj.getClass())
+            return false;
+
+        Glyph other = (Glyph) obj;
+
+        if (this.layers.size() != other.layers.size())
+            return false;
+
+        for (int i = 0; i < other.layers.size(); i++) {
+            GlyphLayer l1 = this.layers.get(i);
+            GlyphLayer l2 = other.layers.get(i);
+
+            for (int q = 0; q < GlyphLayer.QUARTERS; q++) {
+                if (l1.q[q] != l2.q[q]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+
+        for (GlyphLayer layer : layers) {
+            for (int i = 0; i < GlyphLayer.QUARTERS; i++) {
+                result = 31 * result + (layer.q[i] != null ? layer.q[i].hashCode() : 0);
+            }
+        }
+        return result;
+    }
 }

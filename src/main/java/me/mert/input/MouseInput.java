@@ -5,6 +5,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
+import javax.swing.SwingUtilities;
+
 import me.mert.ui.Camera;
 import me.mert.ui.GameRenderer;
 import me.mert.ui.panel.GamePanel;
@@ -25,7 +27,13 @@ public class MouseInput extends MouseAdapter {
     public void mouseClicked(MouseEvent e) {
         lastX = e.getX();
         lastY = e.getY();
-        panel.placeSelectedComponentAt(camera.screenToCellY(lastY), camera.screenToCellX(lastX));
+
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            panel.placeSelectedComponentAt(camera.screenToCellY(lastY), camera.screenToCellX(lastX));
+        } else if (SwingUtilities.isRightMouseButton(e)) {
+
+            panel.removeComponentAt(camera.screenToCellY(lastY), camera.screenToCellX(lastX));
+        }
     }
 
     @Override

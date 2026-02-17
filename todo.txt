@@ -1,13 +1,15 @@
 make currency manager - coins i guess
 
-upgrade manager, level manager, currancy manager:
+upgrade manager, currancy manager:
     update time of components
     buy new components
+
+    level manager = DONE
 
 make the ui for the world
 pause menu ui - doesn't pause update of components:
     exit button
-    settings button
+    sound button
     continue button
 
 saving world system:
