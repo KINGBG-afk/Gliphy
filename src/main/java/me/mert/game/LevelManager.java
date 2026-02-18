@@ -19,7 +19,7 @@ public class LevelManager {
     private int goalAmount;
     private JSONObject levelObj;
 
-    public LevelManager() {
+    private LevelManager() {
         level = 1;
         loadNextLevel(level);
     }
@@ -56,13 +56,14 @@ public class LevelManager {
         levelGoal = new Glyph(GlyphLayer.createLayer(ps));
     }
 
-    public void goNextLevel() {
+    private void goNextLevel() {
         if (level == 3) {
             return;
         }
 
         level++;
         loadNextLevel(level);
+        CurrencyManager.getInstance().add(50);
         System.out.println("Leve up");
         System.out.println("Going to level: " + level);
     }

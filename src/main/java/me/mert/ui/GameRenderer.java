@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Point;
 import java.awt.RadialGradientPaint;
@@ -15,9 +16,11 @@ import java.util.Set;
 import me.mert.components.Component;
 import me.mert.components.Conveyor;
 import me.mert.core.Constants;
+import me.mert.core.GliphyUtilities;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.LayerType;
+import me.mert.game.CurrencyManager;
 import me.mert.game.LevelManager;
 import me.mert.glyph.Glyph;
 import me.mert.world.Tile;
@@ -29,7 +32,7 @@ public class GameRenderer {
     private final World world;
     public Point mouse;
     private final int CELL_SIZE;
-
+    private final Image coinImage = GliphyUtilities.loadIcon("/icons/coin.png", 40, 40).getImage();
     private static final Color TILE_COLOR = new Color(0, 0, 0, 17);
 
     public GameRenderer(Camera camera, World world) {
@@ -266,7 +269,7 @@ public class GameRenderer {
         LevelManager mgr = LevelManager.getInstance();
         Glyph glyph = mgr.getLevelGoal();
 
-        g.setColor(new Color(179, 179, 179));
+        g.setColor(new Color(215, 215, 215));
         g.fillOval(10, screenHeight / 2 - 70, 50, 50);
 
         Glyph.render((Graphics2D) g, glyph, 18, screenHeight / 2 - 63, 35);
@@ -274,7 +277,25 @@ public class GameRenderer {
         g.setFont(new Font("sans-serif", Font.PLAIN, 27));
         g.setColor(Color.BLACK);
         g.drawString("/" + mgr.getGoalAmount(), 69, screenHeight / 2 - 20);
-        
+
         g.drawString(String.valueOf(mgr.getStored()), 69, screenHeight / 2 - 50);
+    }
+    
+    public void drawCoins(Graphics g, int screenWidth, int screenHeight) {
+        g.setColor(new Color(215, 215, 215));
+        CurrencyManager mgr = CurrencyManager.getInstance();
+        
+        g.fillRoundRect(
+            20, 20,
+            160, 65,
+            15, 15);
+            g.drawImage(coinImage, 30, 30, null);
+
+            g.setFont(new Font("sans-serif", Font.PLAIN, 38));
+            g.setColor(Color.BLACK);
+            g.drawString(mgr.getCoinsString(), 75, 65);
+        
+
+
     }
 }

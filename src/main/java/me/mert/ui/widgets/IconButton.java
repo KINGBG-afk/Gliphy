@@ -13,19 +13,33 @@ import javax.swing.JButton;
 // god forbid for this awful class
 public class IconButton extends JButton {
 
-    private final ImageIcon pressedImg;
+    private ImageIcon pressedImg;
+    private ImageIcon highlightIcon;
 
-    public IconButton(String text, ImageIcon icon, ImageIcon pressedIcon) {
+    // some buttons don't have hover state so that's why this is here
+    public IconButton(String text, ImageIcon icon, ImageIcon pressedImg) {
+        this(text, icon, pressedImg, null);
+    }
+
+    public IconButton(String text,
+            ImageIcon icon,
+            ImageIcon pressedIcon,
+            ImageIcon highlightIcon) {
 
         super(text, icon);
+
         this.pressedImg = pressedIcon;
+        this.highlightIcon = highlightIcon;
 
         setContentAreaFilled(false);
         setFocusPainted(false);
         setFocusable(false);
-        setForeground(Color.BLACK);
         setBorderPainted(false);
         setRolloverEnabled(true);
+    }
+
+    public void setHighlightIcon(ImageIcon img) {
+        highlightIcon = img;
     }
 
     @Override
@@ -43,6 +57,12 @@ public class IconButton extends JButton {
             iconToDraw = pressedImg;
         }
 
+        // hover
+        boolean hovering = mod.isRollover() && !mod.isPressed();
+        if (hovering && highlightIcon != null) {
+            iconToDraw = highlightIcon;
+        }
+
         // draw icon
         if (iconToDraw != null) {
             int iw = iconToDraw.getIconWidth();
@@ -53,8 +73,7 @@ public class IconButton extends JButton {
             iconToDraw.paintIcon(this, g2, ix, iy);
         }
 
-        // hover
-        if (mod.isRollover() && !mod.isPressed()) {
+        if (hovering && highlightIcon == null) {
             g2.setColor(new Color(255, 255, 255, 50));
             g2.fillRect(0, 0, getWidth(), getHeight());
         }

@@ -2,6 +2,7 @@ package me.mert.components;
 
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
+import me.mert.game.CurrencyManager;
 import me.mert.game.LevelManager;
 import me.mert.glyph.Glyph;
 
@@ -24,8 +25,9 @@ public class Hub extends Component {
 
                 Glyph g = in.getItem();
                 in.eject();
-                System.out.println("got new item");
+
                 LevelManager.getInstance().addToStored(g);
+                CurrencyManager.getInstance().add(1);
             }
         }
     }
