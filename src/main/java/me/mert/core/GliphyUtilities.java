@@ -4,7 +4,6 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-
 public class GliphyUtilities {
     public static ImageIcon loadIcon(String path, int width, int height) {
         ImageIcon icon = new ImageIcon(

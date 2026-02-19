@@ -35,7 +35,7 @@ public class MainMenu extends JPanel {
         ImageIcon bgHoverIcon = GliphyUtilities.loadIcon("/icons/bg-hover.png", 70, 70);
         ImageIcon enIcon = GliphyUtilities.loadIcon("/icons/en.png", 70, 70);
         ImageIcon enHoverIcon = GliphyUtilities.loadIcon("/icons/en-hover.png", 70, 70);
-        
+
         // i know the size should be dynamic but we have to cut corners
         bgImage = GliphyUtilities.loadIcon("/ui/background.png", 1920, 1080).getImage();
 

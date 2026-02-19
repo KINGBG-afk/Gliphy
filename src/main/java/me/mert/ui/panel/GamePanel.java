@@ -6,10 +6,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import me.mert.components.Component;
+import me.mert.core.GliphyUtilities;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.LayerType;
@@ -18,6 +20,9 @@ import me.mert.input.MouseInput;
 import me.mert.ui.Camera;
 import me.mert.ui.GameRenderer;
 import me.mert.ui.menu.ComponentMenu;
+import me.mert.ui.menu.UpgradeMenu;
+import me.mert.ui.widgets.IconButton;
+import me.mert.ui.window.MainWindow;
 import me.mert.world.World;
 
 public class GamePanel extends JPanel {
@@ -27,6 +32,9 @@ public class GamePanel extends JPanel {
     private final World world;
     private final GameRenderer gameRenderer;
     private final GameUIPanel uiPanel;
+    
+    // just so this class can access the updateTimer
+    private final MainWindow mainWindow;
 
     private ComponentType selectedType = ComponentType.COLLECTOR;
     private Direction selectedDirection = Direction.NORTH;
@@ -40,9 +48,10 @@ public class GamePanel extends JPanel {
     private boolean variant = false;
 
     // lesson relearned - do not use getWIdth and getHeight in the constructor :)
-    public GamePanel(Camera camera, World world, GameRenderer gameRenderer) {
+    public GamePanel(Camera camera, World world, GameRenderer gameRenderer, MainWindow mainWindow) {
         this.world = world;
         this.gameRenderer = gameRenderer;
+        this.mainWindow = mainWindow;
 
         setLayout(null);
         setBackground(Color.WHITE);
@@ -55,9 +64,9 @@ public class GamePanel extends JPanel {
         uiPanel = new GameUIPanel();
         uiPanel.setBounds(0, 0, screenDimension.width, screenDimension.height);
         layers.add(uiPanel, JLayeredPane.PALETTE_LAYER);
-        createMenu();
 
-        // LevelManager levelManager = new LevelManager();
+        createComponentMenu();
+        createUpgradeUI();
 
         // mouse
         MouseInput mouseInput = new MouseInput(camera, this, gameRenderer);
@@ -71,14 +80,39 @@ public class GamePanel extends JPanel {
         kActions.register(this);
     }
 
-    private void createMenu() {
+    private void createComponentMenu() {
         ComponentMenu menu = new ComponentMenu(this);
         menu.setSize(600, 70);
         menu.setLocation(
                 (uiPanel.getWidth() - menu.getWidth()) / 2,
                 uiPanel.getHeight() - menu.getHeight() - 20);
         uiPanel.add(menu);
+    }
 
+    private void createUpgradeUI() {
+        UpgradeMenu menu = new UpgradeMenu(this);
+        menu.setSize(400, 800);
+        menu.setLocation(
+                (uiPanel.getWidth() - menu.getWidth()) - 20,
+                (uiPanel.getHeight() - menu.getHeight()) / 2);
+        menu.setVisible(true);
+
+        ImageIcon starIcon = GliphyUtilities.loadIcon("/icons/star.png", 70, 70);
+        IconButton upgradeButton = new IconButton("",
+                starIcon,
+                starIcon);
+        upgradeButton.setBounds(
+                (uiPanel.getWidth() + 620) / 2,
+                uiPanel.getHeight() - 70 - 20,
+                70, 70);
+        upgradeButton.addActionListener(e -> {
+            menu.setVisible(!menu.isVisible());
+            uiPanel.revalidate(); // not that there is a layout but still
+            uiPanel.repaint();
+            System.out.println("Upgrade Menu");
+        });
+        uiPanel.add(upgradeButton);
+        uiPanel.add(menu);
     }
 
     public void setSelectedType(ComponentType c, boolean v, LayerType r) {
@@ -107,6 +141,10 @@ public class GamePanel extends JPanel {
     // it gets the job done
     public World getWorld() {
         return world;
+    }
+
+    public void upgradeSpeed() {
+        mainWindow.upgradeSpeed();
     }
 
     // not that you should move the window but

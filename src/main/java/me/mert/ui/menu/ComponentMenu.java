@@ -1,5 +1,6 @@
 package me.mert.ui.menu;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -19,68 +20,29 @@ public class ComponentMenu extends JPanel {
     public ComponentMenu(GamePanel gamePanel) {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setOpaque(false);
+        setBackground(new Color(236, 236, 236));
 
         // Create buttons for components
-        ComponentSlot collectorButton = new ComponentSlot(getScaledImage(
-                ComponentType.COLLECTOR, false),
-                false);
+        addButton(gamePanel, ComponentType.COLLECTOR, false, false);
+        addButton(gamePanel, ComponentType.CONVEYOR, false, false);
+        addButton(gamePanel, ComponentType.HUB, false, false);
+        addButton(gamePanel, ComponentType.CUTTER, false, false);
+        addButton(gamePanel, ComponentType.STACKER, false, false);
+        addButton(gamePanel, ComponentType.MERGER, false, false);
+        addButton(gamePanel, ComponentType.MERGER, true, false);
+        addButton(gamePanel, ComponentType.ROTATER, false, true);
+    }
 
-        ComponentSlot conveyorButton = new ComponentSlot(
-                getScaledImage(ComponentType.CONVEYOR, false),
-                false);
-        ComponentSlot hubButton = new ComponentSlot(
-                getScaledImage(ComponentType.HUB, false),
-                false);
-        ComponentSlot cutterButton = new ComponentSlot(
-                getScaledImage(ComponentType.CUTTER, false),
-                false);
-        ComponentSlot stackerButton = new ComponentSlot(
-                getScaledImage(ComponentType.STACKER, false),
-                false);
-        ComponentSlot lMergerButton = new ComponentSlot(
-                getScaledImage(ComponentType.MERGER, false),
-                false);
-        ComponentSlot rMergerButton = new ComponentSlot(
-                getScaledImage(ComponentType.MERGER, true),
-                true);
-        ComponentSlot rotaterButton = new ComponentSlot(getScaledImage(ComponentType.ROTATER, false),
-                false);
+    private void addButton(GamePanel gamePanel, ComponentType ct, boolean variant, boolean locked) {
+        ComponentSlot button = new ComponentSlot(
+                getScaledImage(ct, variant),
+                locked);
+        button.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        setAction(gamePanel, button, ComponentType.COLLECTOR, variant);
 
-        collectorButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
-        conveyorButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
-        hubButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
-        cutterButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
-        stackerButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
-        lMergerButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
-        rMergerButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
-        rotaterButton.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
+        add(button);
 
-        collectorButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        conveyorButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        hubButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        cutterButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        stackerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lMergerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        rMergerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        rotaterButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        add(collectorButton);
-        add(conveyorButton);
-        add(rotaterButton);
-        add(cutterButton);
-        add(stackerButton);
-        add(hubButton);
-        add(lMergerButton);
-        add(rMergerButton);
-
-        setAction(gamePanel, collectorButton, ComponentType.COLLECTOR, false);
-        setAction(gamePanel, conveyorButton, ComponentType.CONVEYOR, false);
-        setAction(gamePanel, hubButton, ComponentType.HUB, false);
-        setAction(gamePanel, cutterButton, ComponentType.CUTTER, false);
-        setAction(gamePanel, stackerButton, ComponentType.STACKER, false);
-        setAction(gamePanel, lMergerButton, ComponentType.MERGER, false);
-        setAction(gamePanel, rMergerButton, ComponentType.MERGER, true);
-        setAction(gamePanel, rotaterButton, ComponentType.ROTATER, false);
     }
 
     private void setAction(GamePanel panel, ComponentSlot c, ComponentType ct, boolean v) {

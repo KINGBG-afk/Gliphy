@@ -280,22 +280,20 @@ public class GameRenderer {
 
         g.drawString(String.valueOf(mgr.getStored()), 69, screenHeight / 2 - 50);
     }
-    
+
     public void drawCoins(Graphics g, int screenWidth, int screenHeight) {
         g.setColor(new Color(215, 215, 215));
         CurrencyManager mgr = CurrencyManager.getInstance();
-        
+
         g.fillRoundRect(
-            20, 20,
-            160, 65,
-            15, 15);
-            g.drawImage(coinImage, 30, 30, null);
+                20, 20,
+                160, 65,
+                15, 15);
+        g.drawImage(coinImage, 30, 30, null);
 
-            g.setFont(new Font("sans-serif", Font.PLAIN, 38));
-            g.setColor(Color.BLACK);
-            g.drawString(mgr.getCoinsString(), 75, 65);
-        
-
+        g.setFont(new Font("sans-serif", Font.PLAIN, 38));
+        g.setColor(Color.BLACK);
+        g.drawString(mgr.getCoinsString(), 75, 65);
 
     }
 }

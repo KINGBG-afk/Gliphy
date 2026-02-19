@@ -8,6 +8,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import me.mert.game.CurrencyManager;
+import me.mert.game.Upgrade;
+import me.mert.game.UpgradeManager;
 import me.mert.ui.Camera;
 import me.mert.ui.GameRenderer;
 import me.mert.ui.panel.GamePanel;
@@ -28,16 +31,22 @@ public class MainWindow extends JFrame {
     Timer updateTimer;
 
     private final int FPS = 120;
+    private int baseUpdateDelay = 1000;
 
     public MainWindow(boolean startGame) {
         setTitle("Gliphy");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(screenDimension);
         setLocationRelativeTo(null);
-        setResizable(false);
         setUndecorated(true);
-        // setFocusable(true);
-        // setLayout(null);
+        setResizable(false);
+
+        String os = System.getProperty("os.name").toLowerCase();
+
+        if (!os.contains("linux")) {
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+        } else {
+            setSize(screenDimension);
+        }
 
         cl = new CardLayout();
         root = new JPanel(cl);
@@ -51,9 +60,17 @@ public class MainWindow extends JFrame {
         } else {
             showMainMenu();
         }
+    }
 
-        setVisible(true);
+    public void upgradeSpeed() {
+        Upgrade up = UpgradeManager.getInstance().getUpgrade("speed");
+        CurrencyManager cmgr = CurrencyManager.getInstance();
 
+        if (cmgr.canAfford(up.getCost())) {
+            up.levelUp();
+            updateTimer.setDelay((int) (baseUpdateDelay - (up.getLevel() * 50)));
+            System.out.println((int) (baseUpdateDelay - (up.getLevel() * 50)));
+        }
     }
 
     private void createScreens() {
@@ -62,13 +79,13 @@ public class MainWindow extends JFrame {
         World world = new World();
         GameRenderer renderer = new GameRenderer(camera, world);
 
-        gamePanel = new GamePanel(camera, world, renderer);
+        gamePanel = new GamePanel(camera, world, renderer, this);
 
         root.add(mainMenu, "menu");
         root.add(gamePanel, "world");
     }
 
-    public void showMainMenu() {
+    private void showMainMenu() {
         stopTimer();
         cl.show(root, "menu");
     }
@@ -81,7 +98,7 @@ public class MainWindow extends JFrame {
     private void startTimer() {
         if (renderTimer == null) {
             renderTimer = new Timer(1000 / FPS, e -> gamePanel.repaint());
-            updateTimer = new Timer(1000, e -> gamePanel.getWorld().updateComponents());
+            updateTimer = new Timer(baseUpdateDelay, e -> gamePanel.getWorld().updateComponents());
         }
         renderTimer.start();
         updateTimer.start();

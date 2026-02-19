@@ -38,7 +38,6 @@ public class LevelManager {
     public void addToStored(Glyph g) {
         if (g.equals(levelGoal)) {
             stored++;
-            System.out.println("Stored glyph");
 
             if (checkLevelCompleted()) {
                 goNextLevel();
