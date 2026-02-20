@@ -12,16 +12,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import me.mert.core.GliphyUtilities;
+import me.mert.game.UpgradeManager;
 
 // god forbid for this awful class
 public class ComponentSlot extends JButton {
-    boolean locked;
+    private final  String componentId;
     ImageIcon lock = GliphyUtilities.loadIcon("/icons/lock.png", 40, 40);
 
-    public ComponentSlot(ImageIcon icon, boolean locked) {
+    public ComponentSlot(ImageIcon icon, String componentId) {
 
         super(icon);
-        this.locked = locked;
+        this.componentId = componentId;
         Color bgColor = new Color(0, 0, 0, 0);
 
         setFont(new Font("Segoe UI", Font.PLAIN, 14)); // idk why this is here
@@ -57,12 +58,8 @@ public class ComponentSlot extends JButton {
 
     }
 
-    public void setLocked(boolean locked) {
-        this.locked = locked;
-    }
-
-    public boolean getLocked() {
-        return locked;
+    public boolean isLocked() {
+        return !UpgradeManager.getInstance().isComponentUnlocked(componentId);
     }
 
     @Override
@@ -85,7 +82,8 @@ public class ComponentSlot extends JButton {
 
             getIcon().paintIcon(this, g2, iconX, iconY);
 
-            if (locked) {
+            if (!UpgradeManager.getInstance()
+                    .isComponentUnlocked(componentId)) {
                 // Semi-transparent overlay (over the main icon)
                 g2.setColor(new Color(255, 255, 255, 120));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);

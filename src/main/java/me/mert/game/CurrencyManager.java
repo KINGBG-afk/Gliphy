@@ -29,6 +29,14 @@ public class CurrencyManager {
         }
     }
 
+    public long getCoins() {
+        return coins;
+    }
+
+    public void setCoins(long c) {
+        this.coins = c;
+    }
+
     public String getCoinsString() {
         if (coins < 1000)
             return String.valueOf(coins);

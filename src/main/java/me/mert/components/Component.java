@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,17 +16,18 @@ import me.mert.core.enums.Direction;
 import me.mert.core.enums.PortType;
 import me.mert.glyph.Glyph;
 
-public abstract class Component {
+public abstract class Component implements Serializable {
     public int i, j;
-    public Glyph item;
     public final ComponentType type;
     public final int[] size;
     public Direction direction;
-    protected BufferedImage img;
-    public BufferedImage previewImage;
+    protected transient BufferedImage img;
+    public transient  BufferedImage previewImage;
 
     public final List<Port> inputs;
     public final List<Port> outputs;
+
+    // transient means it won't get saved 
 
     // uh this class is total chaos
     protected Component(int i, int j, Direction direction, int[] size, ComponentType type) {

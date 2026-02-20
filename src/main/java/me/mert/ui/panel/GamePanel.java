@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLayeredPane;
@@ -15,6 +17,12 @@ import me.mert.core.GliphyUtilities;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.LayerType;
+import me.mert.game.CurrencyManager;
+import me.mert.game.LevelManager;
+import me.mert.game.Upgrade;
+import me.mert.game.UpgradeManager;
+import me.mert.game.save.SaveData;
+import me.mert.game.save.SaveManager;
 import me.mert.input.KeyboardActions;
 import me.mert.input.MouseInput;
 import me.mert.ui.Camera;
@@ -32,7 +40,7 @@ public class GamePanel extends JPanel {
     private final World world;
     private final GameRenderer gameRenderer;
     private final GameUIPanel uiPanel;
-    
+
     // just so this class can access the updateTimer
     private final MainWindow mainWindow;
 
@@ -95,7 +103,7 @@ public class GamePanel extends JPanel {
         menu.setLocation(
                 (uiPanel.getWidth() - menu.getWidth()) - 20,
                 (uiPanel.getHeight() - menu.getHeight()) / 2);
-        menu.setVisible(true);
+        menu.setVisible(false);
 
         ImageIcon starIcon = GliphyUtilities.loadIcon("/icons/star.png", 70, 70);
         IconButton upgradeButton = new IconButton("",
@@ -145,6 +153,36 @@ public class GamePanel extends JPanel {
 
     public void upgradeSpeed() {
         mainWindow.upgradeSpeed();
+    }
+
+    public void saveWorld() {
+        SaveData data = new SaveData();
+
+        data.coins = CurrencyManager.getInstance().getCoins();
+        data.level = LevelManager.getInstance().getLevel();
+
+        data.upgradeLevels = new HashMap<>();
+        for (Upgrade u : UpgradeManager.getInstance().getAllUpgrades()) {
+            data.upgradeLevels.put(u.getId(), u.getLevel());
+        }
+
+        data.unlockedComponents = UpgradeManager.getInstance().getUnlockedComponents();
+    }
+
+    public void loadWorld() {
+        SaveData data = SaveManager.load();
+
+        CurrencyManager.getInstance().setCoins(data.coins);
+        LevelManager.getInstance().setLevel(data.level);
+
+        for (Map.Entry<String, Integer> entry : data.upgradeLevels.entrySet()) {
+            UpgradeManager.getInstance()
+                    .getUpgrade(entry.getKey())
+                    .setLevel(entry.getValue());
+        }
+
+        UpgradeManager.getInstance()
+                .setUnlockedComponents(data.unlockedComponents);
     }
 
     // not that you should move the window but

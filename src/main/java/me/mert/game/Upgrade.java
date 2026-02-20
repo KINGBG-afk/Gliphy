@@ -23,6 +23,10 @@ public class Upgrade {
         return level;
     }
 
+    public void setLevel(int l) {
+        this.level = l;
+    }
+
     public int getCost() {
         return (int) (baseCost * Math.pow(costMultiplier, level - 1));
     }

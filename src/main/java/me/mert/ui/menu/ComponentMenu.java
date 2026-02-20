@@ -23,23 +23,22 @@ public class ComponentMenu extends JPanel {
         setBackground(new Color(236, 236, 236));
 
         // Create buttons for components
-        addButton(gamePanel, ComponentType.COLLECTOR, false, false);
-        addButton(gamePanel, ComponentType.CONVEYOR, false, false);
-        addButton(gamePanel, ComponentType.HUB, false, false);
-        addButton(gamePanel, ComponentType.CUTTER, false, false);
-        addButton(gamePanel, ComponentType.STACKER, false, false);
-        addButton(gamePanel, ComponentType.MERGER, false, false);
-        addButton(gamePanel, ComponentType.MERGER, true, false);
-        addButton(gamePanel, ComponentType.ROTATER, false, true);
+        addButton(gamePanel, ComponentType.COLLECTOR, false);
+        addButton(gamePanel, ComponentType.CONVEYOR, false);
+        addButton(gamePanel, ComponentType.HUB, false);
+        addButton(gamePanel, ComponentType.CUTTER, false);
+        addButton(gamePanel, ComponentType.STACKER, false);
+        addButton(gamePanel, ComponentType.MERGER, false);
+        addButton(gamePanel, ComponentType.MERGER, true);
+        addButton(gamePanel, ComponentType.ROTATER, false);
     }
 
-    private void addButton(GamePanel gamePanel, ComponentType ct, boolean variant, boolean locked) {
+    private void addButton(GamePanel gamePanel, ComponentType ct, boolean variant) {
         ComponentSlot button = new ComponentSlot(
-                getScaledImage(ct, variant),
-                locked);
+                getScaledImage(ct, variant), ct.toString().toLowerCase());
         button.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        setAction(gamePanel, button, ComponentType.COLLECTOR, variant);
+        setAction(gamePanel, button, ct, variant);
 
         add(button);
 
@@ -47,7 +46,7 @@ public class ComponentMenu extends JPanel {
 
     private void setAction(GamePanel panel, ComponentSlot c, ComponentType ct, boolean v) {
         c.addActionListener(e -> {
-            if (!c.getLocked()) {
+            if (!c.isLocked()) {
                 panel.setSelectedType(ct, v, null);
             } else {
                 // TODO: implement this when currancy is done

@@ -45,6 +45,16 @@ public class LevelManager {
         }
     }
 
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int l) {
+        this.level = l;
+        getGoalGlyph();
+        getGoalAmount();
+    }
+
     // there will only be one layer even tho i added the option for multiple layers
     private void getGoalGlyph() {
         JSONArray arr = levelObj.getJSONArray("glyph");
