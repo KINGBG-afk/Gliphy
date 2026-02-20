@@ -31,7 +31,6 @@ public class MouseInput extends MouseAdapter {
         if (SwingUtilities.isLeftMouseButton(e)) {
             panel.placeSelectedComponentAt(camera.screenToCellY(lastY), camera.screenToCellX(lastX));
         } else if (SwingUtilities.isRightMouseButton(e)) {
-
             panel.removeComponentAt(camera.screenToCellY(lastY), camera.screenToCellX(lastX));
         }
     }
@@ -60,7 +59,7 @@ public class MouseInput extends MouseAdapter {
         panel.repaint();
     }
 
-    // i wish i wasn't the person i am
+    // i wish i wasn't the person i am...
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         int mouseX = e.getX();
@@ -83,5 +82,4 @@ public class MouseInput extends MouseAdapter {
     public void mouseMoved(MouseEvent e) {
         renderer.mouse = new Point(e.getX(), e.getY());
     }
-
 }

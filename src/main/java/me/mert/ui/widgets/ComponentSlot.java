@@ -1,7 +1,6 @@
 package me.mert.ui.widgets;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -25,7 +24,6 @@ public class ComponentSlot extends JButton {
         this.componentId = componentId;
         Color bgColor = new Color(0, 0, 0, 0);
 
-        setFont(new Font("Segoe UI", Font.PLAIN, 14)); // idk why this is here
         setContentAreaFilled(false);
         setFocusPainted(false);
         setFocusable(false);
@@ -46,16 +44,10 @@ public class ComponentSlot extends JButton {
             }
 
             @Override
-            public void mouseClicked(MouseEvent e) {
-                // im not answering any quesntions as to why is this here
-            }
-
-            @Override
             public void mouseReleased(MouseEvent e) {
                 setBackground(new Color(201, 201, 201));
             }
         });
-
     }
 
     public boolean isLocked() {

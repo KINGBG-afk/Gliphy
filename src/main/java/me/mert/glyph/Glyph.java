@@ -120,7 +120,6 @@ public class Glyph {
     }
 
     public static Glyph[] cut(Glyph g) {
-        // i know it looks disgustiong
         Glyph left = new Glyph((GlyphLayer) null);
         Glyph right = new Glyph((GlyphLayer) null);
 
@@ -186,8 +185,6 @@ public class Glyph {
             return;
         }
 
-        // well yeah at least i won't worry about performance for this one
-        // hehe...
         int mask = (layer.q[0] == Primitive.LINE ? 1 : 0) |
                 (layer.q[1] == Primitive.LINE ? 2 : 0) |
                 (layer.q[2] == Primitive.LINE ? 4 : 0) |
@@ -213,7 +210,6 @@ public class Glyph {
                 drawVerticalLine(g2d, x, y, size);
                 if (layer.q[0] == Primitive.EMPTY && layer.q[3] == Primitive.EMPTY)
                     return;
-
             }
         }
 

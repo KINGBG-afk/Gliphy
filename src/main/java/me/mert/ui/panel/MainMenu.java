@@ -24,16 +24,15 @@ public class MainMenu extends JPanel {
     public MainMenu(MainWindow root) {
         setFocusable(true);
         setLayout(null);
-        String path = "/ui/button.png";
-        String pressedPath = "/ui/pressed-button.png";
+        ImageIcon buttonIcon = GliphyUtilities.loadIcon("/ui/button.png", 300, 100);
+        ImageIcon pressedButtonIcon = GliphyUtilities.loadIcon("/ui/pressed-button.png", 300, 100);
 
-        // HACK: i know hard coded it but.. it works
         ImageIcon speakerIcon = GliphyUtilities.loadIcon("/icons/speaker.png", 64, 64);
         ImageIcon muteIcon = GliphyUtilities.loadIcon("/icons/speaker-mute.png", 64, 64);
 
         ImageIcon bgIcon = GliphyUtilities.loadIcon("/icons/bg.png", 70, 70);
-        ImageIcon bgHoverIcon = GliphyUtilities.loadIcon("/icons/bg-hover.png", 70, 70);
         ImageIcon enIcon = GliphyUtilities.loadIcon("/icons/en.png", 70, 70);
+        ImageIcon bgHoverIcon = GliphyUtilities.loadIcon("/icons/bg-hover.png", 70, 70);
         ImageIcon enHoverIcon = GliphyUtilities.loadIcon("/icons/en-hover.png", 70, 70);
 
         // i know the size should be dynamic but we have to cut corners
@@ -41,16 +40,16 @@ public class MainMenu extends JPanel {
 
         startButton = new IconButton(
                 "Play",
-                GliphyUtilities.loadIcon(path, 300, 100),
-                GliphyUtilities.loadIcon(pressedPath, 300, 100));
+                buttonIcon,
+                pressedButtonIcon);
         startButton.setFont(new Font("Segoe UI", Font.PLAIN, 50));
         startButton.setBounds(380, 650, 300, 100);
         startButton.addActionListener(e -> root.showWorld());
 
         quitButton = new IconButton(
                 "Quit",
-                GliphyUtilities.loadIcon(path, 300, 100),
-                GliphyUtilities.loadIcon(pressedPath, 300, 100));
+                buttonIcon,
+                pressedButtonIcon);
         quitButton.setFont(new Font("Segoe UI", Font.PLAIN, 50));
         quitButton.setBounds(380, 790, 300, 100);
         quitButton.addActionListener(e -> System.exit(0));
@@ -86,8 +85,8 @@ public class MainMenu extends JPanel {
 
         creditsButton = new IconButton(
                 "Credits",
-                GliphyUtilities.loadIcon(path, 300, 100),
-                GliphyUtilities.loadIcon(pressedPath, 300, 100));
+                buttonIcon,
+                pressedButtonIcon);
         creditsButton.setFont(new Font("Segoe UI", Font.PLAIN, 40));
         creditsButton.setBounds(1550, 940, 300, 100);
         // TODO: creditsButton.addActionListener(e ->);

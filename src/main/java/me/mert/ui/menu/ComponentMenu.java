@@ -41,7 +41,6 @@ public class ComponentMenu extends JPanel {
         setAction(gamePanel, button, ct, variant);
 
         add(button);
-
     }
 
     private void setAction(GamePanel panel, ComponentSlot c, ComponentType ct, boolean v) {

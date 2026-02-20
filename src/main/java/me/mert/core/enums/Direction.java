@@ -6,7 +6,7 @@ public enum Direction {
     SOUTH(1, 0),
     WEST(0, -1);
 
-    // lets not forget that if i didn't think of di and dj i would've probably
+    // let's not forget that if i didn't think of di and dj i would've probably
     // demotivated myself from having to rewrite the whole code base
     // for future me: just thank past me
     private final int di;

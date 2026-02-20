@@ -31,7 +31,7 @@ public class MainWindow extends JFrame {
     Timer updateTimer;
 
     private final int FPS = 120;
-    private int baseUpdateDelay = 1000;
+    private final  int BASE_UPDATE_DELAY = 1000;
 
     public MainWindow(boolean startGame) {
         setTitle("Gliphy");
@@ -68,8 +68,8 @@ public class MainWindow extends JFrame {
 
         if (cmgr.canAfford(up.getCost())) {
             up.levelUp();
-            updateTimer.setDelay((int) (baseUpdateDelay - (up.getLevel() * 50)));
-            System.out.println((int) (baseUpdateDelay - (up.getLevel() * 50)));
+            updateTimer.setDelay((int) (BASE_UPDATE_DELAY - (up.getLevel() * 50)));
+            System.out.println((int) (BASE_UPDATE_DELAY - (up.getLevel() * 50)));
         }
     }
 
@@ -98,7 +98,7 @@ public class MainWindow extends JFrame {
     private void startTimer() {
         if (renderTimer == null) {
             renderTimer = new Timer(1000 / FPS, e -> gamePanel.repaint());
-            updateTimer = new Timer(baseUpdateDelay, e -> gamePanel.getWorld().updateComponents());
+            updateTimer = new Timer(BASE_UPDATE_DELAY, e -> gamePanel.getWorld().updateComponents());
         }
         renderTimer.start();
         updateTimer.start();

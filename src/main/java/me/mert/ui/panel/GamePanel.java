@@ -55,7 +55,7 @@ public class GamePanel extends JPanel {
 
     private boolean variant = false;
 
-    // lesson relearned - do not use getWIdth and getHeight in the constructor :)
+    // lesson learned - do not use getWIdth and getHeight in the constructor :)
     public GamePanel(Camera camera, World world, GameRenderer gameRenderer, MainWindow mainWindow) {
         this.world = world;
         this.gameRenderer = gameRenderer;

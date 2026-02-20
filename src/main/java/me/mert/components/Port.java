@@ -79,13 +79,8 @@ public class Port implements ItemAcceptor, ItemEjector, Serializable {
     }
 
     @Override
-    public boolean canEject() {
-        return item != null && connectedTo != null;
-    }
-
-    @Override
     public Glyph eject() {
-        if (!canEject())
+        if (item == null && connectedTo == null)
             return null;
 
         Glyph tmp = item;

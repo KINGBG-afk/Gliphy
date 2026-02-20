@@ -13,12 +13,10 @@ public class Rotater extends Component {
         super(i, j, dir, new int[] { 1, 1 }, ComponentType.ROTATER);
         in = addinput(dir.opposite());
         out = addOutput(dir);
-
     }
 
     @Override
     public void update() {
-
         if (!in.hasItem()) {
             return;
         }

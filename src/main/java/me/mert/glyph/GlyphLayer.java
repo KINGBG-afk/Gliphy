@@ -56,7 +56,6 @@ public class GlyphLayer {
         return l;
     }
 
-
     public LayerType getType() {
         return type;
     }

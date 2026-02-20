@@ -37,7 +37,6 @@ public class UpgradeMenu extends RoundedPanel {
         }
     }
 
-    // god forgive me but there is 2 days left for the deadline
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

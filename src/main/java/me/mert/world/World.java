@@ -44,7 +44,6 @@ public class World {
                 .type(NoiseType.SIMPLEX2)
                 .frequency(0.25f)
                 .build();
-        loadChunksAroundCenter();
     }
 
     public World() {
@@ -57,7 +56,6 @@ public class World {
                 .type(NoiseType.SIMPLEX2)
                 .frequency(0.25f)
                 .build();
-        loadChunksAroundCenter();
     }
 
     public static int generateSeed() {
@@ -123,16 +121,6 @@ public class World {
         activeChunks = nActiveChunks;
     }
 
-    // NOTE: called only to generate chunks in the constructor
-    private void loadChunksAroundCenter() {
-        for (int y = -CHUNK_LOAD_RADIUS; y <= CHUNK_LOAD_RADIUS; y++) {
-            for (int x = -CHUNK_LOAD_RADIUS; x <= CHUNK_LOAD_RADIUS; x++) {
-                loadChunk(x, y);
-                activeChunks.add(chunkKey(x, y));
-            }
-        }
-    }
-
     private void loadChunk(int x, int y) {
         long key = chunkKey(x, y);
         if (!chunks.containsKey(key)) {
@@ -154,8 +142,8 @@ public class World {
     }
 
     private long chunkKey(int x, int y) {
-        // casting x as long and shifting left by32 bits to the upper 32
-        // then mask y to ensure it's unsigned and them combine them with "|"
+        // casting x as long and shifting left by 32 bits to the upper 32
+        // then mask y to ensure it's unsigned and then combine them with bitwise OR
         return (((long) x) << 32) | (y & 0xffffffffL);
     }
 
@@ -170,7 +158,6 @@ public class World {
         Chunk chunk = chunks.get(key);
 
         if (chunk == null) {
-            // REVIEW: or generate a new chunk
             loadChunk(chunkX, chunkY);
             return null;
         }
@@ -226,6 +213,7 @@ public class World {
         LayerType lt = getTile(i, j).recourse;
         Component obj = ComponentType.createComponent(comp, dir, i, j, variant, lt);
         int ox = 0, oy = 0;
+        
         if (obj == null)
             return false;
 
@@ -258,14 +246,12 @@ public class World {
                 int ni = i + di;
                 int nj = j + dj;
                 getTile(ni, nj).component = obj;
-
             }
         }
 
         System.out.println("Placing: " + obj);
         components.add(obj);
         connectPorts(obj);
-
         return true;
     }
 

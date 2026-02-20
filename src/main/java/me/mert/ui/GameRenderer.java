@@ -124,7 +124,6 @@ public class GameRenderer {
         g2d.setPaint(paint);
         g2d.fillRect(0, 0, w, h);
         g2d.setPaint(old);
-
     }
 
     // --- GRID ------------------------------------------------------------
@@ -134,8 +133,8 @@ public class GameRenderer {
 
         // find the visible world bouds
         int worldStartX = (int) camera.screenToWorldX(0);
-        int worldEndX = (int) camera.screenToWorldX(screenWidth);
         int worldStartY = (int) camera.screenToWorldY(0);
+        int worldEndX = (int) camera.screenToWorldX(screenWidth);
         int worldEndY = (int) camera.screenToWorldY(screenHeight);
 
         // first world grid line
@@ -166,8 +165,6 @@ public class GameRenderer {
         double worldStartX = camera.x;
         double worldEndX = camera.x + screenWidth / zoom;
 
-        // ofc division is an expensive math calculation
-        // i'm aware of that
         double worldStartY = camera.y;
         double worldEndY = camera.y + screenHeight / zoom;
 
@@ -202,12 +199,9 @@ public class GameRenderer {
                 int screenX = camera.worldToScreenX(worldX);
                 int screenY = camera.worldToScreenY(worldY);
 
-                // it's impossible for obj to not have an image
-                // except if you are retarted and remove the resource folder
                 obj.render(g, screenX, screenY, zoom, CELL_SIZE);
 
                 if (obj.hasItem() && (obj.type == ComponentType.CONVEYOR || obj.type == ComponentType.COLLECTOR)) {
-
                     Glyph glyph = obj.getItem();
                     int glyphSize = (int) (getSize() * 0.6f);
                     int gx = screenX + (int) (CELL_SIZE * zoom / 2 - glyphSize / 2);
@@ -294,6 +288,5 @@ public class GameRenderer {
         g.setFont(new Font("sans-serif", Font.PLAIN, 38));
         g.setColor(Color.BLACK);
         g.drawString(mgr.getCoinsString(), 75, 65);
-
     }
 }

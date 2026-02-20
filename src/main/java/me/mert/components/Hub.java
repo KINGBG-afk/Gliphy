@@ -15,14 +15,12 @@ public class Hub extends Component {
         addinput(Direction.SOUTH);
         addinput(Direction.EAST);
         addinput(Direction.WEST);
-
     }
 
     @Override
     public void update() {
         for (Port in : inputs) {
             if (in.hasItem()) {
-
                 Glyph g = in.getItem();
                 in.eject();
 

@@ -24,9 +24,6 @@ public class Collector extends Component {
         // if emtpy create new one
         if (!out.hasItem() && out.nextItem == null) {
 
-            // GlyphLayer l = GlyphLayer.createLayer(Primitive.SQUARE, Primitive.CIRCLE,
-            // Primitive.SQUARE,Primitive.SQUARE);
-
             Glyph glyph = new Glyph(resource);
             out.nextItem = glyph;
 

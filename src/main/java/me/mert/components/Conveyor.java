@@ -23,15 +23,6 @@ public class Conveyor extends Component {
     private static int globalFrame = 0;
     private static int tickCounter = 0;
 
-    public Conveyor(int i, int j, Direction dir) {
-        super(i, j, dir, new int[] { 1, 1 }, ComponentType.CONVEYOR);
-
-        in = addinput(dir.opposite());
-        out = addOutput(dir);
-
-        in.connectTo(out);
-    }
-
     static {
         straightFrames = new BufferedImage[FRAME_COUNT];
         leftFrames = new BufferedImage[FRAME_COUNT];
@@ -49,6 +40,15 @@ public class Conveyor extends Component {
             rightFrames[i] = loadStatic(
                     "/components/conveyor/right_" + idx + ".png");
         }
+    }
+
+    public Conveyor(int i, int j, Direction dir) {
+        super(i, j, dir, new int[] { 1, 1 }, ComponentType.CONVEYOR);
+
+        in = addinput(dir.opposite());
+        out = addOutput(dir);
+
+        in.connectTo(out);
     }
 
     private static BufferedImage loadStatic(String path) {
