@@ -1,6 +1,7 @@
 package me.mert.ui.widgets;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -14,6 +15,9 @@ public class RoundedButton extends JButton {
 
     public RoundedButton(String text, Color bgColor, Color highlight) {
         super(text);
+        setBackground(bgColor);
+        setOpaque(false);
+        setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -33,7 +37,6 @@ public class RoundedButton extends JButton {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        setOpaque(false);
         Graphics2D g2 = (Graphics2D) g.create();
 
         // rendering algorithm

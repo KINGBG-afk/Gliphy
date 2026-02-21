@@ -12,6 +12,7 @@ import me.mert.ui.widgets.RoundedButton;
 
 public class UpgradeMenu extends RoundedPanel {
     public UpgradeMenu(GamePanel gamePanel) {
+        super(10);
         setLayout(null);
         setOpaque(false);
         setBackground(new Color(236, 236, 236));

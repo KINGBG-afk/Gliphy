@@ -8,19 +8,30 @@ import javax.swing.JPanel;
 
 public class RoundedPanel extends JPanel {
 
-    public RoundedPanel() {
+    private int arc;
+
+    public RoundedPanel(int arc) {
+        this.arc = arc;
+
+        setOpaque(false);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        setOpaque(false);
         Graphics2D g2 = (Graphics2D) g.create();
 
-        // rendering algorithm
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        // for edges
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // for text
+        g2.setRenderingHint(
+                RenderingHints.KEY_TEXT_ANTIALIASING,
+                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2.setColor(getBackground());
-        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+        g2.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
         g2.dispose();
+
+        super.paintComponent(g);
     }
 }

@@ -18,7 +18,9 @@ import personthecat.fastnoise.FastNoise;
 import personthecat.fastnoise.data.NoiseType;
 
 public class World {
-    private final List<Component> components;
+    public final String worldName;
+
+    private List<Component> components;
 
     // funnily enough this is the first time i ever used the long type
     private final HashMap<Long, Chunk> chunks;
@@ -35,7 +37,9 @@ public class World {
     private int centerChunkX = 0;
     private int centerChunkY = 0;
 
-    public World(int seed) {
+    public World(int seed, String name) {
+        this.worldName = name;
+
         this.seed = seed;
         chunks = new HashMap<>();
         this.components = new ArrayList<>();
@@ -46,7 +50,9 @@ public class World {
                 .build();
     }
 
-    public World() {
+    public World(String name) {
+        this.worldName = name;
+
         chunks = new HashMap<>();
         this.components = new ArrayList<>();
 
@@ -60,6 +66,10 @@ public class World {
 
     public static int generateSeed() {
         return (int) System.nanoTime();
+    }
+
+    public void setComponents(List<Component> components) {
+        this.components = components;
     }
 
     // --- CHUNKS ------------------------------------------------------------
@@ -213,7 +223,7 @@ public class World {
         LayerType lt = getTile(i, j).recourse;
         Component obj = ComponentType.createComponent(comp, dir, i, j, variant, lt);
         int ox = 0, oy = 0;
-        
+
         if (obj == null)
             return false;
 

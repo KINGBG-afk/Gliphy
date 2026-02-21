@@ -1,6 +1,7 @@
 package me.mert.ui.widgets;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -31,6 +32,7 @@ public class IconButton extends JButton {
         this.pressedImg = pressedIcon;
         this.highlightIcon = highlightIcon;
 
+        setCursor(new Cursor(Cursor.HAND_CURSOR));
         setContentAreaFilled(false);
         setFocusPainted(false);
         setFocusable(false);

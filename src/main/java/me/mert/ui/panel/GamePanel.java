@@ -37,12 +37,12 @@ public class GamePanel extends JPanel {
     private final Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
 
     // i swaer at some point imma run into performance issues
-    private final World world;
-    private final GameRenderer gameRenderer;
-    private final GameUIPanel uiPanel;
+    private World world;
+    private GameRenderer gameRenderer;
+    private GameUIPanel uiPanel;
 
     // just so this class can access the updateTimer
-    private final MainWindow mainWindow;
+    private MainWindow mainWindow;
 
     private ComponentType selectedType = ComponentType.COLLECTOR;
     private Direction selectedDirection = Direction.NORTH;
@@ -55,7 +55,10 @@ public class GamePanel extends JPanel {
 
     private boolean variant = false;
 
-    // lesson learned - do not use getWIdth and getHeight in the constructor :)
+    // this is so the ui can generate without generating the whole world
+    public GamePanel() {
+    }
+
     public GamePanel(Camera camera, World world, GameRenderer gameRenderer, MainWindow mainWindow) {
         this.world = world;
         this.gameRenderer = gameRenderer;
@@ -65,6 +68,11 @@ public class GamePanel extends JPanel {
         setBackground(Color.WHITE);
         setFocusable(true);
 
+        createUI(camera, gameRenderer);
+        setVisible(true);
+    }
+
+    private void createUI(Camera camera, GameRenderer gameRenderer) {
         JLayeredPane layers = new JLayeredPane();
         layers.setBounds(0, 0, screenDimension.width, screenDimension.height);
         add(layers);
@@ -84,8 +92,15 @@ public class GamePanel extends JPanel {
 
         // keyboard
         KeyboardActions kActions = new KeyboardActions(camera);
-        setVisible(true);
         kActions.register(this);
+    }
+
+    public void init(Camera camera, World world, GameRenderer renderer, MainWindow mainWindow) {
+        this.world = world;
+        this.gameRenderer = renderer;
+        this.mainWindow = mainWindow;
+        createUI(camera, gameRenderer);
+
     }
 
     private void createComponentMenu() {
@@ -167,10 +182,12 @@ public class GamePanel extends JPanel {
         }
 
         data.unlockedComponents = UpgradeManager.getInstance().getUnlockedComponents();
+        data.name = world.worldName;
+        SaveManager.save(data);
     }
 
-    public void loadWorld() {
-        SaveData data = SaveManager.load();
+    public void loadWorld(String name) {
+        SaveData data = SaveManager.load(name);
 
         CurrencyManager.getInstance().setCoins(data.coins);
         LevelManager.getInstance().setLevel(data.level);

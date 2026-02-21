@@ -48,4 +48,9 @@ public class UpgradeManager {
     public void setUnlockedComponents(Set<String> unlockedComponents) {
         this.unlockedComponents = unlockedComponents;
     }
+
+    public void setUpgrades(Map<String, Upgrade> upgrades) {
+        this.upgrades = upgrades;
+    }
+
 }

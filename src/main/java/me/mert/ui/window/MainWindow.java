@@ -15,6 +15,7 @@ import me.mert.ui.Camera;
 import me.mert.ui.GameRenderer;
 import me.mert.ui.panel.GamePanel;
 import me.mert.ui.panel.MainMenu;
+import me.mert.ui.panel.WorldSelectionMenu;
 import me.mert.world.World;
 
 // container holding UI and game panels
@@ -26,14 +27,15 @@ public class MainWindow extends JFrame {
 
     GamePanel gamePanel;
     MainMenu mainMenu;
+    WorldSelectionMenu worldMenu;
 
     Timer renderTimer;
     Timer updateTimer;
 
     private final int FPS = 120;
-    private final  int BASE_UPDATE_DELAY = 1000;
+    private final int BASE_UPDATE_DELAY = 1000;
 
-    public MainWindow(boolean startGame) {
+    public MainWindow() {
         setTitle("Gliphy");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -53,13 +55,8 @@ public class MainWindow extends JFrame {
 
         createScreens();
         setContentPane(root);
+        showMainMenu();
 
-        // TEMP: remove before release
-        if (startGame) {
-            showWorld();
-        } else {
-            showMainMenu();
-        }
     }
 
     public void upgradeSpeed() {
@@ -75,24 +72,39 @@ public class MainWindow extends JFrame {
 
     private void createScreens() {
         mainMenu = new MainMenu(this);
-        Camera camera = new Camera(0, 0);
-        World world = new World();
-        GameRenderer renderer = new GameRenderer(camera, world);
-
-        gamePanel = new GamePanel(camera, world, renderer, this);
+        gamePanel = new GamePanel();
+        worldMenu = new WorldSelectionMenu(this);
 
         root.add(mainMenu, "menu");
-        root.add(gamePanel, "world");
+        root.add(gamePanel, "game");
+        root.add(worldMenu, "worlds");
     }
 
-    private void showMainMenu() {
+    public void showMainMenu() {
         stopTimer();
         cl.show(root, "menu");
     }
 
-    public void showWorld() {
+    public void showGame(Camera c, World w) {
+        // Camera camera = new Camera(0, 0);
+        // World world = new World(seed, name);
+        GameRenderer renderer = new GameRenderer(c, w);
+        gamePanel = new GamePanel(c, w, renderer, this);
         startTimer();
-        cl.show(root, "world");
+        cl.show(root, "game");
+    }
+
+    public void showGame(String name) {
+        Camera camera = new Camera(0, 0);
+        World world = new World(name);
+        GameRenderer renderer = new GameRenderer(camera, world);
+        gamePanel.init(camera, world, renderer, this);
+        startTimer();
+        cl.show(root, "game");
+    }
+
+    public void showWorldMenu() {
+        cl.show(root, "worlds");
     }
 
     private void startTimer() {

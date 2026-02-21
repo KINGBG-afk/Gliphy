@@ -16,6 +16,11 @@ public class Camera {
         this.y = y;
     }
 
+    public Camera(double  x, double  y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public void setZoom(double zoom) {
         this.zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoom));
     }

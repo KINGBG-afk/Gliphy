@@ -10,12 +10,12 @@ import me.mert.components.Component;
 public class SaveData implements Serializable {
     public static final long serialVersionUID = 1l;
 
+    public String name;
     public int level;
     public int seed;
     public long coins;
     public double cameraX;
     public double cameraY;
-    public double cameraZoom;
     public List<Component> components;
     public Map<String, Integer> upgradeLevels;
     public Set<String> unlockedComponents;

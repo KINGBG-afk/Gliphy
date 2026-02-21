@@ -82,5 +82,14 @@ public class KeyboardActions {
                 System.exit(0);
             }
         });
+
+        // SAVE
+        im.put(KeyStroke.getKeyStroke("E"), "save");
+        am.put("save", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.saveWorld();
+            }
+        });
     }
 }

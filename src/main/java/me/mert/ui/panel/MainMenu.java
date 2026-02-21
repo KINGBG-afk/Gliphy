@@ -44,7 +44,7 @@ public class MainMenu extends JPanel {
                 pressedButtonIcon);
         startButton.setFont(new Font("Segoe UI", Font.PLAIN, 50));
         startButton.setBounds(380, 650, 300, 100);
-        startButton.addActionListener(e -> root.showWorld());
+        startButton.addActionListener(e -> root.showWorldMenu());
 
         quitButton = new IconButton(
                 "Quit",

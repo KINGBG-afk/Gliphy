@@ -18,7 +18,7 @@ public class Main {
         }
 
         SwingUtilities.invokeLater(() -> {
-            MainWindow frame = new MainWindow(false);
+            MainWindow frame = new MainWindow();
 
             if (isLinux) {
                 // this is so wayland panels (waybar and quick shell) doesn't cover the window
@@ -28,7 +28,6 @@ public class Main {
             }
 
             frame.setVisible(true);
-
         });
     }
 }
