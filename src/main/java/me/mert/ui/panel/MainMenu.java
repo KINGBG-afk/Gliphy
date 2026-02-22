@@ -91,7 +91,7 @@ public class MainMenu extends JPanel {
                 pressedButtonIcon);
         creditsButton.setFont(new Font("Segoe UI", Font.PLAIN, 40));
         creditsButton.setBounds(1550, 940, 300, 100);
-        // TODO: creditsButton.addActionListener(e ->);
+        creditsButton.addActionListener(e -> root.showCredits());
 
         add(startButton);
         add(quitButton);

@@ -13,6 +13,7 @@ import me.mert.game.Upgrade;
 import me.mert.game.UpgradeManager;
 import me.mert.ui.Camera;
 import me.mert.ui.GameRenderer;
+import me.mert.ui.menu.CreditsPanel;
 import me.mert.ui.panel.GamePanel;
 import me.mert.ui.panel.MainMenu;
 import me.mert.ui.panel.WorldSelectionMenu;
@@ -28,6 +29,7 @@ public class MainWindow extends JFrame {
     GamePanel gamePanel;
     MainMenu mainMenu;
     WorldSelectionMenu worldMenu;
+    CreditsPanel creditsPanel;
 
     Timer renderTimer;
     Timer updateTimer;
@@ -74,10 +76,17 @@ public class MainWindow extends JFrame {
         mainMenu = new MainMenu(this);
         gamePanel = new GamePanel();
         worldMenu = new WorldSelectionMenu(this);
+        creditsPanel = new CreditsPanel(this);
 
         root.add(mainMenu, "menu");
         root.add(gamePanel, "game");
         root.add(worldMenu, "worlds");
+        root.add(creditsPanel, "credits");
+    }
+
+    public void showCredits() {
+        stopTimer();
+        cl.show(root, "credits");
     }
 
     public void showMainMenu() {
