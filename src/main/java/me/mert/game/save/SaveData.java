@@ -12,6 +12,7 @@ public class SaveData implements Serializable {
 
     public String name;
     public int level;
+    public int levelProgress;
     public int seed;
     public long coins;
     public double cameraX;

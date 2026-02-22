@@ -86,10 +86,8 @@ public class MainWindow extends JFrame {
     }
 
     public void showGame(Camera c, World w) {
-        // Camera camera = new Camera(0, 0);
-        // World world = new World(seed, name);
         GameRenderer renderer = new GameRenderer(c, w);
-        gamePanel = new GamePanel(c, w, renderer, this);
+        gamePanel.init(c, w, renderer, this);
         startTimer();
         cl.show(root, "game");
     }

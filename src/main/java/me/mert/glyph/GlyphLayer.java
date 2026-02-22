@@ -1,9 +1,11 @@
 package me.mert.glyph;
 
+import java.io.Serializable;
+
 import me.mert.core.enums.LayerType;
 import me.mert.core.enums.Primitive;
 
-public class GlyphLayer {
+public class GlyphLayer implements Serializable {
     // at this point this is here to just remind me what a quarter is
     public static final int QUARTERS = 4;
 

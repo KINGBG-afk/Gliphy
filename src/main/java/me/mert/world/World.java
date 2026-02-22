@@ -68,8 +68,16 @@ public class World {
         return (int) System.nanoTime();
     }
 
+    public int getSeed() {
+        return seed;
+    }
+
     public void setComponents(List<Component> components) {
         this.components = components;
+    }
+
+    public List<Component> getComponents() {
+        return components;
     }
 
     // --- CHUNKS ------------------------------------------------------------
@@ -169,7 +177,7 @@ public class World {
 
         if (chunk == null) {
             loadChunk(chunkX, chunkY);
-            return null;
+            chunk = chunks.get(key);
         }
 
         int localX = Math.floorMod(j, CHUNK_SIZE);
@@ -321,7 +329,7 @@ public class World {
                             // conveyor has only 1 output at a time
                             return;
                         }
-                    }
+                    } // the stair case of doom
                 }
             }
         }

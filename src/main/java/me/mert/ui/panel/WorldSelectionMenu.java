@@ -13,6 +13,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import me.mert.components.Component;
 import me.mert.game.CurrencyManager;
 import me.mert.game.LevelManager;
 import me.mert.game.UpgradeManager;
@@ -24,10 +25,11 @@ import me.mert.ui.widgets.RoundedButton;
 import me.mert.ui.widgets.ScrollBar;
 import me.mert.ui.widgets.ScrollableElement;
 import me.mert.ui.window.MainWindow;
+import me.mert.world.Tile;
 import me.mert.world.World;
 
 public class WorldSelectionMenu extends JPanel {
-    private MainWindow root;
+    private final MainWindow root;
 
     RoundedPanel mainPanel;
 
@@ -78,20 +80,26 @@ public class WorldSelectionMenu extends JPanel {
             element.setPreferredSize(new Dimension(1470, 130));
             element.setBackground(new Color(215, 215, 215));
             element.setPlayAction(e -> {
-
-                World w = new World(save.seed, save.name);
-                w.setComponents(save.components);
-                // generate world
-                root.showGame(new Camera(save.cameraX, save.cameraY), w);
-
-                // set unlocked components
-                umgr.setUnlockedComponents(save.unlockedComponents);
-
                 // set level
                 LevelManager.getInstance().setLevel(save.level);
 
                 // set coinds
                 CurrencyManager.getInstance().setCoins(save.coins);
+
+                // generate world with name and seed
+                World w = new World(save.seed, save.name);
+                w.setComponents(save.components);
+                System.out.println("Loading components");
+                for (Component c : save.components) {
+                    Tile tile = w.getTile(c.i, c.j);
+                    if (tile != null) {
+                        tile.setComponent(c);
+                        c.loadImage(c.type);
+                    }
+                }
+
+                // set unlocked components
+                umgr.setUnlockedComponents(save.unlockedComponents);
 
                 // set upgrades
                 for (Map.Entry<String, Integer> entry : save.upgradeLevels.entrySet()) {
@@ -100,6 +108,9 @@ public class WorldSelectionMenu extends JPanel {
 
                     umgr.getUpgrade(k).setLevel(v);
                 }
+
+                // camera positions
+                root.showGame(new Camera(save.cameraX, save.cameraY), w);
             });
             scrollContent.add(element);
             scrollContent.add(Box.createVerticalStrut(20));

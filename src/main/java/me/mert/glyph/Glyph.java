@@ -5,13 +5,14 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import me.mert.core.enums.LayerType;
 import me.mert.core.enums.Primitive;
 
-public class Glyph {
+public class Glyph implements Serializable{
     public List<GlyphLayer> layers = new ArrayList<>();
     static final int[] QX = { 1, 0, 0, 1 };
     static final int[] QY = { 0, 0, 1, 1 };

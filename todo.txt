@@ -20,6 +20,9 @@ add world selection menu ui:
     list of all worlds that are made
     new world button
     delete world button
-    
+
+
+there is a bug with the junks
+if more than 2 worlds are loaded in one session the cunks duplicate so as the components
 
 

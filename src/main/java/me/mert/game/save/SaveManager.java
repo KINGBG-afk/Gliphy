@@ -6,6 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +37,22 @@ public class SaveManager {
     }
 
     @SuppressWarnings("CallToPrintStackTrace")
+    private static void createFolder() {
+        Path path = Paths.get("saves");
+
+        try {
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @SuppressWarnings("CallToPrintStackTrace")
     public static void save(SaveData data) {
+        createFolder(); // if it doesn't exist
+
         try (ObjectOutputStream out = new ObjectOutputStream(
                 new FileOutputStream(SAVE_PATH + data.name + ".dat"))) {
             out.writeObject(data);

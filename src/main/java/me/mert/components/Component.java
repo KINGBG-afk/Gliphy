@@ -22,12 +22,12 @@ public abstract class Component implements Serializable {
     public final int[] size;
     public Direction direction;
     protected transient BufferedImage img;
-    public transient  BufferedImage previewImage;
+    public transient BufferedImage previewImage;
 
     public final List<Port> inputs;
     public final List<Port> outputs;
 
-    // transient means it won't get saved 
+    // transient means it won't get saved
 
     // uh this class is total chaos
     protected Component(int i, int j, Direction direction, int[] size, ComponentType type) {
@@ -143,7 +143,7 @@ public abstract class Component implements Serializable {
 
     }
 
-    protected final void loadImage(ComponentType ct) {
+    public  final void loadImage(ComponentType ct) {
         String path = "components/" + ct.toString().toLowerCase() + ".png";
 
         try (InputStream iStream = getClass().getClassLoader().getResourceAsStream(path)) {

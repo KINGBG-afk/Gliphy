@@ -6,6 +6,8 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import me.mert.game.CurrencyManager;
+import me.mert.game.UpgradeManager;
 import me.mert.ui.panel.GamePanel;
 import me.mert.ui.panel.RoundedPanel;
 import me.mert.ui.widgets.RoundedButton;
@@ -17,12 +19,22 @@ public class UpgradeMenu extends RoundedPanel {
         setOpaque(false);
         setBackground(new Color(236, 236, 236));
 
+        UpgradeManager umgr = UpgradeManager.getInstance();
+        CurrencyManager cmgr = CurrencyManager.getInstance();
         RoundedButton machineSpeed = new RoundedButton("UPGRADE",
                 new Color(213, 213, 213),
                 new Color(194, 194, 194));
         machineSpeed.setBounds(220, 55, 80, 40);
         machineSpeed.setBackground(new Color(213, 213, 213));
-        machineSpeed.addActionListener(e -> gamePanel.upgradeSpeed());
+        machineSpeed.setToolTipText("Costs " + umgr.getUpgrade("speed").getCost() + " coins");
+        machineSpeed.addActionListener(e -> {
+            if (cmgr.canAfford(100)) {
+                cmgr.spend(100);
+                gamePanel.upgradeSpeed();
+                machineSpeed.setToolTipText(
+                        "Costs " + umgr.getUpgrade("speed").getCost() + " coins");
+            }
+        });
         add(machineSpeed);
     }
 

@@ -16,7 +16,7 @@ public class Tile {
         this.recourse = recourse;
     }
 
-    protected void setComponent(Component component) {
+    public void setComponent(Component component) {
         this.component = component;
     }
 

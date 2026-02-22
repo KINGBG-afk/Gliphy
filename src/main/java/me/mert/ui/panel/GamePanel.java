@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLayeredPane;
@@ -40,9 +39,10 @@ public class GamePanel extends JPanel {
     private World world;
     private GameRenderer gameRenderer;
     private GameUIPanel uiPanel;
+    private Camera camera;
 
     // just so this class can access the updateTimer
-    private MainWindow mainWindow;
+    private MainWindow root;
 
     private ComponentType selectedType = ComponentType.COLLECTOR;
     private Direction selectedDirection = Direction.NORTH;
@@ -62,7 +62,8 @@ public class GamePanel extends JPanel {
     public GamePanel(Camera camera, World world, GameRenderer gameRenderer, MainWindow mainWindow) {
         this.world = world;
         this.gameRenderer = gameRenderer;
-        this.mainWindow = mainWindow;
+        this.root = mainWindow;
+        this.camera = camera;
 
         setLayout(null);
         setBackground(Color.WHITE);
@@ -83,6 +84,7 @@ public class GamePanel extends JPanel {
 
         createComponentMenu();
         createUpgradeUI();
+        createExitButton();
 
         // mouse
         MouseInput mouseInput = new MouseInput(camera, this, gameRenderer);
@@ -98,7 +100,8 @@ public class GamePanel extends JPanel {
     public void init(Camera camera, World world, GameRenderer renderer, MainWindow mainWindow) {
         this.world = world;
         this.gameRenderer = renderer;
-        this.mainWindow = mainWindow;
+        this.root = mainWindow;
+        this.camera = camera;
         createUI(camera, gameRenderer);
 
     }
@@ -110,6 +113,20 @@ public class GamePanel extends JPanel {
                 (uiPanel.getWidth() - menu.getWidth()) / 2,
                 uiPanel.getHeight() - menu.getHeight() - 20);
         uiPanel.add(menu);
+    }
+
+    private void createExitButton() {
+        ImageIcon icon = GliphyUtilities.loadIcon("/icons/close.png", 60, 60);
+        IconButton xButton = new IconButton("",
+                icon, icon);
+
+        xButton.setBounds(1800, 20, 60, 60);
+        xButton.addActionListener(e -> {
+            saveWorld();
+            root.showWorldMenu();
+
+        });
+        uiPanel.add(xButton);
     }
 
     private void createUpgradeUI() {
@@ -132,7 +149,6 @@ public class GamePanel extends JPanel {
             menu.setVisible(!menu.isVisible());
             uiPanel.revalidate(); // not that there is a layout but still
             uiPanel.repaint();
-            System.out.println("Upgrade Menu");
         });
         uiPanel.add(upgradeButton);
         uiPanel.add(menu);
@@ -167,14 +183,24 @@ public class GamePanel extends JPanel {
     }
 
     public void upgradeSpeed() {
-        mainWindow.upgradeSpeed();
+        root.upgradeSpeed();
     }
 
     public void saveWorld() {
         SaveData data = new SaveData();
 
-        data.coins = CurrencyManager.getInstance().getCoins();
+        data.name = world.worldName;
         data.level = LevelManager.getInstance().getLevel();
+        data.seed = world.getSeed();
+        data.coins = CurrencyManager.getInstance().getCoins();
+        data.cameraX = camera.x;
+        data.cameraY = camera.y;
+
+        System.out.println("Saving components");
+        data.components = world.getComponents();
+        for (Component c : world.getComponents()) {
+            System.out.println(c);
+        }
 
         data.upgradeLevels = new HashMap<>();
         for (Upgrade u : UpgradeManager.getInstance().getAllUpgrades()) {
@@ -182,24 +208,8 @@ public class GamePanel extends JPanel {
         }
 
         data.unlockedComponents = UpgradeManager.getInstance().getUnlockedComponents();
-        data.name = world.worldName;
+
         SaveManager.save(data);
-    }
-
-    public void loadWorld(String name) {
-        SaveData data = SaveManager.load(name);
-
-        CurrencyManager.getInstance().setCoins(data.coins);
-        LevelManager.getInstance().setLevel(data.level);
-
-        for (Map.Entry<String, Integer> entry : data.upgradeLevels.entrySet()) {
-            UpgradeManager.getInstance()
-                    .getUpgrade(entry.getKey())
-                    .setLevel(entry.getValue());
-        }
-
-        UpgradeManager.getInstance()
-                .setUnlockedComponents(data.unlockedComponents);
     }
 
     // not that you should move the window but

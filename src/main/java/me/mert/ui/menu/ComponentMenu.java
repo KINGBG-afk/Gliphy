@@ -13,6 +13,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import me.mert.core.enums.ComponentType;
+import me.mert.game.CurrencyManager;
+import me.mert.game.UpgradeManager;
 import me.mert.ui.panel.GamePanel;
 import me.mert.ui.widgets.ComponentSlot;
 
@@ -39,16 +41,20 @@ public class ComponentMenu extends JPanel {
         button.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         setAction(gamePanel, button, ct, variant);
-
+        button.setToolTipText("Costs 100 coins");
         add(button);
     }
 
     private void setAction(GamePanel panel, ComponentSlot c, ComponentType ct, boolean v) {
+        CurrencyManager cmgr = CurrencyManager.getInstance();
         c.addActionListener(e -> {
             if (!c.isLocked()) {
                 panel.setSelectedType(ct, v, null);
             } else {
-                // TODO: implement this when currancy is done
+                if (cmgr.canAfford(100)) {
+                    cmgr.spend(100);
+                    UpgradeManager.getInstance().unlockComponent(ct.toString().toLowerCase());
+                }
             }
         });
     }

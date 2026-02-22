@@ -21,9 +21,9 @@
         "amount": 50,
         "glyph": [
             "circle",
-            "line",
             "circle",
-            "line"
+            "circle",
+            "square"
         ]
     }
 }
