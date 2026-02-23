@@ -51,14 +51,16 @@ public class LevelManager {
 
     public void setLevel(int l) {
         this.level = l;
-        getGoalGlyph();
+        loadNextLevel(l);
+        loadGoalGlyph();
         getGoalAmount();
     }
 
-    // there will only be one layer even tho i added the option for multiple layers
-    private void getGoalGlyph() {
+    // it's public only so it can load the goal glyph
+    private void loadGoalGlyph() {
         JSONArray arr = levelObj.getJSONArray("glyph");
         Primitive[] ps = new Primitive[4];
+        // there will only be one layer even tho i added the option for multiple layers
         for (int i = 0; i < arr.length(); i++) {
             ps[i] = Primitive.getPrimitive(arr.getString(i));
         }
@@ -103,7 +105,7 @@ public class LevelManager {
             this.levelObj = obj.getJSONObject(String.valueOf(lvl));
             this.goalAmount = levelObj.getInt("amount");
             this.stored = 0;
-            getGoalGlyph();
+            loadGoalGlyph();
 
         } catch (Exception e) {
             e.printStackTrace();

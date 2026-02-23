@@ -353,12 +353,12 @@ public class World {
         }
     }
 
-    // like we said 2 phase updates bc why not :)
     public void updateComponents() {
         for (Component obj : components) {
             obj.update();
         }
-
+        
+        // like we said 2 phase updates bc why not :)
         for (Component c : components) {
             for (Port p : c.getAllPorts()) {
                 p.commitMovement();

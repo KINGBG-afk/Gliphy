@@ -129,7 +129,7 @@ public abstract class Component implements Serializable {
         g2d.dispose();
     }
 
-    protected final BufferedImage loadImage(String p) {
+    public final BufferedImage loadImage(String p) {
         String path = "components/" + p.toLowerCase() + ".png";
 
         try (InputStream iStream = getClass().getClassLoader().getResourceAsStream(path)) {

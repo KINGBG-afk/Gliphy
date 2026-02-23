@@ -41,7 +41,11 @@ public class ComponentMenu extends JPanel {
         button.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         setAction(gamePanel, button, ct, variant);
-        button.setToolTipText("Costs 100 coins");
+
+        if (button.isLocked()) {
+            button.setToolTipText("Costs 100 coins");
+        }
+
         add(button);
     }
 
@@ -53,6 +57,7 @@ public class ComponentMenu extends JPanel {
             } else {
                 if (cmgr.canAfford(100)) {
                     cmgr.spend(100);
+                    c.setToolTipText(null);
                     UpgradeManager.getInstance().unlockComponent(ct.toString().toLowerCase());
                 }
             }

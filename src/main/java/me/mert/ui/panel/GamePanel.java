@@ -235,6 +235,6 @@ public class GamePanel extends JPanel {
         gameRenderer.drawGoal(g, sWidth, sHeight);
         gameRenderer.drawCoins(g, sWidth, sHeight);
 
-        // gameRenderer.debugDraw(g, sWidth, sHeight);
+        gameRenderer.debugDraw(g, sWidth, sHeight);
     }
 }

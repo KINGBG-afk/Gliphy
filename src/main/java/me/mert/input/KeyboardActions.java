@@ -8,6 +8,7 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
+import me.mert.game.CurrencyManager;
 import me.mert.ui.Camera;
 import me.mert.ui.panel.GamePanel;
 
@@ -89,6 +90,15 @@ public class KeyboardActions {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.saveWorld();
+            }
+        });
+        
+        //TEMP: remove later
+        im.put(KeyStroke.getKeyStroke("C"), "cheat");
+        am.put("cheat", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CurrencyManager.getInstance().add(9999);
             }
         });
     }

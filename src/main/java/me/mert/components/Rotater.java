@@ -20,10 +20,10 @@ public class Rotater extends Component {
         if (!in.hasItem()) {
             return;
         }
-
+        
         Glyph g = in.getItem();
-        Glyph.rotateCCW(g);
         if (out.getConnectedTo() != null && out.getConnectedTo().canAccept(g)) {
+            Glyph.rotateCCW(g);
             in.wantsToEject = true;
             out.getConnectedTo().nextItem = g;
         }

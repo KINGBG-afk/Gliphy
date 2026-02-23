@@ -80,7 +80,7 @@ public class Port implements ItemAcceptor, ItemEjector, Serializable {
 
     @Override
     public Glyph eject() {
-        if (item == null && connectedTo == null)
+        if (!hasItem() && connectedTo == null)
             return null;
 
         Glyph tmp = item;

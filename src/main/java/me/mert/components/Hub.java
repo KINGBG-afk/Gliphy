@@ -21,8 +21,7 @@ public class Hub extends Component {
     public void update() {
         for (Port in : inputs) {
             if (in.hasItem()) {
-                Glyph g = in.getItem();
-                in.eject();
+                Glyph g = in.eject();
 
                 LevelManager.getInstance().addToStored(g);
                 CurrencyManager.getInstance().add(1);

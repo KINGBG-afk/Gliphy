@@ -15,11 +15,13 @@ import java.util.Set;
 
 import me.mert.components.Component;
 import me.mert.components.Conveyor;
+import me.mert.components.Port;
 import me.mert.core.Constants;
 import me.mert.core.GliphyUtilities;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.LayerType;
+import me.mert.core.enums.PortType;
 import me.mert.game.CurrencyManager;
 import me.mert.game.LevelManager;
 import me.mert.glyph.Glyph;
@@ -33,6 +35,7 @@ public class GameRenderer {
     public Point mouse;
     private final int CELL_SIZE;
     private final Image coinImage = GliphyUtilities.loadIcon("/icons/coin.png", 40, 40).getImage();
+    private final Image arrowImage = GliphyUtilities.loadIcon("/icons/arrow.png", 64, 64).getImage();
     private static final Color TILE_COLOR = new Color(0, 0, 0, 17);
 
     public GameRenderer(Camera camera, World world) {
@@ -49,8 +52,11 @@ public class GameRenderer {
     }
 
     public void debugDraw(Graphics g, int w, int h) {
-        g.setColor(Color.BLUE);
-        g.fillOval(w / 2, h / 2, 10, 10);
+
+        g.setColor(Color.BLACK);
+        g.drawString(String.valueOf(LevelManager.getInstance().getLevel()), 400, 400);
+        g.drawString(String.valueOf(LevelManager.getInstance().getGoalAmount()), 400, 430);
+
     }
 
     // --- MOUSE ------------------------------------------------------------
@@ -90,6 +96,36 @@ public class GameRenderer {
                 unrotH,
                 null);
 
+        for (Port p : c.getAllPorts()) {
+            // quick and dirty
+            if (c.type == ComponentType.COLLECTOR && p.type == PortType.INPUT) {
+                continue;
+            }
+
+            int px = p.localJ * cellPx;
+            int py = p.localI * cellPx;
+
+            int centerX = -unrotW / 2 + px + cellPx / 2;
+            int centerY = -unrotH / 2 + py + cellPx / 2;
+
+            AffineTransform arrowTransform = g2d.getTransform();
+
+            g2d.translate(centerX, centerY);
+
+            // rotate based on port type
+            g2d.rotate(directionToRadians(p.getDirection()) + (p.type == PortType.INPUT ? Math.PI : 0));
+
+            int arrowSize = cellPx / 2;
+            g2d.drawImage(
+                    arrowImage,
+                    -arrowSize / 2,
+                    -arrowSize / 2,
+                    arrowSize,
+                    arrowSize,
+                    null);
+
+            g2d.setTransform(arrowTransform);
+        }
         g2d.setTransform(oldTransform);
     }
 

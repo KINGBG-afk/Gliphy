@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import me.mert.components.Component;
+import me.mert.core.enums.ComponentType;
 import me.mert.game.CurrencyManager;
 import me.mert.game.LevelManager;
 import me.mert.game.UpgradeManager;
@@ -71,17 +72,17 @@ public class WorldSelectionMenu extends JPanel {
         wrapper.add(scrollContent, gbc);
         scrollContent.add(Box.createVerticalStrut(20));
 
-        UpgradeManager umgr = UpgradeManager.getInstance();
-        // BUG: the data isn't loaded correctly
-        for (SaveData save : SaveManager.loadAllSaves()) {
+        UpgradeManager upgradeManager = UpgradeManager.getInstance();
+        LevelManager levelManager = LevelManager.getInstance();
 
+        for (SaveData save : SaveManager.loadAllSaves()) {
             ScrollableElement element = new ScrollableElement(20, save.name, String.valueOf(save.coins),
                     String.valueOf(save.level));
             element.setPreferredSize(new Dimension(1470, 130));
             element.setBackground(new Color(215, 215, 215));
             element.setPlayAction(e -> {
                 // set level
-                LevelManager.getInstance().setLevel(save.level);
+                levelManager.setLevel(save.level);
 
                 // set coinds
                 CurrencyManager.getInstance().setCoins(save.coins);
@@ -94,19 +95,25 @@ public class WorldSelectionMenu extends JPanel {
                     Tile tile = w.getTile(c.i, c.j);
                     if (tile != null) {
                         tile.setComponent(c);
-                        c.loadImage(c.type);
+                        
+                        if (c.type != ComponentType.MERGER) {
+                            c.loadImage(c.type);
+                        } else {
+                            // at this point just load both
+                            c.loadImage(c.type + "merger-right");
+                            c.loadImage(c.type + "merger-left");
+                        }
                     }
                 }
 
                 // set unlocked components
-                umgr.setUnlockedComponents(save.unlockedComponents);
+                upgradeManager.setUnlockedComponents(save.unlockedComponents);
 
                 // set upgrades
                 for (Map.Entry<String, Integer> entry : save.upgradeLevels.entrySet()) {
                     String k = entry.getKey();
                     Integer v = entry.getValue();
-
-                    umgr.getUpgrade(k).setLevel(v);
+                    upgradeManager.getUpgrade(k).setLevel(v);
                 }
 
                 // camera positions
@@ -123,7 +130,6 @@ public class WorldSelectionMenu extends JPanel {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         // scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
-
         mainPanel.add(scrollPane, BorderLayout.CENTER);
     }
 
