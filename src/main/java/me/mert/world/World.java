@@ -23,7 +23,7 @@ public class World {
     private List<Component> components;
 
     // funnily enough this is the first time i ever used the long type
-    private final HashMap<Long, Chunk> chunks;
+    private HashMap<Long, Chunk> chunks;
 
     private Set<Long> activeChunks = new HashSet<>();
     private final int CHUNK_SIZE = Constants.CHUNK_SIZE;
@@ -81,6 +81,12 @@ public class World {
     }
 
     // --- CHUNKS ------------------------------------------------------------
+
+    public void resetChunks() {
+        chunks.clear();
+        activeChunks.clear();
+    }
+
     public Set<Long> getChunks() {
         return activeChunks;
     }
@@ -357,7 +363,7 @@ public class World {
         for (Component obj : components) {
             obj.update();
         }
-        
+
         // like we said 2 phase updates bc why not :)
         for (Component c : components) {
             for (Port p : c.getAllPorts()) {

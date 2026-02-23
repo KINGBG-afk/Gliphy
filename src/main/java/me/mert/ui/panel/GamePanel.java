@@ -123,7 +123,7 @@ public class GamePanel extends JPanel {
         xButton.setBounds(1800, 20, 60, 60);
         xButton.addActionListener(e -> {
             saveWorld();
-            root.showWorldMenu();
+            showWorldMenu();
 
         });
         uiPanel.add(xButton);
@@ -212,6 +212,11 @@ public class GamePanel extends JPanel {
         SaveManager.save(data);
     }
 
+    public void showWorldMenu() {
+        world.resetChunks();
+        root.showWorldMenu();
+    }
+
     // not that you should move the window but
     // just future proofing
     @Override
@@ -235,6 +240,6 @@ public class GamePanel extends JPanel {
         gameRenderer.drawGoal(g, sWidth, sHeight);
         gameRenderer.drawCoins(g, sWidth, sHeight);
 
-        gameRenderer.debugDraw(g, sWidth, sHeight);
+        // gameRenderer.debugDraw(g, sWidth, sHeight);
     }
 }

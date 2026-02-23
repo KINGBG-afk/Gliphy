@@ -111,6 +111,7 @@ public class MainWindow extends JFrame {
     }
 
     public void showWorldMenu() {
+        stopTimer();
         cl.show(root, "worlds");
     }
 
