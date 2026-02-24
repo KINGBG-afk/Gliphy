@@ -97,6 +97,7 @@ public class MainWindow extends JFrame {
     public void showGame(Camera c, World w) {
         GameRenderer renderer = new GameRenderer(c, w);
         gamePanel.init(c, w, renderer, this);
+
         startTimer();
         cl.show(root, "game");
     }
@@ -105,13 +106,17 @@ public class MainWindow extends JFrame {
         Camera camera = new Camera(0, 0);
         World world = new World(name);
         GameRenderer renderer = new GameRenderer(camera, world);
+
         gamePanel.init(camera, world, renderer, this);
+
         startTimer();
         cl.show(root, "game");
     }
 
     public void showWorldMenu() {
         stopTimer();
+        worldMenu.refreshMenu();
+        // gamePanel = null;
         cl.show(root, "worlds");
     }
 

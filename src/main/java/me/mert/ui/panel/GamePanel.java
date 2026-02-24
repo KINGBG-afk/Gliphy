@@ -5,6 +5,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelListener;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
@@ -103,7 +106,6 @@ public class GamePanel extends JPanel {
         this.root = mainWindow;
         this.camera = camera;
         createUI(camera, gameRenderer);
-
     }
 
     private void createComponentMenu() {
@@ -213,7 +215,35 @@ public class GamePanel extends JPanel {
     }
 
     public void showWorldMenu() {
-        world.resetChunks();
+        // unload everything when exiting the world
+        if (gameRenderer != null) {
+            gameRenderer = null;
+        }
+
+        if (camera != null) {
+            camera = null;
+        }
+
+        if (world != null) {
+            world.resetChunks();
+            world = null;
+        }
+
+        for (MouseListener ml : getMouseListeners()) {
+            removeMouseListener(ml);
+        }
+
+        for (MouseMotionListener ml : getMouseMotionListeners()) {
+            removeMouseMotionListener(ml);
+        }
+
+        for (MouseWheelListener ml : getMouseWheelListeners()) {
+            removeMouseWheelListener(ml);
+        }
+
+        getInputMap().clear();
+        getActionMap().clear();
+
         root.showWorldMenu();
     }
 

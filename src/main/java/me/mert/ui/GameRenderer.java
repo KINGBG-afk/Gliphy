@@ -113,7 +113,9 @@ public class GameRenderer {
             g2d.translate(centerX, centerY);
 
             // rotate based on port type
-            g2d.rotate(directionToRadians(p.getDirection()) + (p.type == PortType.INPUT ? Math.PI : 0));
+            double portAngle = directionToRadians(p.getDirection())
+                    + (p.type == PortType.INPUT ? Math.PI : 0);
+            g2d.rotate(portAngle);
 
             int arrowSize = cellPx / 2;
             g2d.drawImage(
@@ -214,7 +216,6 @@ public class GameRenderer {
         // avoid drawing same object multiple times
         Set<Component> drawn = new HashSet<>();
 
-        // REVIEW: maybe iterate over the list of components?
         for (int i = startY; i < endY; i++) {
             for (int j = startX; j < endX; j++) {
 

@@ -20,7 +20,6 @@ public class MainMenu extends JPanel {
     private final IconButton creditsButton;
     private final Image bgImage;
 
-    // TODO: make objects of keyboard and mouse here
     public MainMenu(MainWindow root) {
         setFocusable(true);
         setLayout(null);

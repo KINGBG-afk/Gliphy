@@ -54,6 +54,14 @@ public class WorldSelectionMenu extends JPanel {
         add(mainPanel);
     }
 
+    public void refreshMenu() {
+        mainPanel.removeAll();
+        createScrollArea();
+        createButtons();
+        mainPanel.revalidate();
+        mainPanel.repaint();
+    }
+
     // there are probably better solutions for this but it works
     private void createScrollArea() {
         scrollContent = new JPanel();
@@ -95,7 +103,7 @@ public class WorldSelectionMenu extends JPanel {
                     Tile tile = w.getTile(c.i, c.j);
                     if (tile != null) {
                         tile.setComponent(c);
-                        
+
                         if (c.type != ComponentType.MERGER) {
                             c.loadImage(c.type);
                         } else {

@@ -21,18 +21,27 @@ public class UpgradeMenu extends RoundedPanel {
 
         UpgradeManager umgr = UpgradeManager.getInstance();
         CurrencyManager cmgr = CurrencyManager.getInstance();
+
         RoundedButton machineSpeed = new RoundedButton("UPGRADE",
                 new Color(213, 213, 213),
                 new Color(194, 194, 194));
         machineSpeed.setBounds(220, 55, 80, 40);
         machineSpeed.setBackground(new Color(213, 213, 213));
-        machineSpeed.setToolTipText("Costs " + umgr.getUpgrade("speed").getCost() + " coins");
+
+        machineSpeed.setToolTipText(
+                "<html><span style='font-size:14px;'>Costs "
+                        + umgr.getUpgrade("speed").getCost()
+                        + " coins</span></html>");
+
         machineSpeed.addActionListener(e -> {
             if (cmgr.canAfford(100)) {
                 cmgr.spend(100);
                 gamePanel.upgradeSpeed();
+
                 machineSpeed.setToolTipText(
-                        "Costs " + umgr.getUpgrade("speed").getCost() + " coins");
+                        "<html><span style='font-size:14px;'>Costs "
+                                + umgr.getUpgrade("speed").getCost()
+                                + " coins</span></html>");
             }
         });
         add(machineSpeed);

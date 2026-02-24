@@ -43,7 +43,8 @@ public class ComponentMenu extends JPanel {
         setAction(gamePanel, button, ct, variant);
 
         if (button.isLocked()) {
-            button.setToolTipText("Costs 100 coins");
+            button.setToolTipText(
+                    "<html><span style='font-size:14px;'>Costs 100 coins</span></html>");
         }
 
         add(button);
