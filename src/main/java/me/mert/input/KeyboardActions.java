@@ -8,7 +8,6 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import me.mert.game.CurrencyManager;
 import me.mert.ui.Camera;
 import me.mert.ui.panel.GamePanel;
 
