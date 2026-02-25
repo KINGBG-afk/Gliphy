@@ -8,18 +8,34 @@ public class Stacker extends Component {
     private final Port in1, in2;
     private final Port out;
 
-    public Stacker(int i, int j, Direction direction) {
-        super(i, j, direction, new int[] { 2, 1 }, ComponentType.STACKER);
-        Direction inDir = direction.opposite();
-        Direction side = direction.right();
+    public Stacker(int i, int j, Direction dir) {
+        super(i, j, dir, new int[] { 2, 1 }, ComponentType.STACKER);
+        int dirI = dir.getDi();
+        int dirJ = dir.getDj();
 
-        in1 = addinput(inDir);
+        Direction inDir = dir.opposite();
+        int inI = inDir.getDi();
+        int inJ = inDir.getDj();
+
+        Direction side = dir.right();
+
+        if (dir == Direction.SOUTH) {
+            inJ += 1;
+            dirJ += 1;
+
+        } else if (dir == Direction.WEST) {
+            inI += 1;
+            dirI += 1;
+        }
+
+        in1 = addinput(inI, inJ, inDir);
         in2 = addinput(
-                inDir.getDi() + side.getDi(),
-                inDir.getDj() + side.getDj(),
+                inI + side.getDi(),
+                inJ + side.getDj(),
                 inDir);
 
-        out = addOutput(direction);
+        out = addOutput(dirI, dirJ, dir);
+
         in1.connectTo(out);
     }
 

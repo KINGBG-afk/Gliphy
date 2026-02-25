@@ -53,9 +53,16 @@ public class GameRenderer {
 
     public void debugDraw(Graphics g, int w, int h) {
 
-        g.setColor(Color.BLACK);
-        g.drawString(String.valueOf(LevelManager.getInstance().getLevel()), 400, 400);
-        g.drawString(String.valueOf(LevelManager.getInstance().getGoalAmount()), 400, 430);
+        g.setColor(Color.RED);
+        int size = getSize();
+        for (Component c : world.getComponents()) {
+            for (Port p : c.getAllPorts()) {
+                g.drawRect(
+                        camera.cellToScreenX(p.getWorldJ()),
+                        camera.cellToScreenY(p.getWorldI()),
+                        size, size);
+            }
+        }
 
     }
 
@@ -63,7 +70,7 @@ public class GameRenderer {
     public void drawPreviewComponent(Graphics g, Component c) {
         Graphics2D g2d = (Graphics2D) g;
 
-        int cellPx = getSize();
+        int size = getSize();
 
         int worldX = camera.screenToCellX(mouse.x) * CELL_SIZE;
         int worldY = camera.screenToCellY(mouse.y) * CELL_SIZE;
@@ -76,8 +83,8 @@ public class GameRenderer {
 
         // for 90/270 rotations the footprint swaps on screen
         boolean swap = (c.direction == Direction.EAST || c.direction == Direction.WEST);
-        int drawW = (swap ? cellsH : cellsW) * cellPx;
-        int drawH = (swap ? cellsW : cellsH) * cellPx;
+        int drawW = (swap ? cellsH : cellsW) * size;
+        int drawH = (swap ? cellsW : cellsH) * size;
 
         AffineTransform oldTransform = g2d.getTransform();
 
@@ -85,8 +92,8 @@ public class GameRenderer {
         g2d.rotate(directionToRadians(c.direction));
 
         // after rotation draw the unrotated img
-        int unrotW = cellsW * cellPx;
-        int unrotH = cellsH * cellPx;
+        int unrotW = cellsW * size;
+        int unrotH = cellsH * size;
 
         g2d.drawImage(
                 c.previewImage,
@@ -96,39 +103,39 @@ public class GameRenderer {
                 unrotH,
                 null);
 
+        g2d.setTransform(oldTransform);
+
+        // draw the component's ports
+        drawPorts(g2d, c);
+    }
+
+    private void drawPorts(Graphics2D g2d, Component c) {
+        int size = (int) (getSize() * 0.6f);
+        int offset = (getSize() - size) / 2;
+
+        int cellX = camera.screenToCellX(mouse.x);
+        int cellY = camera.screenToCellY(mouse.y);
+
         for (Port p : c.getAllPorts()) {
-            // quick and dirty
-            if (c.type == ComponentType.COLLECTOR && p.type == PortType.INPUT) {
-                continue;
+
+            int x = camera.cellToScreenX(p.localJ + cellX) + offset;
+            int y = camera.cellToScreenY(p.localI + cellY) + offset;
+
+            int cx = x + size / 2;
+            int cy = y + size / 2;
+
+            AffineTransform oldTransform = g2d.getTransform();
+
+            if (p.type == PortType.OUTPUT) {
+                g2d.rotate(directionToRadians(p.getDirection()), cx, cy);
+            } else {
+                g2d.rotate(directionToRadians(p.getDirection().opposite()), cx, cy);
             }
 
-            int px = p.localJ * cellPx;
-            int py = p.localI * cellPx;
-
-            int centerX = -unrotW / 2 + px + cellPx / 2;
-            int centerY = -unrotH / 2 + py + cellPx / 2;
-
-            AffineTransform arrowTransform = g2d.getTransform();
-
-            g2d.translate(centerX, centerY);
-
-            // rotate based on port type
-            double portAngle = directionToRadians(p.getDirection())
-                    + (p.type == PortType.INPUT ? Math.PI : 0);
-            g2d.rotate(portAngle);
-
-            int arrowSize = cellPx / 2;
-            g2d.drawImage(
-                    arrowImage,
-                    -arrowSize / 2,
-                    -arrowSize / 2,
-                    arrowSize,
-                    arrowSize,
-                    null);
-
-            g2d.setTransform(arrowTransform);
+            g2d.drawImage(arrowImage, x, y, size, size, null);
+            g2d.setTransform(oldTransform);
         }
-        g2d.setTransform(oldTransform);
+
     }
 
     private double directionToRadians(Direction d) {

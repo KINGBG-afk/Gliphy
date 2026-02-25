@@ -164,7 +164,13 @@ public class GamePanel extends JPanel {
 
     public void rotateDirection() {
         selectedDirection = selectedDirection.right();
-        selectedComponent.direction = selectedDirection;
+        selectedComponent = ComponentType.createComponent(selectedType, selectedDirection, 0, 0, variant, null);
+    }
+
+    public void rotateOtherDirection() {
+        selectedDirection = selectedDirection.left();
+        selectedComponent = ComponentType.createComponent(selectedType, selectedDirection, 0, 0, variant, null);
+
     }
 
     public void setChunkLocation(int x, int y) {
@@ -270,6 +276,6 @@ public class GamePanel extends JPanel {
         gameRenderer.drawGoal(g, sWidth, sHeight);
         gameRenderer.drawCoins(g, sWidth, sHeight);
 
-        // gameRenderer.debugDraw(g, sWidth, sHeight);
+        gameRenderer.debugDraw(g, sWidth, sHeight);
     }
 }

@@ -8,6 +8,7 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
+import me.mert.game.CurrencyManager;
 import me.mert.ui.Camera;
 import me.mert.ui.panel.GamePanel;
 
@@ -31,6 +32,15 @@ public class KeyboardActions {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.rotateDirection();
+            }
+        });
+
+        // Q
+        im.put(KeyStroke.getKeyStroke("Q"), "orotate");
+        am.put("orotate", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.rotateOtherDirection();
             }
         });
 
@@ -79,8 +89,8 @@ public class KeyboardActions {
         am.put("esc", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // System.exit(0);
-                panel.showWorldMenu();
+                System.exit(0);
+                // panel.showWorldMenu();
             }
         });
 
@@ -92,9 +102,8 @@ public class KeyboardActions {
                 panel.saveWorld();
             }
         });
-        
-        /*
-        //TEMP: remove later
+
+        // TEMP: remove later
         im.put(KeyStroke.getKeyStroke("C"), "cheat");
         am.put("cheat", new AbstractAction() {
             @Override
@@ -102,6 +111,6 @@ public class KeyboardActions {
                 CurrencyManager.getInstance().add(9999);
             }
         });
-        */
+
     }
 }

@@ -11,9 +11,21 @@ public class Cutter extends Component {
     public Cutter(int i, int j, Direction dir) {
         super(i, j, dir, new int[] { 2, 1 }, ComponentType.CUTTER);
         Direction inDir = dir.opposite();
+        int inI = inDir.getDi();
+        int inJ = inDir.getDj();
         Direction side = dir.right();
 
-        in = addinput(inDir.getDi(), inDir.getDj(), inDir);
+        if (dir == Direction.SOUTH || dir == Direction.WEST) {
+            side = dir.left();
+        }
+
+        if (dir == Direction.SOUTH) {
+            inJ += 1;
+        } else if (dir == Direction.WEST) {
+            inI += 1;
+        }
+
+        in = addinput(inI, inJ, inDir);
 
         out1 = addOutput(dir.getDi(), dir.getDj(), dir);
         out2 = addOutput(

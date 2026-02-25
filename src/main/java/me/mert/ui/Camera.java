@@ -16,7 +16,7 @@ public class Camera {
         this.y = y;
     }
 
-    public Camera(double  x, double  y) {
+    public Camera(double x, double y) {
         this.x = x;
         this.y = y;
     }
@@ -53,6 +53,14 @@ public class Camera {
 
     public int screenToCellY(int screenY) {
         return (int) Math.floorDiv((int) Math.floor(screenToWorldY(screenY)), Constants.CELL_SIZE);
+    }
+
+    public int cellToScreenX(int cellX) {
+        return worldToScreenX(cellX * Constants.CELL_SIZE);
+    }
+
+    public int cellToScreenY(int cellY) {
+        return worldToScreenY(cellY * Constants.CELL_SIZE);
     }
 
     public void update() {
