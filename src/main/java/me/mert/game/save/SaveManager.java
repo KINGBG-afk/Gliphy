@@ -75,12 +75,19 @@ public class SaveManager {
     @SuppressWarnings("CallToPrintStackTrace")
     public static SaveData load(File file) {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
-
             return (SaveData) in.readObject();
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static void delete(String worldName) {
+        try {
+            Files.delete(Path.of(SAVE_PATH + worldName + ".dat"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

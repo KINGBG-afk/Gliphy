@@ -110,7 +110,7 @@ public class GamePanel extends JPanel {
 
     private void createComponentMenu() {
         ComponentMenu menu = new ComponentMenu(this);
-        menu.setSize(600, 70);
+        menu.setSize(680, 80);
         menu.setLocation(
                 (uiPanel.getWidth() - menu.getWidth()) / 2,
                 uiPanel.getHeight() - menu.getHeight() - 20);
@@ -144,8 +144,8 @@ public class GamePanel extends JPanel {
                 starIcon,
                 starIcon);
         upgradeButton.setBounds(
-                (uiPanel.getWidth() + 620) / 2,
-                uiPanel.getHeight() - 70 - 20,
+                (uiPanel.getWidth() + 700) / 2,
+                uiPanel.getHeight() - 95,
                 70, 70);
         upgradeButton.addActionListener(e -> {
             menu.setVisible(!menu.isVisible());
@@ -276,6 +276,6 @@ public class GamePanel extends JPanel {
         gameRenderer.drawGoal(g, sWidth, sHeight);
         gameRenderer.drawCoins(g, sWidth, sHeight);
 
-        gameRenderer.debugDraw(g, sWidth, sHeight);
+        // gameRenderer.debugDraw(g, sWidth, sHeight);
     }
 }

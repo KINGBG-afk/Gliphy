@@ -10,7 +10,7 @@ public class Chunk {
     Tile[] tiles;
 
     private static final float SCALE = 0.15f;
-    private static final float RESOURCE_THRESHOLD = 0.8f;
+    private static final float RESOURCE_THRESHOLD = 0.84f;
     private final int CHUNK_SIZE = Constants.CHUNK_SIZE;
 
     private final FastNoise noise;

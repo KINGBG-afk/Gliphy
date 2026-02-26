@@ -91,6 +91,10 @@ public abstract class Component implements Serializable {
         return this.img;
     }
 
+    public void setImage(BufferedImage img) {
+        this.img = img;
+    }
+
     public abstract void update();
 
     public void render(Graphics g, int x, int y, double zoom, int cellSize) {
@@ -136,7 +140,7 @@ public abstract class Component implements Serializable {
             if (iStream != null) {
                 return ImageIO.read(iStream);
             }
-        } catch (IOException ignored) {
+        } catch (IOException e) {
             System.err.print("Couldn't load " + p + ".png");
         }
         return null; // well too bad it doesn't load
@@ -150,7 +154,7 @@ public abstract class Component implements Serializable {
             if (iStream != null) {
                 this.img = ImageIO.read(iStream);
             }
-        } catch (IOException ignored) {
+        } catch (IOException e) {
             System.err.print("Couldn't load " + ct);
             System.out.println("Loading default image");
         }

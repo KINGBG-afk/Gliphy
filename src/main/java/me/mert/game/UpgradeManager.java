@@ -16,6 +16,8 @@ public class UpgradeManager {
         unlockedComponents.add("collector");
         unlockedComponents.add("conveyor");
         unlockedComponents.add("hub");
+        unlockedComponents.add("trash");
+
     }
 
     public static UpgradeManager getInstance() {

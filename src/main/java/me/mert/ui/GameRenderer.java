@@ -106,10 +106,10 @@ public class GameRenderer {
         g2d.setTransform(oldTransform);
 
         // draw the component's ports
-        drawPorts(g2d, c);
+        drawArrows(g2d, c);
     }
 
-    private void drawPorts(Graphics2D g2d, Component c) {
+    private void drawArrows(Graphics2D g2d, Component c) {
         int size = (int) (getSize() * 0.6f);
         int offset = (getSize() - size) / 2;
 
@@ -117,6 +117,8 @@ public class GameRenderer {
         int cellY = camera.screenToCellY(mouse.y);
 
         for (Port p : c.getAllPorts()) {
+            if (c.type == ComponentType.COLLECTOR && p.type == PortType.INPUT)
+                continue;
 
             int x = camera.cellToScreenX(p.localJ + cellX) + offset;
             int y = camera.cellToScreenY(p.localI + cellY) + offset;

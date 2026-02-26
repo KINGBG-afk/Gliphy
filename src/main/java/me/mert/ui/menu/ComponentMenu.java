@@ -33,12 +33,13 @@ public class ComponentMenu extends JPanel {
         addButton(gamePanel, ComponentType.MERGER, false);
         addButton(gamePanel, ComponentType.MERGER, true);
         addButton(gamePanel, ComponentType.ROTATER, false);
+        addButton(gamePanel, ComponentType.TRASH, false);
     }
 
     private void addButton(GamePanel gamePanel, ComponentType ct, boolean variant) {
         ComponentSlot button = new ComponentSlot(
                 getScaledImage(ct, variant), ct.toString().toLowerCase());
-        button.setMaximumSize(new Dimension(60, Integer.MAX_VALUE));
+        button.setMaximumSize(new Dimension(80, Integer.MAX_VALUE));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         setAction(gamePanel, button, ct, variant);
 
@@ -46,7 +47,6 @@ public class ComponentMenu extends JPanel {
             button.setToolTipText(
                     "<html><span style='font-size:14px;'>Costs 100 coins</span></html>");
         }
-
         add(button);
     }
 

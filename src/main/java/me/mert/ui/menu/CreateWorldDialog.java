@@ -34,7 +34,6 @@ public class CreateWorldDialog extends JDialog {
         title.setForeground(Color.BLACK);
         title.setFont(new Font("SansSerif", Font.BOLD, 18));
         title.setBounds(146, 20, 200, 30);
-        panel.add(title);
 
         nameField = new JTextField();
         nameField.setBounds(50, 80, 300, 35);
@@ -43,10 +42,9 @@ public class CreateWorldDialog extends JDialog {
         nameField.setForeground(Color.BLACK);
         nameField.setCaretColor(Color.BLACK);
         nameField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        panel.add(nameField);
 
         RoundedButton createButton = new RoundedButton("Create",
-        new Color(194, 194, 194),
+                new Color(194, 194, 194),
                 new Color(170, 170, 170));
         createButton.setBounds(125, 140, 150, 35);
         createButton.setFocusPainted(false);
@@ -58,6 +56,8 @@ public class CreateWorldDialog extends JDialog {
             dispose();
         });
 
+        panel.add(nameField);
+        panel.add(title);
         panel.add(createButton);
     }
 

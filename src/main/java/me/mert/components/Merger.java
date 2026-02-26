@@ -10,10 +10,12 @@ public class Merger extends Component {
     private final Port out;
 
     private boolean turn;
+    private final boolean variant;
 
     // variant = false = takes from left and vise versa
     public Merger(int i, int j, Direction dir, boolean variant) {
         super(i, j, dir, new int[] { 1, 1 }, ComponentType.MERGER);
+        this.variant = variant;
 
         in1 = addinput(dir.opposite());
 
@@ -26,6 +28,10 @@ public class Merger extends Component {
         out = addOutput(dir);
         this.img = loadImage(variant ? "merger-right" : "merger-left");
         loadPreviewImage(img);
+    }
+
+    public boolean isVariant() {
+        return variant;
     }
 
     @Override

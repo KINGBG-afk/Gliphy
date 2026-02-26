@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import me.mert.components.Component;
+import me.mert.components.Merger;
 import me.mert.core.enums.ComponentType;
 import me.mert.game.CurrencyManager;
 import me.mert.game.LevelManager;
@@ -85,7 +86,7 @@ public class WorldSelectionMenu extends JPanel {
 
         for (SaveData save : SaveManager.loadAllSaves()) {
             ScrollableElement element = new ScrollableElement(20, save.name, String.valueOf(save.coins),
-                    String.valueOf(save.level));
+                    String.valueOf(save.level), root, this);
             element.setPreferredSize(new Dimension(1470, 130));
             element.setBackground(new Color(215, 215, 215));
             element.setPlayAction(e -> {
@@ -107,9 +108,12 @@ public class WorldSelectionMenu extends JPanel {
                         if (c.type != ComponentType.MERGER) {
                             c.loadImage(c.type);
                         } else {
-                            // at this point just load both
-                            c.loadImage(c.type + "merger-right");
-                            c.loadImage(c.type + "merger-left");
+                            Merger m = (Merger) c;
+                            if (m.isVariant()) {
+                                c.setImage(c.loadImage("merger-right"));
+                            } else {
+                                c.setImage(c.loadImage("merger-left"));
+                            }
                         }
                     }
                 }
