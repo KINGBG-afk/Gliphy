@@ -15,7 +15,7 @@ import javax.swing.JScrollPane;
 
 import me.mert.components.Component;
 import me.mert.components.Merger;
-import me.mert.core.enums.ComponentType;
+import me.mert.components.Splitter;
 import me.mert.game.CurrencyManager;
 import me.mert.game.LevelManager;
 import me.mert.game.UpgradeManager;
@@ -104,16 +104,27 @@ public class WorldSelectionMenu extends JPanel {
                     Tile tile = w.getTile(c.i, c.j);
                     if (tile != null) {
                         tile.setComponent(c);
+                    }
 
-                        if (c.type != ComponentType.MERGER) {
-                            c.loadImage(c.type);
-                        } else {
-                            Merger m = (Merger) c;
-                            if (m.isVariant()) {
-                                c.setImage(c.loadImage("merger-right"));
-                            } else {
-                                c.setImage(c.loadImage("merger-left"));
+                    if (c.type != null) {
+                        switch (c.type) {
+                            case MERGER -> {
+                                Merger m = (Merger) c;
+                                if (m.isVariant()) {
+                                    c.setImage(c.loadImage("merger-right"));
+                                } else {
+                                    c.setImage(c.loadImage("merger-left"));
+                                }
                             }
+                            case SPLITTER -> {
+                                Splitter s = (Splitter) c;
+                                if (s.isVariant()) {
+                                    c.setImage(c.loadImage("merger-right"));
+                                } else {
+                                    c.setImage(c.loadImage("merger-left"));
+                                }
+                            }
+                            default -> c.loadImage(c.type);
                         }
                     }
                 }

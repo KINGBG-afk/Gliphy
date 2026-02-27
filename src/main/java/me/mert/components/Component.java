@@ -40,10 +40,9 @@ public abstract class Component implements Serializable {
         this.size = size;
         this.type = type;
 
-        loadImage(type);
-
         // i swaer im going too far just for one component
-        if (this.type != ComponentType.MERGER) {
+        if (this.type != ComponentType.MERGER && this.type != ComponentType.SPLITTER) {
+            loadImage(type);
             loadPreviewImage(img);
         }
     }
@@ -147,7 +146,7 @@ public abstract class Component implements Serializable {
 
     }
 
-    public  final void loadImage(ComponentType ct) {
+    public final void loadImage(ComponentType ct) {
         String path = "components/" + ct.toString().toLowerCase() + ".png";
 
         try (InputStream iStream = getClass().getClassLoader().getResourceAsStream(path)) {

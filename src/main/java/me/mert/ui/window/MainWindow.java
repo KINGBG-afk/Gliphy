@@ -8,7 +8,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import me.mert.game.CurrencyManager;
 import me.mert.game.Upgrade;
 import me.mert.game.UpgradeManager;
 import me.mert.ui.Camera;
@@ -63,13 +62,12 @@ public class MainWindow extends JFrame {
 
     public void upgradeSpeed() {
         Upgrade up = UpgradeManager.getInstance().getUpgrade("speed");
-        CurrencyManager cmgr = CurrencyManager.getInstance();
 
-        if (cmgr.canAfford(up.getCost())) {
+
             up.levelUp();
             updateTimer.setDelay((int) (BASE_UPDATE_DELAY - (up.getLevel() * 50)));
             System.out.println((int) (BASE_UPDATE_DELAY - (up.getLevel() * 50)));
-        }
+
     }
 
     private void createScreens() {

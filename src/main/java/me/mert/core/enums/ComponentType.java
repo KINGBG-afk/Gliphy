@@ -7,6 +7,7 @@ import me.mert.components.Cutter;
 import me.mert.components.Hub;
 import me.mert.components.Merger;
 import me.mert.components.Rotater;
+import me.mert.components.Splitter;
 import me.mert.components.Stacker;
 import me.mert.components.Trash;
 
@@ -17,6 +18,7 @@ public enum ComponentType {
     ROTATER,
     STACKER,
     MERGER,
+    SPLITTER,
     TRASH,
     HUB;
 
@@ -30,6 +32,7 @@ public enum ComponentType {
             case MERGER -> new Merger(i, j, Direction.NORTH, variant);
             case ROTATER -> new Rotater(i, j, Direction.NORTH);
             case TRASH -> new Trash(i, j, Direction.NORTH);
+            case SPLITTER -> new Splitter(i, j, Direction.NORTH, variant);
             default -> null;
         };
     }
@@ -45,6 +48,7 @@ public enum ComponentType {
             case MERGER -> new Merger(i, j, d, variant);
             case ROTATER -> new Rotater(i, j, d);
             case TRASH -> new Trash(i, j, d);
+            case SPLITTER -> new Splitter(i, j, d, variant);
             default -> null;
         };
     }

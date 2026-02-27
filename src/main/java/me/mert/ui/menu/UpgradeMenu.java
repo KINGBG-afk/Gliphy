@@ -34,8 +34,8 @@ public class UpgradeMenu extends RoundedPanel {
                         + " coins</span></html>");
 
         machineSpeed.addActionListener(e -> {
-            if (cmgr.canAfford(100)) {
-                cmgr.spend(100);
+            if (cmgr.canAfford(umgr.getUpgrade("speed").getCost())) {
+                cmgr.spend(umgr.getUpgrade("speed").getCost());
                 gamePanel.upgradeSpeed();
 
                 machineSpeed.setToolTipText(

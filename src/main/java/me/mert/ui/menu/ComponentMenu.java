@@ -34,6 +34,8 @@ public class ComponentMenu extends JPanel {
         addButton(gamePanel, ComponentType.MERGER, true);
         addButton(gamePanel, ComponentType.ROTATER, false);
         addButton(gamePanel, ComponentType.TRASH, false);
+        addButton(gamePanel, ComponentType.SPLITTER, false);
+        addButton(gamePanel, ComponentType.SPLITTER, true);
     }
 
     private void addButton(GamePanel gamePanel, ComponentType ct, boolean variant) {
