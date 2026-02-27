@@ -119,9 +119,9 @@ public class WorldSelectionMenu extends JPanel {
                             case SPLITTER -> {
                                 Splitter s = (Splitter) c;
                                 if (s.isVariant()) {
-                                    c.setImage(c.loadImage("merger-right"));
+                                    c.setImage(c.loadImage("splitter-right"));
                                 } else {
-                                    c.setImage(c.loadImage("merger-left"));
+                                    c.setImage(c.loadImage("splitter-left"));
                                 }
                             }
                             default -> c.loadImage(c.type);
