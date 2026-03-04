@@ -89,28 +89,8 @@ public class KeyboardActions {
         am.put("esc", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-                // panel.showWorldMenu();
+                panel.showWorldMenu();
             }
         });
-
-        // SAVE
-        im.put(KeyStroke.getKeyStroke("E"), "save");
-        am.put("save", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                panel.saveWorld();
-            }
-        });
-
-        // TEMP: remove later
-        im.put(KeyStroke.getKeyStroke("C"), "cheat");
-        am.put("cheat", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CurrencyManager.getInstance().add(9999);
-            }
-        });
-
     }
 }
