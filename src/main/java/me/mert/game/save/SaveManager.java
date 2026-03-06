@@ -13,16 +13,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SaveManager {
-    private static final String SAVE_PATH = "saves/";
+    private static final Path SAVE_PATH = getSavePath();
+
+    // chooses the save path depending on the OS
+    private static Path getSavePath() {
+        String os = System.getProperty("os.name").toLowerCase();
+
+        if (os.contains("win")) {
+            String home = System.getProperty("user.home");
+            return Paths.get(home, "AppData", "Local", "Gliphy", "saves");
+        } else {
+            return Paths.get("saves");
+        }
+    }
 
     public static List<SaveData> loadAllSaves() {
+        createFolder();
         List<SaveData> saves = new ArrayList<>();
 
-        File folder = new File("saves");
-        if (!folder.exists())
-            return saves;
-
-        File[] files = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".dat"));
+        File[] files = SAVE_PATH.toFile().listFiles((dir, name) -> name.toLowerCase().endsWith(".dat"));
 
         if (files == null)
             return saves;
@@ -38,12 +47,8 @@ public class SaveManager {
 
     @SuppressWarnings("CallToPrintStackTrace")
     private static void createFolder() {
-        Path path = Paths.get("saves");
-
         try {
-            if (!Files.exists(path)) {
-                Files.createDirectories(path);
-            }
+            Files.createDirectories(SAVE_PATH);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,8 +58,9 @@ public class SaveManager {
     public static void save(SaveData data) {
         createFolder(); // if it doesn't exist
 
-        try (ObjectOutputStream out = new ObjectOutputStream(
-                new FileOutputStream(SAVE_PATH + data.name + ".dat"))) {
+        Path file = SAVE_PATH.resolve(data.name + ".dat");
+
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file.toFile()))) {
             out.writeObject(data);
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,8 +69,10 @@ public class SaveManager {
 
     @SuppressWarnings("CallToPrintStackTrace")
     public static SaveData load(String worldName) {
-        try (ObjectInputStream in = new ObjectInputStream(
-                new FileInputStream(SAVE_PATH + worldName + ".dat"))) {
+        createFolder();
+        Path file = SAVE_PATH.resolve(worldName + ".dat");
+
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file.toFile()))) {
             return (SaveData) in.readObject();
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,18 +82,21 @@ public class SaveManager {
 
     @SuppressWarnings("CallToPrintStackTrace")
     public static SaveData load(File file) {
+        createFolder();
+
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
             return (SaveData) in.readObject();
-
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-            return null;
         }
+        return null;
     }
 
     public static void delete(String worldName) {
+        Path file = SAVE_PATH.resolve(worldName + ".dat");
+
         try {
-            Files.delete(Path.of(SAVE_PATH + worldName + ".dat"));
+            Files.deleteIfExists(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
