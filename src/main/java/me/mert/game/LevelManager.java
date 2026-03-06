@@ -68,13 +68,13 @@ public class LevelManager {
     }
 
     private void goNextLevel() {
-        if (level == 3) {
+        if (level == 5) {
             return;
         }
 
         level++;
         loadNextLevel(level);
-        CurrencyManager.getInstance().add(50);
+        CurrencyManager.getInstance().add(60);
         System.out.println("Leve up");
         System.out.println("Going to level: " + level);
     }

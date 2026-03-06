@@ -25,5 +25,23 @@
             "circle",
             "square"
         ]
+    },
+    "4": {
+        "amount": 100,
+        "glyph": [
+            "circle",
+            "square",
+            "square",
+            "circle"
+        ]
+    },
+    "5": {
+        "amount": 150,
+        "glyph": [
+            "circle",
+            "circle",
+            "square",
+            "square"
+        ]
     }
 }
