@@ -10,16 +10,19 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import me.mert.core.GliphyUtilities;
+import me.mert.game.LanguageManager;
 import me.mert.ui.widgets.IconButton;
 import me.mert.ui.window.MainWindow;
 
 public class CreditsPanel extends JPanel {
 
-    private IconButton backButton;
     private final MainWindow root;
+    private IconButton backButton;
+    private final LanguageManager languageManager;
 
-    public CreditsPanel(MainWindow root) {
+    public CreditsPanel(MainWindow root, LanguageManager languageManager) {
         this.root = root;
+        this.languageManager = languageManager;
 
         setLayout(null);
         setOpaque(false);
@@ -31,7 +34,7 @@ public class CreditsPanel extends JPanel {
         ImageIcon pressedButtonIcon = GliphyUtilities.loadIcon("/ui/pressed-button.png", 300, 100);
 
         backButton = new IconButton(
-                "Back",
+                languageManager.getString("back"),
                 buttonIcon,
                 pressedButtonIcon);
 
@@ -53,11 +56,11 @@ public class CreditsPanel extends JPanel {
         int y = 200;
 
         g2.setFont(new Font("SansSerif", Font.BOLD, 60));
-        drawString(g2, "CREDITS", width, y);
+        drawString(g2, languageManager.getString("credits").toUpperCase(), width, y);
 
         y += 120;
         g2.setFont(new Font("SansSerif", Font.BOLD, 40));
-        drawString(g2, "Програмист", width, y);
+        drawString(g2, languageManager.getString("programmer"), width, y);
 
         y += 50;
         g2.setFont(new Font("SansSerif", Font.PLAIN, 35));
@@ -65,7 +68,7 @@ public class CreditsPanel extends JPanel {
 
         y += 120;
         g2.setFont(new Font("SansSerif", Font.BOLD, 40));
-        drawString(g2, "Дизайнер", width, y);
+        drawString(g2, languageManager.getString("designer"), width, y);
 
         y += 50;
         g2.setFont(new Font("SansSerif", Font.PLAIN, 35));
@@ -73,7 +76,7 @@ public class CreditsPanel extends JPanel {
 
         y += 120;
         g2.setFont(new Font("SansSerif", Font.BOLD, 40));
-        drawString(g2, "Ръководител", width, y);
+        drawString(g2, languageManager.getString("manager"), width, y);
 
         y += 50;
         g2.setFont(new Font("SansSerif", Font.PLAIN, 35));

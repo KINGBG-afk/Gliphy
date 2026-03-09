@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import me.mert.core.GliphyUtilities;
+import me.mert.game.LanguageManager;
 import me.mert.ui.widgets.IconButton;
 import me.mert.ui.window.MainWindow;
 
@@ -16,29 +17,32 @@ public class MainMenu extends JPanel {
     private final IconButton startButton;
     private final IconButton quitButton;
     // private final IconButton soundButton;
-    // private final IconButton languageButton;
+    private final IconButton languageButton;
     private final IconButton creditsButton;
     private final Image bgImage;
 
-    public MainMenu(MainWindow root) {
+    public MainMenu(MainWindow root, LanguageManager languageManager) {
         setFocusable(true);
         setLayout(null);
+
         ImageIcon buttonIcon = GliphyUtilities.loadIcon("/ui/button.png", 300, 100);
         ImageIcon pressedButtonIcon = GliphyUtilities.loadIcon("/ui/pressed-button.png", 300, 100);
 
-        // ImageIcon speakerIcon = GliphyUtilities.loadIcon("/icons/speaker.png", 64, 64);
-        // ImageIcon muteIcon = GliphyUtilities.loadIcon("/icons/speaker-mute.png", 64, 64);
+        // ImageIcon speakerIcon = GliphyUtilities.loadIcon("/icons/speaker.png", 64,
+        // 64);
+        // ImageIcon muteIcon = GliphyUtilities.loadIcon("/icons/speaker-mute.png", 64,
+        // 64);
 
-        // ImageIcon bgIcon = GliphyUtilities.loadIcon("/icons/bg.png", 70, 70);
-        // ImageIcon enIcon = GliphyUtilities.loadIcon("/icons/en.png", 70, 70);
-        // ImageIcon bgHoverIcon = GliphyUtilities.loadIcon("/icons/bg-hover.png", 70, 70);
-        // ImageIcon enHoverIcon = GliphyUtilities.loadIcon("/icons/en-hover.png", 70, 70);
+        ImageIcon bgIcon = GliphyUtilities.loadIcon("/icons/bg.png", 70, 70);
+        ImageIcon enIcon = GliphyUtilities.loadIcon("/icons/en.png", 70, 70);
+        ImageIcon bgHoverIcon = GliphyUtilities.loadIcon("/icons/bg-hover.png", 70, 70);
+        ImageIcon enHoverIcon = GliphyUtilities.loadIcon("/icons/en-hover.png", 70, 70);
 
         // i know the size should be dynamic but we have to cut corners
         bgImage = GliphyUtilities.loadIcon("/ui/background.png", 1920, 1080).getImage();
 
         startButton = new IconButton(
-                "Play",
+                languageManager.getString("play"),
                 buttonIcon,
                 pressedButtonIcon);
         startButton.setFont(new Font("Segoe UI", Font.PLAIN, 50));
@@ -46,7 +50,7 @@ public class MainMenu extends JPanel {
         startButton.addActionListener(e -> root.showWorldMenu());
 
         quitButton = new IconButton(
-                "Quit",
+                languageManager.getString("quit"),
                 buttonIcon,
                 pressedButtonIcon);
         quitButton.setFont(new Font("Segoe UI", Font.PLAIN, 50));
@@ -67,25 +71,34 @@ public class MainMenu extends JPanel {
          * }
          * });
          * 
-         * languageButton = new IconButton(
-         * "",
-         * enIcon,
-         * enIcon,
-         * enHoverIcon);
-         * languageButton.setBounds(1750, 20, 70, 70);
-         * languageButton.addActionListener(e -> {
-         * if (languageButton.getIcon() == enIcon) {
-         * languageButton.setIcon(bgIcon);
-         * languageButton.setHighlightIcon(bgHoverIcon);
-         * } else {
-         * languageButton.setIcon(enIcon);
-         * languageButton.setHighlightIcon(enHoverIcon);
-         * }
-         * });
-         * 
          */
+
+        ImageIcon currIcon = (languageManager.getCurrentLanguage().equals("en") ? enIcon : bgIcon);
+        ImageIcon currHoverIcon = (languageManager.getCurrentLanguage().equals("en") ? enHoverIcon : bgHoverIcon);
+        languageButton = new IconButton(
+                "",
+                currIcon,
+                currIcon,
+                currHoverIcon);
+        languageButton.setBounds(1750, 20, 70, 70);
+        languageButton.addActionListener(e -> {
+            if (languageButton.getIcon() == enIcon) {
+                languageButton.setIcon(bgIcon);
+                languageButton.setHighlightIcon(bgHoverIcon);
+
+                LanguageManager.getInstance().loadLanguage("bg");
+                root.reloadUI();
+            } else {
+                languageButton.setIcon(enIcon);
+                languageButton.setHighlightIcon(enHoverIcon);
+
+                LanguageManager.getInstance().loadLanguage("en");
+                root.reloadUI();
+            }
+        });
+
         creditsButton = new IconButton(
-                "Credits",
+                languageManager.getString("credits"),
                 buttonIcon,
                 pressedButtonIcon);
         creditsButton.setFont(new Font("Segoe UI", Font.PLAIN, 40));
@@ -96,7 +109,7 @@ public class MainMenu extends JPanel {
         add(quitButton);
         add(creditsButton);
         // add(soundButton);
-        // add(languageButton);
+        add(languageButton);
 
     }
 

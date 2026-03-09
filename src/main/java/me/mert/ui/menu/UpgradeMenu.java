@@ -7,31 +7,36 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import me.mert.game.CurrencyManager;
+import me.mert.game.LanguageManager;
 import me.mert.game.UpgradeManager;
 import me.mert.ui.panel.GamePanel;
 import me.mert.ui.panel.RoundedPanel;
 import me.mert.ui.widgets.RoundedButton;
 
 public class UpgradeMenu extends RoundedPanel {
-    public UpgradeMenu(GamePanel gamePanel) {
+    private LanguageManager languageManager;
+
+    public UpgradeMenu(GamePanel gamePanel, LanguageManager languageManager) {
         super(10);
         setLayout(null);
         setOpaque(false);
         setBackground(new Color(236, 236, 236));
 
+        this.languageManager = languageManager;
+
         UpgradeManager umgr = UpgradeManager.getInstance();
         CurrencyManager cmgr = CurrencyManager.getInstance();
 
-        RoundedButton machineSpeed = new RoundedButton("UPGRADE",
+        RoundedButton machineSpeed = new RoundedButton(languageManager.getString("upgrade").toUpperCase(),
                 new Color(213, 213, 213),
                 new Color(194, 194, 194));
         machineSpeed.setBounds(220, 55, 80, 40);
         machineSpeed.setBackground(new Color(213, 213, 213));
 
         machineSpeed.setToolTipText(
-                "<html><span style='font-size:14px;'>Costs "
-                        + umgr.getUpgrade("speed").getCost()
-                        + " coins</span></html>");
+                "<html><span style='font-size:14px;'>" + languageManager.getString("costs") + " "
+                        + umgr.getUpgrade("speed").getCost() + " "
+                        + languageManager.getString("coins").toLowerCase() + "</span></html>");
 
         machineSpeed.addActionListener(e -> {
             if (cmgr.canAfford(umgr.getUpgrade("speed").getCost())) {
@@ -39,9 +44,9 @@ public class UpgradeMenu extends RoundedPanel {
                 gamePanel.upgradeSpeed();
 
                 machineSpeed.setToolTipText(
-                        "<html><span style='font-size:14px;'>Costs "
-                                + umgr.getUpgrade("speed").getCost()
-                                + " coins</span></html>");
+                        "<html><span style='font-size:14px;'>" + languageManager.getString("costs") + " "
+                                + umgr.getUpgrade("speed").getCost() + " "
+                                + languageManager.getString("coins").toLowerCase() + "</span></html>");
             }
         });
         add(machineSpeed);

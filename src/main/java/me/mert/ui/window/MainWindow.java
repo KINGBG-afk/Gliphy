@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import me.mert.game.LanguageManager;
 import me.mert.game.Upgrade;
 import me.mert.game.UpgradeManager;
 import me.mert.ui.Camera;
@@ -24,6 +25,8 @@ public class MainWindow extends JFrame {
 
     private CardLayout cl;
     private JPanel root;
+
+    LanguageManager languageManager;
 
     GamePanel gamePanel;
     MainMenu mainMenu;
@@ -43,6 +46,8 @@ public class MainWindow extends JFrame {
         setUndecorated(true);
         setResizable(false);
 
+        languageManager = LanguageManager.getInstance();
+
         String os = System.getProperty("os.name").toLowerCase();
 
         if (!os.contains("linux")) {
@@ -60,21 +65,32 @@ public class MainWindow extends JFrame {
 
     }
 
+    public void reloadUI() {
+        root.removeAll();
+
+        createScreens();
+
+        root.revalidate();
+        root.repaint();
+
+        showMainMenu();
+
+    }
+
     public void upgradeSpeed() {
         Upgrade up = UpgradeManager.getInstance().getUpgrade("speed");
 
-
-            up.levelUp();
-            updateTimer.setDelay((int) (BASE_UPDATE_DELAY - (up.getLevel() * 50)));
-            System.out.println((int) (BASE_UPDATE_DELAY - (up.getLevel() * 50)));
+        up.levelUp();
+        updateTimer.setDelay((int) (BASE_UPDATE_DELAY - (up.getLevel() * 50)));
+        System.out.println((int) (BASE_UPDATE_DELAY - (up.getLevel() * 50)));
 
     }
 
     private void createScreens() {
-        mainMenu = new MainMenu(this);
-        gamePanel = new GamePanel();
-        worldMenu = new WorldSelectionMenu(this);
-        creditsPanel = new CreditsPanel(this);
+        mainMenu = new MainMenu(this, languageManager);
+        gamePanel = new GamePanel(languageManager);
+        worldMenu = new WorldSelectionMenu(this, languageManager);
+        creditsPanel = new CreditsPanel(this, languageManager);
 
         root.add(mainMenu, "menu");
         root.add(gamePanel, "game");

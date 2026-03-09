@@ -20,6 +20,7 @@ import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.LayerType;
 import me.mert.game.CurrencyManager;
+import me.mert.game.LanguageManager;
 import me.mert.game.LevelManager;
 import me.mert.game.Upgrade;
 import me.mert.game.UpgradeManager;
@@ -38,7 +39,7 @@ import me.mert.world.World;
 public class GamePanel extends JPanel {
     private final Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
 
-    // i swaer at some point imma run into performance issues
+    private LanguageManager languageManager;
     private World world;
     private GameRenderer gameRenderer;
     private GameUIPanel uiPanel;
@@ -59,7 +60,9 @@ public class GamePanel extends JPanel {
     private boolean variant = false;
 
     // this is so the ui can generate without generating the whole world
-    public GamePanel() {
+    public GamePanel(LanguageManager languageManager) {
+        // might as well load it
+        this.languageManager = languageManager;
     }
 
     public GamePanel(Camera camera, World world, GameRenderer gameRenderer, MainWindow mainWindow) {
@@ -109,7 +112,7 @@ public class GamePanel extends JPanel {
     }
 
     private void createComponentMenu() {
-        ComponentMenu menu = new ComponentMenu(this);
+        ComponentMenu menu = new ComponentMenu(this, languageManager);
         menu.setSize(820, 80);
         menu.setLocation(
                 (uiPanel.getWidth() - menu.getWidth()) / 2,
@@ -132,7 +135,7 @@ public class GamePanel extends JPanel {
     }
 
     private void createUpgradeUI() {
-        UpgradeMenu menu = new UpgradeMenu(this);
+        UpgradeMenu menu = new UpgradeMenu(this, languageManager);
         menu.setSize(400, 800);
         menu.setLocation(
                 (uiPanel.getWidth() - menu.getWidth()) - 20,
@@ -196,9 +199,11 @@ public class GamePanel extends JPanel {
 
     public void saveWorld() {
         SaveData data = new SaveData();
+        LevelManager levelManager = LevelManager.getInstance();
 
         data.name = world.worldName;
-        data.level = LevelManager.getInstance().getLevel();
+        data.level = levelManager.getLevel();
+        data.levelProgress = levelManager.getStored();
         data.seed = world.getSeed();
         data.coins = CurrencyManager.getInstance().getCoins();
         data.cameraX = camera.x;

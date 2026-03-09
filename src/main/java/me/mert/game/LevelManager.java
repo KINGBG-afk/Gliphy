@@ -56,6 +56,10 @@ public class LevelManager {
         getGoalAmount();
     }
 
+    public void setStored(int s) {
+        stored = s;
+    }
+
     // it's public only so it can load the goal glyph
     private void loadGoalGlyph() {
         JSONArray arr = levelObj.getJSONArray("glyph");

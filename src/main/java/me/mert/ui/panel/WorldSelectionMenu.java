@@ -17,6 +17,7 @@ import me.mert.components.Component;
 import me.mert.components.Merger;
 import me.mert.components.Splitter;
 import me.mert.game.CurrencyManager;
+import me.mert.game.LanguageManager;
 import me.mert.game.LevelManager;
 import me.mert.game.UpgradeManager;
 import me.mert.game.save.SaveData;
@@ -32,17 +33,19 @@ import me.mert.world.World;
 
 public class WorldSelectionMenu extends JPanel {
     private final MainWindow root;
+    private final LanguageManager languageManager;
 
     RoundedPanel mainPanel;
 
     JScrollPane scrollPane;
     JPanel scrollContent;
 
-    public WorldSelectionMenu(MainWindow root) {
+    public WorldSelectionMenu(MainWindow root, LanguageManager languageManager) {
         setBackground(Color.WHITE);
         setLayout(new GridBagLayout());
 
         this.root = root;
+        this.languageManager = languageManager;
 
         mainPanel = new RoundedPanel(20);
         mainPanel.setBackground(new Color(180, 180, 180));
@@ -86,12 +89,13 @@ public class WorldSelectionMenu extends JPanel {
 
         for (SaveData save : SaveManager.loadAllSaves()) {
             ScrollableElement element = new ScrollableElement(20, save.name, String.valueOf(save.coins),
-                    String.valueOf(save.level), root, this);
+                    String.valueOf(save.level), root, this, languageManager);
             element.setPreferredSize(new Dimension(1470, 130));
             element.setBackground(new Color(215, 215, 215));
             element.setPlayAction(e -> {
-                // set level
+                // set level and level progress
                 levelManager.setLevel(save.level);
+                levelManager.setStored(save.levelProgress);
 
                 // set coinds
                 CurrencyManager.getInstance().setCoins(save.coins);
@@ -106,6 +110,7 @@ public class WorldSelectionMenu extends JPanel {
                         tile.setComponent(c);
                     }
 
+                    // load component images
                     if (c.type != null) {
                         switch (c.type) {
                             case MERGER -> {
@@ -151,20 +156,19 @@ public class WorldSelectionMenu extends JPanel {
         scrollPane.getVerticalScrollBar().setUI(new ScrollBar());
         scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(12, 0));
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        // scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
     }
 
     private void createButtons() {
-        RoundedButton backButton = new RoundedButton("BACK",
+        RoundedButton backButton = new RoundedButton(languageManager.getString("back").toUpperCase(),
                 new Color(213, 213, 213),
                 new Color(194, 194, 194));
         backButton.setFont(new Font("SansSerif", Font.BOLD, 40));
         backButton.setPreferredSize(new Dimension(700, 65));
         backButton.addActionListener(e -> root.showMainMenu());
 
-        RoundedButton newButton = new RoundedButton("NEW WORLD",
+        RoundedButton newButton = new RoundedButton(languageManager.getString("new_world").toUpperCase(),
                 new Color(213, 213, 213),
                 new Color(194, 194, 194));
         newButton.setFont(new Font("SansSerif", Font.BOLD, 40));

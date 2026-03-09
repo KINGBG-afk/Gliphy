@@ -14,12 +14,16 @@ import javax.swing.JPanel;
 
 import me.mert.core.enums.ComponentType;
 import me.mert.game.CurrencyManager;
+import me.mert.game.LanguageManager;
 import me.mert.game.UpgradeManager;
 import me.mert.ui.panel.GamePanel;
 import me.mert.ui.widgets.ComponentSlot;
 
 public class ComponentMenu extends JPanel {
-    public ComponentMenu(GamePanel gamePanel) {
+    LanguageManager languageManager;
+
+    public ComponentMenu(GamePanel gamePanel, LanguageManager languageManager) {
+        this.languageManager = languageManager;
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setOpaque(false);
         setBackground(new Color(236, 236, 236));
@@ -46,8 +50,12 @@ public class ComponentMenu extends JPanel {
         setAction(gamePanel, button, ct, variant);
 
         if (button.isLocked()) {
+            // looks kinda ugly
             button.setToolTipText(
-                    "<html><span style='font-size:14px;'>Costs 100 coins</span></html>");
+                    "<html>" +
+                            "<span style='font-size:14px;'>" + languageManager.getString("costs") + " 100 "
+                            + languageManager.getString("coins".toLowerCase()) + "</span>" +
+                            "</html>");
         }
         add(button);
     }
