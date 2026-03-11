@@ -14,8 +14,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import me.mert.components.Component;
+import me.mert.components.Hub;
 import me.mert.components.Merger;
 import me.mert.components.Splitter;
+import me.mert.core.enums.ComponentType;
 import me.mert.game.CurrencyManager;
 import me.mert.game.LanguageManager;
 import me.mert.game.LevelManager;
@@ -112,6 +114,10 @@ public class WorldSelectionMenu extends JPanel {
 
                     // load component images
                     if (c.type != null) {
+                        if (c.type == ComponentType.HUB) {
+                            Hub.addCount();
+                        }
+
                         switch (c.type) {
                             case MERGER -> {
                                 Merger m = (Merger) c;

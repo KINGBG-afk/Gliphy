@@ -14,7 +14,6 @@ import me.mert.ui.panel.RoundedPanel;
 import me.mert.ui.widgets.RoundedButton;
 
 public class UpgradeMenu extends RoundedPanel {
-    private LanguageManager languageManager;
 
     public UpgradeMenu(GamePanel gamePanel, LanguageManager languageManager) {
         super(10);
@@ -22,7 +21,6 @@ public class UpgradeMenu extends RoundedPanel {
         setOpaque(false);
         setBackground(new Color(236, 236, 236));
 
-        this.languageManager = languageManager;
 
         UpgradeManager umgr = UpgradeManager.getInstance();
         CurrencyManager cmgr = CurrencyManager.getInstance();

@@ -7,6 +7,8 @@ import me.mert.game.LevelManager;
 import me.mert.glyph.Glyph;
 
 public class Hub extends Component {
+    private static int count = 0;
+
     public Hub(int i, int j, Direction dir) {
         super(i, j, dir, new int[] { 1, 1 }, ComponentType.HUB);
 
@@ -15,6 +17,20 @@ public class Hub extends Component {
         addinput(Direction.SOUTH);
         addinput(Direction.EAST);
         addinput(Direction.WEST);
+    }
+
+    public static void addCount() {
+        if (count < 5)
+            count++;
+    }
+    
+    public static void subtractCount() {
+        if (count > 0)
+            count--;
+    }
+
+    public static boolean canPlace() {
+        return count < 5;
     }
 
     @Override

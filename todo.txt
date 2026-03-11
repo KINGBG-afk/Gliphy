@@ -1,28 +1,6 @@
-make currency manager - coins i guess
-
-upgrade manager, currancy manager:
-    update time of components
-    buy new components
-
-    level manager = DONE
-
-make the ui for the world
-pause menu ui - doesn't pause update of components:
-    exit button
-    sound button
-    continue button
-
-saving world system:
-    json format
-    and serialized
-
-add world selection menu ui:
-    list of all worlds that are made
-    new world button
-    delete world button
-
-
-
+make it so it can use a selection mode and cursor mode
+add colors
+more shapes maybe
 
 convert sounds into right format:
 ffmpeg -i place_belt.wav -acodec pcm_s16le -ar 44100 palce_belt1.wav

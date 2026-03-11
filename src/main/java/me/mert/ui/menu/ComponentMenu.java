@@ -50,10 +50,13 @@ public class ComponentMenu extends JPanel {
         setAction(gamePanel, button, ct, variant);
 
         if (button.isLocked()) {
+            int price = getComponentPrice(ct);
+
             // looks kinda ugly
             button.setToolTipText(
                     "<html>" +
-                            "<span style='font-size:14px;'>" + languageManager.getString("costs") + " 100 "
+                            "<span style='font-size:14px;'>" + languageManager.getString("costs") +
+                            " " + price + " "
                             + languageManager.getString("coins".toLowerCase()) + "</span>" +
                             "</html>");
         }
@@ -63,11 +66,12 @@ public class ComponentMenu extends JPanel {
     private void setAction(GamePanel panel, ComponentSlot c, ComponentType ct, boolean v) {
         CurrencyManager cmgr = CurrencyManager.getInstance();
         c.addActionListener(e -> {
+            int price = getComponentPrice(ct);
             if (!c.isLocked()) {
                 panel.setSelectedType(ct, v, null);
             } else {
-                if (cmgr.canAfford(100)) {
-                    cmgr.spend(100);
+                if (cmgr.canAfford(price)) {
+                    cmgr.spend(price);
                     c.setToolTipText(null);
                     UpgradeManager.getInstance().unlockComponent(ct.toString().toLowerCase());
                 }
@@ -86,6 +90,18 @@ public class ComponentMenu extends JPanel {
         }
         Image sImage = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         return new ImageIcon(sImage);
+    }
+
+    private int getComponentPrice(ComponentType ct) {
+
+        return switch (ct) {
+            case MERGER -> 100;
+            case SPLITTER -> 150;
+            case CUTTER -> 150;
+            case STACKER -> 200;
+            case ROTATER -> 50;
+            default -> 0;
+        };
     }
 
     @Override

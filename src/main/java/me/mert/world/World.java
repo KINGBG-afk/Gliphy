@@ -8,6 +8,7 @@ import java.util.Set;
 
 import me.mert.components.Component;
 import me.mert.components.Conveyor;
+import me.mert.components.Hub;
 import me.mert.components.Port;
 import me.mert.core.Constants;
 import me.mert.core.enums.ComponentType;
@@ -230,6 +231,10 @@ public class World {
                 clearComponent(i, j);
             }
         }
+
+        if (c.type == ComponentType.HUB)
+            Hub.subtractCount();
+
         SoundManager.play("destroy_machine");
         return true;
     }
@@ -242,6 +247,9 @@ public class World {
 
         if (obj == null)
             return false;
+
+        if (obj.type == ComponentType.HUB && !Hub.canPlace())
+            return true;
 
         if (dir == Direction.EAST || dir == Direction.WEST) {
             size = new int[] { obj.size[1], obj.size[0] };
@@ -278,13 +286,19 @@ public class World {
         System.out.println("Placing: " + obj);
         components.add(obj);
         connectPorts(obj);
+
         if (obj.type == ComponentType.CONVEYOR) {
             SoundManager.play("place_belt");
         } else {
             SoundManager.play("place_machine");
         }
+
+        // limit the world to only 5 hubs
+        if (obj.type == ComponentType.HUB)
+            Hub.addCount();
+
         SoundManager.play(worldName);
-    
+
         return true;
     }
 

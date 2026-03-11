@@ -10,14 +10,13 @@ import javax.sound.sampled.Clip;
 
 public class SoundManager {
     private static final Map<String, Clip> sounds = new HashMap<>();
-    private static boolean canPlay = true;
+    // TEMP it was getting annooying; change it to true when needed
+    private static boolean canPlay = false;
 
     public static void init() {
         loadSound("destroy_machine");
         loadSound("place_belt");
         loadSound("place_machine");
-        
-
     }
 
     private static void loadSound(String name) {
