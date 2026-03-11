@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import me.mert.core.GliphyUtilities;
 import me.mert.game.LanguageManager;
+import me.mert.game.SoundManager;
 import me.mert.ui.widgets.IconButton;
 import me.mert.ui.window.MainWindow;
 
@@ -16,7 +17,7 @@ public class MainMenu extends JPanel {
 
     private final IconButton startButton;
     private final IconButton quitButton;
-    // private final IconButton soundButton;
+    private final IconButton soundButton;
     private final IconButton languageButton;
     private final IconButton creditsButton;
     private final Image bgImage;
@@ -28,10 +29,10 @@ public class MainMenu extends JPanel {
         ImageIcon buttonIcon = GliphyUtilities.loadIcon("/ui/button.png", 300, 100);
         ImageIcon pressedButtonIcon = GliphyUtilities.loadIcon("/ui/pressed-button.png", 300, 100);
 
-        // ImageIcon speakerIcon = GliphyUtilities.loadIcon("/icons/speaker.png", 64,
-        // 64);
-        // ImageIcon muteIcon = GliphyUtilities.loadIcon("/icons/speaker-mute.png", 64,
-        // 64);
+        ImageIcon speakerIcon = GliphyUtilities.loadIcon("/icons/speaker.png", 64,
+                64);
+        ImageIcon muteIcon = GliphyUtilities.loadIcon("/icons/speaker-mute.png", 64,
+                64);
 
         ImageIcon bgIcon = GliphyUtilities.loadIcon("/icons/bg.png", 70, 70);
         ImageIcon enIcon = GliphyUtilities.loadIcon("/icons/en.png", 70, 70);
@@ -57,21 +58,20 @@ public class MainMenu extends JPanel {
         quitButton.setBounds(380, 790, 300, 100);
         quitButton.addActionListener(e -> System.exit(0));
 
-        /*
-         * soundButton = new IconButton(
-         * "",
-         * speakerIcon,
-         * speakerIcon);
-         * soundButton.setBounds(1650, 20, 64, 64);
-         * soundButton.addActionListener(e -> {
-         * if (soundButton.getIcon() == speakerIcon) {
-         * soundButton.setIcon(muteIcon);
-         * } else {
-         * soundButton.setIcon(speakerIcon);
-         * }
-         * });
-         * 
-         */
+        soundButton = new IconButton(
+                "",
+                speakerIcon,
+                speakerIcon);
+        soundButton.setBounds(1650, 20, 64, 64);
+        soundButton.addActionListener(e -> {
+            if (soundButton.getIcon() == speakerIcon) {
+                soundButton.setIcon(muteIcon);
+                SoundManager.setCanPlay(false);
+            } else {
+                soundButton.setIcon(speakerIcon);
+                SoundManager.setCanPlay(true);
+            }
+        });
 
         ImageIcon currIcon = (languageManager.getCurrentLanguage().equals("en") ? enIcon : bgIcon);
         ImageIcon currHoverIcon = (languageManager.getCurrentLanguage().equals("en") ? enHoverIcon : bgHoverIcon);
@@ -108,7 +108,7 @@ public class MainMenu extends JPanel {
         add(startButton);
         add(quitButton);
         add(creditsButton);
-        // add(soundButton);
+        add(soundButton);
         add(languageButton);
 
     }

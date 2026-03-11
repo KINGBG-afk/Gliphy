@@ -14,6 +14,7 @@ import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.LayerType;
 import me.mert.core.enums.PortType;
+import me.mert.game.SoundManager;
 import personthecat.fastnoise.FastNoise;
 import personthecat.fastnoise.data.NoiseType;
 
@@ -229,6 +230,7 @@ public class World {
                 clearComponent(i, j);
             }
         }
+        SoundManager.play("destroy_machine");
         return true;
     }
 
@@ -276,6 +278,13 @@ public class World {
         System.out.println("Placing: " + obj);
         components.add(obj);
         connectPorts(obj);
+        if (obj.type == ComponentType.CONVEYOR) {
+            SoundManager.play("place_belt");
+        } else {
+            SoundManager.play("place_machine");
+        }
+        SoundManager.play(worldName);
+    
         return true;
     }
 

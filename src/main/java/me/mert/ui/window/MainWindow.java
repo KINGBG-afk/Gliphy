@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import me.mert.game.LanguageManager;
+import me.mert.game.SoundManager;
 import me.mert.game.Upgrade;
 import me.mert.game.UpgradeManager;
 import me.mert.ui.Camera;
@@ -47,6 +48,9 @@ public class MainWindow extends JFrame {
         setResizable(false);
 
         languageManager = LanguageManager.getInstance();
+
+        // init sounds
+        SoundManager.init();
 
         String os = System.getProperty("os.name").toLowerCase();
 
