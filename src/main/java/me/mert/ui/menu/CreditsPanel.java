@@ -53,34 +53,18 @@ public class CreditsPanel extends JPanel {
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         int width = getWidth();
-        int y = 200;
+        int y = 100;
 
         g2.setFont(new Font("SansSerif", Font.BOLD, 60));
         drawString(g2, languageManager.getString("credits").toUpperCase(), width, y);
 
-        y += 120;
+        y += 420;
         g2.setFont(new Font("SansSerif", Font.BOLD, 40));
         drawString(g2, languageManager.getString("programmer"), width, y);
 
         y += 50;
         g2.setFont(new Font("SansSerif", Font.PLAIN, 35));
         drawString(g2, "Мерт Ниязиев", width, y);
-
-        y += 120;
-        g2.setFont(new Font("SansSerif", Font.BOLD, 40));
-        drawString(g2, languageManager.getString("designer"), width, y);
-
-        y += 50;
-        g2.setFont(new Font("SansSerif", Font.PLAIN, 35));
-        drawString(g2, "Мирослава Алекова", width, y);
-
-        y += 120;
-        g2.setFont(new Font("SansSerif", Font.BOLD, 40));
-        drawString(g2, languageManager.getString("manager"), width, y);
-
-        y += 50;
-        g2.setFont(new Font("SansSerif", Font.PLAIN, 35));
-        drawString(g2, "Надежда Георгиева", width, y);
     }
 
     private void drawString(Graphics2D g2, String text, int width, int y) {
