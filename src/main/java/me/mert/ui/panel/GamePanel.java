@@ -19,6 +19,7 @@ import me.mert.core.GliphyUtilities;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.LayerType;
+import me.mert.core.logger.Logger;
 import me.mert.game.CurrencyManager;
 import me.mert.game.LanguageManager;
 import me.mert.game.LevelManager;
@@ -209,11 +210,8 @@ public class GamePanel extends JPanel {
         data.cameraX = camera.x;
         data.cameraY = camera.y;
 
-        System.out.println("Saving components");
+        Logger.info("Saving components");
         data.components = world.getComponents();
-        for (Component c : world.getComponents()) {
-            System.out.println(c);
-        }
 
         data.upgradeLevels = new HashMap<>();
         for (Upgrade u : UpgradeManager.getInstance().getAllUpgrades()) {

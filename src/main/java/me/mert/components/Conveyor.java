@@ -6,6 +6,7 @@ import java.io.IOException;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.PortType;
+import me.mert.core.logger.Logger;
 import me.mert.glyph.Glyph;
 
 public class Conveyor extends Component {
@@ -93,10 +94,11 @@ public class Conveyor extends Component {
         if (!checkValidOutputPort(p))
             return false;
 
-        System.out.println("Removing port: " + out);
+        Logger.info("Removing port: " + out);
         removePort(out);
+
+        Logger.info("Adding new port: " + p);
         out = addOutput(p);
-        System.out.println("Adding new port: " + p);
         return true;
     }
 

@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import me.mert.core.enums.Primitive;
+import me.mert.core.logger.Logger;
 import me.mert.glyph.Glyph;
 import me.mert.glyph.GlyphLayer;
 
@@ -79,8 +80,8 @@ public class LevelManager {
         level++;
         loadNextLevel(level);
         CurrencyManager.getInstance().add(60);
-        System.out.println("Leve up");
-        System.out.println("Going to level: " + level);
+        Logger.info("Level up");
+        Logger.info("Going to level: " + level);
     }
 
     public int getGoalAmount() {

@@ -15,6 +15,7 @@ import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.LayerType;
 import me.mert.core.enums.PortType;
+import me.mert.core.logger.Logger;
 import me.mert.game.SoundManager;
 import personthecat.fastnoise.FastNoise;
 import personthecat.fastnoise.data.NoiseType;
@@ -152,7 +153,7 @@ public class World {
         if (!chunks.containsKey(key)) {
             Chunk chunk = new Chunk(x, y, noise);
             chunks.put(key, chunk);
-            // System.out.println("Loaded chunk: " + chunk);
+            // Logger.info("Loaded chunk: " + chunk);
         }
     }
 
@@ -164,7 +165,7 @@ public class World {
         // all components are never removed unless the user does that
         // chunks stays unloaded but the components are still getting updated
 
-        // System.out.println("Unloaded: " + chunk);
+        // Logger.info("Unloaded: " + chunk);
     }
 
     private long chunkKey(int x, int y) {
@@ -283,7 +284,7 @@ public class World {
             }
         }
 
-        System.out.println("Placing: " + obj);
+        Logger.info("Placing: " + obj);
         components.add(obj);
         connectPorts(obj);
 
@@ -306,19 +307,20 @@ public class World {
         Component other;
 
         for (Port p : placed.getAllPorts()) {
-            int wi = p.getWorldI();
-            int wj = p.getWorldJ();
+            int worldI = p.getWorldI();
+            int worldJ = p.getWorldJ();
 
-            other = getComponent(wi, wj);
+            other = getComponent(worldI, worldJ);
             // if it doesn't exist or its the same as "placed" we skip
             if (other == null || other == placed)
                 continue;
 
-            for (Port op : other.getAllPorts()) {
-                System.out.println("Other port: i=" + op.getWorldI() + ", j=" + op.getWorldJ());
-                System.out.println("Port of placed: i=" + wi + ", j=" + wj);
+            for (Port otherPort : other.getAllPorts()) {
+                makeConnection(placed, p, worldI, worldJ, otherPort);
 
-                makeConnection(placed, p, wi, wj, op);
+                Logger.info("Connected port (i=" + worldI + ", j=" + worldJ + ") with port (i=" + otherPort.getWorldI()
+                        + ", j=" + otherPort.getWorldJ() + ")");
+
             }
         }
 
@@ -353,7 +355,7 @@ public class World {
                     if (conveyor.i == wi && conveyor.j == wj) {
 
                         if (conveyor.changeOutputPort(ni, nj, pDir.opposite())) {
-                            System.out.println(":: Conveyor changed ports");
+                            Logger.info("Conveyor changed ports");
                             makeConnection(placed, conveyor.outputs.get(0), ni, nj, p);
                             // conveyor has only 1 output at a time
                             return;
@@ -364,6 +366,7 @@ public class World {
         }
     }
 
+    // TODO maybe clean this up
     private void makeConnection(Component placed, Port p, int wi, int wj, Port op) {
         // if ports does not match
         // placed's ports should not be on the same pos as other's ports
@@ -373,11 +376,11 @@ public class World {
         if (p.type == PortType.OUTPUT && op.type == PortType.INPUT
                 && p.getDirection().opposite() == op.getDirection()) {
             p.connectTo(op);
-            System.out.println(placed + " connected to " + op.getOwner());
+            Logger.info(placed + " connected to " + op.getOwner());
 
         } else if (p.type == PortType.INPUT && op.type == PortType.OUTPUT
                 && op.getDirection().opposite() == p.getDirection()) {
-            System.out.println(op.getOwner() + " connected to " + placed);
+            Logger.info(op.getOwner() + " connected to " + placed);
             op.connectTo(p);
         }
     }

@@ -18,6 +18,7 @@ import me.mert.components.Hub;
 import me.mert.components.Merger;
 import me.mert.components.Splitter;
 import me.mert.core.enums.ComponentType;
+import me.mert.core.logger.Logger;
 import me.mert.game.CurrencyManager;
 import me.mert.game.LanguageManager;
 import me.mert.game.LevelManager;
@@ -105,7 +106,7 @@ public class WorldSelectionMenu extends JPanel {
                 // generate world with name and seed
                 World w = new World(save.seed, save.name);
                 w.setComponents(save.components);
-                System.out.println("Loading components");
+                Logger.info("Loading components");
                 for (Component c : save.components) {
                     Tile tile = w.getTile(c.i, c.j);
                     if (tile != null) {
@@ -185,7 +186,7 @@ public class WorldSelectionMenu extends JPanel {
 
             String name = dialog.getWorldName();
             if (name != null && !name.isEmpty()) {
-                System.out.println("Created world: " + name);
+                Logger.info("Created world: " + name);
                 root.showGame(name);
             }
         });

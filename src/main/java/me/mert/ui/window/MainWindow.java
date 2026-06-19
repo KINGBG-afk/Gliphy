@@ -86,8 +86,6 @@ public class MainWindow extends JFrame {
 
         up.levelUp();
         updateTimer.setDelay((int) (BASE_UPDATE_DELAY - (up.getLevel() * 50)));
-        System.out.println((int) (BASE_UPDATE_DELAY - (up.getLevel() * 50)));
-
     }
 
     private void createScreens() {

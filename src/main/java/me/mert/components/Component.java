@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.PortType;
+import me.mert.core.logger.Logger;
 import me.mert.glyph.Glyph;
 
 public abstract class Component implements Serializable {
@@ -140,7 +141,7 @@ public abstract class Component implements Serializable {
                 return ImageIO.read(iStream);
             }
         } catch (IOException e) {
-            System.err.print("Couldn't load " + p + ".png");
+            Logger.warning("Couldn't load " + p + ".png");
         }
         return null; // well too bad it doesn't load
 
@@ -154,8 +155,8 @@ public abstract class Component implements Serializable {
                 this.img = ImageIO.read(iStream);
             }
         } catch (IOException e) {
-            System.err.print("Couldn't load " + ct);
-            System.out.println("Loading default image");
+            Logger.warning("Couldn't load " + ct);
+            Logger.info("Loading default image");
         }
         // we do need to remember that this will be checked by my dream university
         // we have to keep our profesionalism

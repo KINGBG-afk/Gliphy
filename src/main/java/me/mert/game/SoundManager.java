@@ -8,6 +8,8 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
+import me.mert.core.logger.Logger;
+
 public class SoundManager {
     private static final Map<String, Clip> sounds = new HashMap<>();
     // TEMP it was getting annooying; change it to true when needed
@@ -32,7 +34,7 @@ public class SoundManager {
             sounds.put(name, clip);
 
         } catch (Exception e) {
-            System.err.println("Failed to load sound: " + name);
+            Logger.error("Failed to load sound: " + name);
             e.printStackTrace();
         }
     }
