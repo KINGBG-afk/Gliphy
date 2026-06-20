@@ -202,15 +202,16 @@ public class GamePanel extends JPanel {
         SaveData data = new SaveData();
         LevelManager levelManager = LevelManager.getInstance();
 
+        Logger.info("Saving " + world.worldName);
         data.name = world.worldName;
         data.level = levelManager.getLevel();
         data.levelProgress = levelManager.getStored();
         data.seed = world.getSeed();
         data.coins = CurrencyManager.getInstance().getCoins();
+
         data.cameraX = camera.x;
         data.cameraY = camera.y;
 
-        Logger.info("Saving components");
         data.components = world.getComponents();
 
         data.upgradeLevels = new HashMap<>();

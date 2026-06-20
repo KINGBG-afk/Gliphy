@@ -84,7 +84,6 @@ public class World {
     }
 
     // --- CHUNKS ------------------------------------------------------------
-
     public void resetChunks() {
         chunks.clear();
         activeChunks.clear();

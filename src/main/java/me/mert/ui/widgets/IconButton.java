@@ -69,6 +69,7 @@ public class IconButton extends JButton {
         if (iconToDraw != null) {
             int iw = iconToDraw.getIconWidth();
             int ih = iconToDraw.getIconHeight();
+            // (i use arch btw)
             int ix = (getWidth() - iw) / 2;
             int iy = (getHeight() - ih) / 2;
 
