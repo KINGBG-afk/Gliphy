@@ -195,7 +195,7 @@ public class World {
 
     public Component getComponent(int i, int j) {
         Tile tile = getTile(i, j);
-        return tile != null ? tile.component : null;
+        return tile.getComponent();
     }
 
     private boolean canPlace(int i, int j) {
@@ -269,12 +269,13 @@ public class World {
                 int ni = i + ox + di;
                 int nj = j + oy + dj;
 
+                // check if can place
                 if (!canPlace(ni, nj))
                     return false;
             }
         }
 
-        // place is valid so proceed
+        // place component on tiles
         for (int di = 0; di < h; di++) {
             for (int dj = 0; dj < w; dj++) {
                 int ni = i + di;
@@ -342,20 +343,20 @@ public class World {
                 if (other == null || other == conveyor)
                     continue;
 
-                for (Port p : other.getAllPorts()) {
-                    // rule all cases wehere we do not need to change ports
-                    int wi = p.getWorldI();
-                    int wj = p.getWorldJ();
-                    Direction pDir = p.getDirection();
-
-                    if (p.type == PortType.OUTPUT || pDir == conveyor.direction)
+                for (Port otherPort : other.getAllPorts()) {
+                    int wi = otherPort.getWorldI();
+                    int wj = otherPort.getWorldJ();
+                    Direction opDir = otherPort.getDirection();
+                    
+                    if (otherPort.type == PortType.OUTPUT || opDir == conveyor.direction)
                         continue;
-
+                    
+                    // rule out all cases wehere we do not need to change ports
                     if (conveyor.i == wi && conveyor.j == wj) {
 
-                        if (conveyor.changeOutputPort(ni, nj, pDir.opposite())) {
+                        if (conveyor.changeOutputPort(ni, nj, opDir.opposite())) {
                             Logger.info("Conveyor changed ports");
-                            makeConnection(placed, conveyor.outputs.get(0), ni, nj, p);
+                            makeConnection(placed, conveyor.outputs.get(0), ni, nj, otherPort);
                             // conveyor has only 1 output at a time
                             return;
                         }
@@ -365,7 +366,6 @@ public class World {
         }
     }
 
-    // TODO maybe clean this up
     private void makeConnection(Component placed, Port p, int wi, int wj, Port op) {
         // if ports does not match
         // placed's ports should not be on the same pos as other's ports

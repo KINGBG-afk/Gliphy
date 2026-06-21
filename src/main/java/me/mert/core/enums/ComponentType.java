@@ -22,10 +22,10 @@ public enum ComponentType {
     TRASH,
     HUB;
 
-    public static Component createComponent(ComponentType compType, int i, int j, boolean variant, LayerType r) {
+    public static Component createComponent(ComponentType compType, int i, int j, boolean variant, LayerType t) {
         return switch (compType) {
             case CONVEYOR -> new Conveyor(i, j, Direction.NORTH);
-            case COLLECTOR -> new Collector(i, j, Direction.NORTH, r);
+            case COLLECTOR -> new Collector(i, j, Direction.NORTH, t);
             case HUB -> new Hub(i, j, Direction.NORTH);
             case CUTTER -> new Cutter(i, j, Direction.NORTH);
             case STACKER -> new Stacker(i, j, Direction.NORTH);
