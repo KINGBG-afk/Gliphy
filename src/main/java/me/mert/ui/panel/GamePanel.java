@@ -272,14 +272,23 @@ public class GamePanel extends JPanel {
         super.paintComponent(g);
         int sWidth = getWidth();
         int sHeight = getHeight();
+
+        // WORLD
         gameRenderer.drawGrid((Graphics2D) g, sWidth, sHeight);
         gameRenderer.drawTiles((Graphics2D) g, sWidth, sHeight);
         gameRenderer.drawComponents(g, sWidth, sHeight);
-        gameRenderer.drawPreviewComponent(g, selectedComponent);
+
+        if (selectedComponent != null) {
+            gameRenderer.drawPreviewComponent(g, selectedComponent);
+        }
+
         gameRenderer.drawVignette((Graphics2D) g, sWidth, sHeight);
+
+        // UI
         gameRenderer.drawGoal(g, sWidth, sHeight);
         gameRenderer.drawCoins(g, sWidth, sHeight);
 
+        // DEBUG
         // gameRenderer.debugDraw(g, sWidth, sHeight);
     }
 }

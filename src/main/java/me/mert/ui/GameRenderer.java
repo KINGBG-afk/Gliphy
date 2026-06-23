@@ -16,7 +16,6 @@ import java.util.Set;
 import me.mert.components.Component;
 import me.mert.components.Conveyor;
 import me.mert.components.Port;
-import me.mert.core.Constants;
 import me.mert.core.GliphyUtilities;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
@@ -36,13 +35,14 @@ public class GameRenderer {
     private final int CELL_SIZE;
     private final Image coinImage = GliphyUtilities.loadIcon("/icons/coin.png", 40, 40).getImage();
     private final Image arrowImage = GliphyUtilities.loadIcon("/icons/arrow.png", 64, 64).getImage();
-    private static final Color TILE_COLOR = new Color(0, 0, 0, 17);
+    private static final Color CLOSE_TILE_COLOR = new Color(0, 0, 0, 17);
+    private static final Color FAR_TILE_COLOR = new Color(0, 0, 0, 40);
 
     public GameRenderer(Camera camera, World world) {
         this.camera = camera;
         this.world = world;
         this.mouse = new Point(0, 0);
-        this.CELL_SIZE = Constants.CELL_SIZE;
+        this.CELL_SIZE = World.CELL_SIZE;
     }
 
     // with the amount of math in this file i deserve at least a bit of appreciation
@@ -265,6 +265,8 @@ public class GameRenderer {
     public void drawTiles(Graphics2D g2d, int screenWidth, int screenHeight) {
         double zoom = camera.zoom;
 
+        Color tileColor = zoom >= camera.MID_ZOOM ? CLOSE_TILE_COLOR : FAR_TILE_COLOR;
+
         double worldStartX = camera.x;
         double worldEndX = camera.x + screenWidth / zoom;
         double worldStartY = camera.y;
@@ -293,14 +295,17 @@ public class GameRenderer {
                 int screenX = camera.worldToScreenX(j * CELL_SIZE);
                 int screenY = camera.worldToScreenY(i * CELL_SIZE);
 
-                g2d.setColor(TILE_COLOR);
+                g2d.setColor(tileColor);
                 g2d.fillRect(screenX, screenY, cellPx, cellPx);
 
-                Glyph.render(g2d,
-                        new Glyph(r),
-                        screenX + glyphOffset,
-                        screenY + glyphOffset,
-                        glyphSize);
+                if (zoom >= camera.MID_ZOOM) {
+
+                    Glyph.render(g2d,
+                            new Glyph(r),
+                            screenX + glyphOffset,
+                            screenY + glyphOffset,
+                            glyphSize);
+                }
             }
         }
     }

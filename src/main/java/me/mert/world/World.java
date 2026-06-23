@@ -10,7 +10,6 @@ import me.mert.components.Component;
 import me.mert.components.Conveyor;
 import me.mert.components.Hub;
 import me.mert.components.Port;
-import me.mert.core.Constants;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.LayerType;
@@ -29,7 +28,10 @@ public class World {
     private HashMap<Long, Chunk> chunks;
 
     private Set<Long> activeChunks = new HashSet<>();
-    private final int CHUNK_SIZE = Constants.CHUNK_SIZE;
+    public static final int CHUNK_SIZE = Chunk.CHUNK_SIZE;
+    
+    // i had to place this somewhere so it can be accessed
+    public static final int CELL_SIZE = 60;
 
     private static final int CHUNK_LOAD_RADIUS = 1;
     private static final int CHUNK_UNLOAD_RADIUS = 1;
@@ -347,10 +349,10 @@ public class World {
                     int wi = otherPort.getWorldI();
                     int wj = otherPort.getWorldJ();
                     Direction opDir = otherPort.getDirection();
-                    
+
                     if (otherPort.type == PortType.OUTPUT || opDir == conveyor.direction)
                         continue;
-                    
+
                     // rule out all cases wehere we do not need to change ports
                     if (conveyor.i == wi && conveyor.j == wj) {
 

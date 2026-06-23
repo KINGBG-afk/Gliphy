@@ -5,5 +5,4 @@ target
 src/test
 saves
 Gliphy
-
-*.txt
+todo.txt

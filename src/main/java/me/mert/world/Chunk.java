@@ -1,6 +1,5 @@
 package me.mert.world;
 
-import me.mert.core.Constants;
 import me.mert.core.enums.LayerType;
 import personthecat.fastnoise.FastNoise;
 
@@ -10,8 +9,9 @@ public class Chunk {
     Tile[] tiles;
 
     private static final float SCALE = 0.15f;
-    private static final float RESOURCE_THRESHOLD = 0.86f;
-    private final int CHUNK_SIZE = Constants.CHUNK_SIZE;
+    private static final float VEIN_SCALE = 0.9f;
+    private static final float RESOURCE_THRESHOLD = 0.82f;
+    public static final int CHUNK_SIZE = 16;
 
     private final FastNoise noise;
 
@@ -41,7 +41,10 @@ public class Chunk {
         float combined = mainNoise * 0.7f + deltaNoise * 0.3f;
         combined = (combined + 1f) * 0.5f;
 
-        if (combined > RESOURCE_THRESHOLD) {
+        float veinNoise = noise.getNoise(worldX * VEIN_SCALE, worldY * VEIN_SCALE);
+        veinNoise = (veinNoise + 1f) * 0.5f;
+
+        if (combined > RESOURCE_THRESHOLD && veinNoise > 0.60f) {
             return chooseRecourse(worldX, worldY);
         } else {
             return new Tile(worldX, worldY, null);
