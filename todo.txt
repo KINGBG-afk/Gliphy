@@ -1,9 +1,0 @@
-more shapes maybe
-
-polish belts switching into corners - update neighbours around placed/removed 
-add colors
-make it so it can use a selection mode and cursor mode
-
-
-convert sounds into right format:
-ffmpeg -i place_belt.wav -acodec pcm_s16le -ar 44100 palce_belt1.wav
