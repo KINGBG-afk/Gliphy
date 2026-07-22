@@ -175,6 +175,10 @@ public class GameRenderer {
 
     // --- GRID ------------------------------------------------------------
     public void drawGrid(Graphics2D g2d, int screenWidth, int screenHeight) {
+        if (camera.zoom < camera.MID_ZOOM) {
+            return;
+        }
+
         g2d.setColor(new Color(230, 230, 230));
         g2d.setStroke(new BasicStroke(Math.max(1, (int) ((20 * camera.zoom * 0.6f) / 6))));
 

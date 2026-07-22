@@ -10,14 +10,13 @@ import me.mert.components.Component;
 import me.mert.components.Conveyor;
 import me.mert.components.Hub;
 import me.mert.components.Port;
+import me.mert.core.Noise;
 import me.mert.core.enums.ComponentType;
 import me.mert.core.enums.Direction;
 import me.mert.core.enums.LayerType;
 import me.mert.core.enums.PortType;
 import me.mert.core.logger.Logger;
 import me.mert.game.SoundManager;
-import personthecat.fastnoise.FastNoise;
-import personthecat.fastnoise.data.NoiseType;
 
 public class World {
     public final String worldName;
@@ -29,7 +28,7 @@ public class World {
 
     private Set<Long> activeChunks = new HashSet<>();
     public static final int CHUNK_SIZE = Chunk.CHUNK_SIZE;
-    
+
     // i had to place this somewhere so it can be accessed
     public static final int CELL_SIZE = 60;
 
@@ -37,7 +36,7 @@ public class World {
     private static final int CHUNK_UNLOAD_RADIUS = 1;
 
     private final int seed;
-    private final FastNoise noise;
+    private final Noise noise;
 
     private int centerChunkX = 0;
     private int centerChunkY = 0;
@@ -48,11 +47,7 @@ public class World {
         this.seed = seed;
         chunks = new HashMap<>();
         this.components = new ArrayList<>();
-        this.noise = FastNoise.builder()
-                .seed(seed)
-                .type(NoiseType.SIMPLEX2)
-                .frequency(0.25f)
-                .build();
+        this.noise = new Noise(seed);
     }
 
     public World(String name) {
@@ -62,11 +57,7 @@ public class World {
         this.components = new ArrayList<>();
 
         this.seed = World.generateSeed();
-        this.noise = FastNoise.builder()
-                .seed(seed)
-                .type(NoiseType.SIMPLEX2)
-                .frequency(0.25f)
-                .build();
+        this.noise = new Noise(seed);
     }
 
     public static int generateSeed() {

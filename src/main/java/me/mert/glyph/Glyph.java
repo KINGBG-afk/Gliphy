@@ -12,10 +12,10 @@ import java.util.List;
 import me.mert.core.enums.LayerType;
 import me.mert.core.enums.Primitive;
 
-public class Glyph implements Serializable{
+public class Glyph implements Serializable {
     public List<GlyphLayer> layers = new ArrayList<>();
-    static final int[] QX = { 1, 0, 0, 1 };
-    static final int[] QY = { 0, 0, 1, 1 };
+    private static final int[] QX = { 1, 0, 0, 1 };
+    private static final int[] QY = { 0, 0, 1, 1 };
 
     public Glyph(GlyphLayer l) {
         if (l == null)

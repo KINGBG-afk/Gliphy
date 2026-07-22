@@ -1,21 +1,20 @@
 package me.mert.world;
 
+import me.mert.core.Noise;
 import me.mert.core.enums.LayerType;
-import personthecat.fastnoise.FastNoise;
 
 public class Chunk {
 
     int x, y;
     Tile[] tiles;
 
-    private static final float SCALE = 0.15f;
-    private static final float VEIN_SCALE = 0.9f;
-    private static final float RESOURCE_THRESHOLD = 0.82f;
+    private static final float SCALE = 0.06f;
+    private static final float RESOURCE_THRESHOLD = 0.70f;
     public static final int CHUNK_SIZE = 16;
 
-    private final FastNoise noise;
+    private final Noise noise;
 
-    Chunk(int x, int y, FastNoise noise) {
+    Chunk(int x, int y, Noise noise) {
         this.x = x;
         this.y = y;
         this.noise = noise;
@@ -41,10 +40,7 @@ public class Chunk {
         float combined = mainNoise * 0.7f + deltaNoise * 0.3f;
         combined = (combined + 1f) * 0.5f;
 
-        float veinNoise = noise.getNoise(worldX * VEIN_SCALE, worldY * VEIN_SCALE);
-        veinNoise = (veinNoise + 1f) * 0.5f;
-
-        if (combined > RESOURCE_THRESHOLD && veinNoise > 0.60f) {
+        if (combined > RESOURCE_THRESHOLD) {
             return chooseRecourse(worldX, worldY);
         } else {
             return new Tile(worldX, worldY, null);
@@ -54,13 +50,17 @@ public class Chunk {
     private Tile chooseRecourse(int worldX, int worldY) {
         float n = (noise.getNoise(worldX * 0.08f, worldY * 0.08f) + 1f) * 0.5f;
 
-        if (n < 0.33f) {
+        if (n < 0.30f) {
             return new Tile(worldX, worldY, LayerType.CIRCLE);
-        } else if (n > 0.33f && n < 0.66f) {
+        }
+        if (n > 0.30f && n < 0.60f) {
             return new Tile(worldX, worldY, LayerType.SQUARE);
-        } else {
+        }
+        if (n > 0.60f) {
             return new Tile(worldX, worldY, LayerType.LINE);
         }
+
+        return null;
     }
 
     @Override
