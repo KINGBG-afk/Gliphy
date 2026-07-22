@@ -40,6 +40,11 @@ import me.mert.world.World;
 public class GamePanel extends JPanel {
     private final Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
 
+    // DEBUG: fps counter
+    private int frameCount = 0;
+    private int fps = 0;
+    private long lastFpsTime = System.nanoTime();
+
     private LanguageManager languageManager;
     private World world;
     private GameRenderer gameRenderer;
@@ -273,6 +278,14 @@ public class GamePanel extends JPanel {
         int sWidth = getWidth();
         int sHeight = getHeight();
 
+        frameCount++;
+        long now = System.nanoTime();
+        if (now - lastFpsTime >= 1_000_000_000L) {
+            fps = frameCount;
+            frameCount = 0;
+            lastFpsTime = now;
+        }
+
         // WORLD
         gameRenderer.drawGrid((Graphics2D) g, sWidth, sHeight);
         gameRenderer.drawTiles((Graphics2D) g, sWidth, sHeight);
@@ -289,6 +302,9 @@ public class GamePanel extends JPanel {
         gameRenderer.drawCoins(g, sWidth, sHeight);
 
         // DEBUG
+        g.setColor(Color.BLACK);
+        g.drawString("FPS: " + fps, 20, 120);
+
         // gameRenderer.debugDraw(g, sWidth, sHeight);
     }
 }
